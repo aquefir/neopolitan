@@ -1,0 +1,114 @@
+Universal C Library™ Contributor’s Guide
+
+Written by Alexander Nicholi
+Copyright © 2019 Arqadium, LLC. All rights reserved.
+
+
+
+§1. PROGRAMMING PARADIGMS
+--------------------------
+
+1. A mixture of procedural programming and functional programming is applied.
+Object-oriented programming is eliminated in project code, and handled
+carefully with libraries using it.
+
+2. This conceptual table illustrates the duality of the code, in ascending
+order of abstraction:
+
+	+----------------------+---------------------------------------+
+	| Model level          | Relationship                          |
+	+----------------------+---------------------------------------+
+	| Programmer’s [Lv. 1] | Code file (.c)  <->  Header file (.h) |
+	| Engineer’s   [Lv. 2] | Implementation  <->  Interface        |
+	| Architect’s  [Lv. 3] | Computation     <->  Coordination     |
+	+----------------------+---------------------------------------+
+
+§2. APPLICATION OF MODULARITY
+------------------------------
+
+1. Modules are in play with Θώθ, using Brian Will’s distinction of ‘state
+modules’ and ‘logic modules’. This status is affixed onto every interface
+(header file) when possible, for coordination.
+
+2. Summary of Will’s video:
+ a. ‘state modules’: internally and externally stateful
+ b. ‘logic modules’: internally stateless (pure functions)
+ c. ‘data types’: conceptually separate from the state and logic dichotomy
+ d. ‘public interface’: what the module opts to expose to other modules
+ e. ‘private implementation’: converse of the public interface
+
+3. The interface relationship model applies just as well in the absence of an
+API. This project treats C code files and their associated header files as a
+pair jointly comprising a module. Sometimes modules may lack a C code file.
+Note that each C code file corresponds to one compilation unit (CU).
+
+4. It should be noted that functions modifying state passed to them, even by
+call parameters, count as stateful. The rationale for this is that basic
+hygiene will easily lead to containment of global state into the call stack,
+which is good for state management but does nothing to isolate and reduce the
+amount of state given to functions; pure functions are a cornerstone of the
+functional programming paradigm that keeps code easy to work with and reason
+about.
+
+5. To preserve the integrity of the logic-state module divide, an API-level
+rule is in place using the const modifier. While primitives may be passed as
+arguments as-is, all struct types (which are passed by pointer reference) must
+have their contents declared const. Additionally, any pointer-type variables
+within must also have their contents declared const, and so on; otherwise,
+they may not be passed into logic modules. All pointer types (to arrays or
+otherwise) must additionally have their contents (i.e. the object pointed to)
+be declared const as well, even within structs.
+
+§3. HABITS & HYGIENE BUCKET LIST
+---------------------------------
+
+1. Header guards should use the format /^INC__([A-Z]+)_(([A-Z]+_)*[A-Z]+)_H$/,
+where $1 is the project shortname in its all-caps form (in this case, ‘OWO’),
+$2 is the relative path to the file, in all-caps without its extension, and $3
+inside $2 contains the directory parts of the path with the directory separator
+replaced with an underscore. Directories in between the repository root and the
+source root are not included in said directory parts (like ‘src/’, or a subdir
+for #include conflict resolution). For example, the header guard for
+‘src/owo/scenes/title.h’ would be ‘INC__OWO_SCENES_TITLE_H’.
+
+2. Header should hoist a comment boilerplate block with the project name and
+its copyright notice. See BOILERPLATE for copy-pastable renditions of this.
+
+3. Header should specify whether it exposes a state module, logic module, or
+type module.
+
+4. Both header and code files should #include all of the headers with symbols
+they depend on, even if they happen to be #included in another header.
+
+5. A code file with an associated header should #include it before all other
+headers, using the local quotation mark style.
+ a. All other headers should be #included using the angle bracket style.
+ b. #include blocks (as described here) are separated by an empty line, for
+ the autoformatter’s sake.
+ c. C standard library headers should be #included in a block by themselves
+ after the associated header #include (if present).
+ d. All other headers should be #included in the last block.
+ e. All #include blocks must be alphabetised (use the autoformatter for this).
+
+6. Ensure that every commit to ‘master’ successfully compiles. You can do this
+by running ‘make distclean’ and then ‘make format’ before a normal build. If
+you need to do extensive work where failing WIP commits may need to be made,
+create and push a new branch for that work and merge it when it’s done.
+
+7. Always format your code with ‘make format’ before committing.
+
+8. Do clean builds with address sanitisation (command ‘make asan’) to resolve
+memory errors. It is good practise to make sure that there are no segfaults
+of any kind during runtime. While normally we use ASan as it has much milder
+performance hits than other solutions, some memory bugs will be stubborn – for
+these, recompile the usual debug target and run it through Valgrind (Linux and
+macOS only).
+
+9. Before trudging through ASan or Valgrind, it may be helpful to identify
+bugs more proactively with a sanity check build, which is available under the
+‘make check’ recipe command. Compilers will have wildly varying degrees of
+leniency towards undefined behaviour – don’t count on vendor defaults to tell
+you everything CC knows.
+
+10. Every non-static function should be documented in the corresponding text
+file inside the ‘doc/’ folder, with a top-level section (§) dedicated to it.

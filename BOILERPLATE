@@ -1,0 +1,19 @@
+This file contains the project’s copypastable boilerplate comment headers.
+
+Boilerplate for C-like languages:
+
+/****************************************************************************\
+ *                           Universal C Library™                           *
+ *                                                                          *
+ *                      Copyright © 2019 ARQADIUM, LLC                      *
+ *                           All rights reserved.                           *
+\****************************************************************************/
+
+Hash-based boilerplate (Python, POSIX shell, Makefile):
+
+##############################################################################
+##                           Universal C Library™                           ##
+##                                                                          ##
+##                      Copyright © 2019 ARQADIUM, LLC                      ##
+##                           All rights reserved.                           ##
+##############################################################################

@@ -1,0 +1,72 @@
+Universal C Library: Error Handling
+
+Copyright © 2019 ARQADIUM, LLC
+All rights reserved.
+
+§1. ENUM ERR_CODE
+------------------
+
+Possible error codes. UNI_ERR_SUCCESS is falsey (zero). All builtin code will
+be less than or equal to UNI_MAX_BUILTIN_ERR, and greater than or equal to
+UNI_ERR_SUCCESS. Custom (user-defined) error codes may be defined privately
+in the range between UNI_MIN_CUSTOM_ERR and UNI_MAX_CUSTOM_ERR (inclusive).
+UNI_MAX_ERR provides the maximum bounds of the enum.
+
+The storage class for this must be able to hold integers as large as 65,535
+(u16 or larger).
+
+§2. #ASSERT
+------------
+
+Assert an expression as true. Aborts the program upon failure.
+
+§3. #ASSERT_RET
+----------------
+
+Assert an expression as true. Returns (void) upon failure.
+
+§4. #ASSERT_RETNEG1
+--------------------
+
+Assert an expression as true. Returns -1 upon failure.
+
+§5. #ASSERT_RETRET
+-------------------
+
+Assert an expression as true. Returns the expression as a value upon failure.
+
+§6. #ASSERT_SDL
+----------------
+
+Assert an expression as true. Logs an error message from SDL_GetError() upon
+failure and continues.
+
+§7. #ASSERT_SDLRET
+-------------------
+
+Assert an expression as true. Does the same as ASSERT_SDL, but returns 1
+instead of continuing.
+
+§6. #ASSERT_LODEPNG
+--------------------
+
+Assert an expression as true. Logs an error message from lodepng_error_text()
+upon failure and continues.
+
+§7. #ASSERT_LODEPNGRET
+-----------------------
+
+Assert an expression as true. Does the same as ASSERT_LODEPNG, but returns 1
+instead of continuing.
+
+§6. #ASSERT_TTF
+----------------
+
+Assert an expression as true. Logs an error message from TTF_GetError() upon
+failure and continues.
+
+§7. #ASSERT_TTFRET
+-------------------
+
+Assert an expression as true. Does the same as ASSERT_TTF, but returns 1
+instead of continuing.

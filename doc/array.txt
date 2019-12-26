@@ -1,0 +1,24 @@
+Universal C Library: Array Construct
+
+Copyright © 2019 ARQADIUM, LLC
+All rights reserved.
+
+§1. #UNI_ARRAY
+---------------
+
+Type-like shorthand for array structs of a given type. Be sure to declare it
+using one of the DECL_* macros first.
+
+Variables of this type have two properties, accessible by dot notation:
+ 1. val: the array itself, as a pointer to the given type
+ 2. sz: the size of the array, expressed as the number of elements allocated
+
+§2. #UNI_DECL_ARR
+------------------
+
+Declare an array type of another type, in the type namespace (no prefixes).
+
+§3. #UNI_DECL_ARR_S
+--------------------
+
+Declare an array type of another struct type, in the struct namespace.

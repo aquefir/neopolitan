@@ -1,0 +1,27 @@
+Universal C Library™ Build Instructions
+
+Written by Alexander Nicholi
+Copyright © 2019 Arqadium, LLC. All rights reserved.
+
+§1. PREREQUISITES
+------------------
+
+1. Arch Linux: base-devel, clang-format, sdl2, sdl2_mixer, sdl2_ttf
+2. Debian: gcc, g++, make, clang-format, libsdl2 libsdl2-mixer, libsdl2-ttf
+3. macOS: XCode tools (note 1), clang-format, sdl2, sdl2_mixer, sdl2_ttf
+
+§2. BUILD COMMAND
+------------------
+
+Use a POSIX-compliant shell, and run ‘make’ to build the default target
+(debug). The ‘-j’ option is fully supported for job control, and can be given
+an argument for the number of parallel jobs with the form ‘-j$(nproc)’ (on
+Linux) or ‘-j$(sysctl -n hw.ncpu)’ (on macOS). The ‘-j$(nproc)’ form works on
+macOS too if GNU coreutils is installed.
+
+Several targets are available: debug, release, check, cov, and asan. Building
+will output the executable with the suffix ‘_{dbg,rel,chk,cov,asan}’,
+respectively depending on which target was chosen. This defaults to debug.
+Run ‘make clean’ to delete all of the project’s ofiles; run ‘make distclean’
+to do the same, additionally for in-tree 3rd-party libraries and their
+outputs.
