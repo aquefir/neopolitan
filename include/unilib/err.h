@@ -130,6 +130,45 @@ enum /* err */
 #define ASSERT_TTF( v ) IMPL_ASSERT_TTF( v, 0, __FILE__, __LINE__ )
 #define ASSERT_TTFRET( v ) IMPL_ASSERT_TTF( v, 1, __FILE__, __LINE__ )
 
+#define IMPL_ASSERT_NOP( x, o, file, line )  \
+	do \
+	{ \
+		if( x ) \
+		{ \
+		} \
+		else \
+		{ \
+			fprintf( stderr, \
+			  "!!! Assert failed @ %s L%u: %s\n", \
+			  file, \
+			  line, \
+			  #x ); \
+			o.is = 0; \
+			return (o); \
+		} \
+	} while( 0 )
+
+#define IMPL_ASSERT_SDLNOP( x, o, file, line )  \
+	do \
+	{ \
+		if( x ) \
+		{ \
+		} \
+		else \
+		{ \
+			fprintf( stderr, \
+			  "SDL error @ %s L%u: %s\n", \
+			  file, \
+			  line, \
+			  SDL_GetError( ) ); \
+			(o).is = 0; \
+			return (o); \
+		} \
+	} while( 0 )
+
+#define ASSERT_NOP( x, o ) IMPL_ASSERT_NOP( (x), (o), __FILE__, __LINE__)
+#define ASSERT_SDLNOP( x, o ) IMPL_ASSERT_SDLNOP( (x), (o), __FILE__, __LINE__)
+
 extern void uni_assert_fail(
   const char*, const char*, unsigned, const char* );
 
