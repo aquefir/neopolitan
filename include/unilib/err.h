@@ -8,6 +8,8 @@
 #ifndef INC__UNILIB_ERR_H
 #define INC__UNILIB_ERR_H
 
+#include <unilib/log.h>
+
 enum /* err */
 {
 	UNI_ERR_SUCCESS = 0,
@@ -37,6 +39,7 @@ enum /* err */
 		} \
 		else \
 		{ \
+			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in function \"%s\".\nExpression: %s", __FILE__, __LINE__, __func__, #cnd ); \
 			return; \
 		} \
 	} while( 0 )
@@ -48,6 +51,7 @@ enum /* err */
 		} \
 		else \
 		{ \
+			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in function \"%s\".\nExpression: %s", __FILE__, __LINE__, __func__, #cnd ); \
 			return -1; \
 		} \
 	} while( 0 )
@@ -59,6 +63,7 @@ enum /* err */
 		} \
 		else \
 		{ \
+			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in function \"%s\".\nExpression: %s", __FILE__, __LINE__, __func__, #r ); \
 			return ( r ); \
 		} \
 	} while( 0 )
