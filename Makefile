@@ -7,7 +7,7 @@
 
 include base.mk
 
-PROJECT := unilib
+PROJECT := uni
 EXEFILE :=
 SOFILE  :=
 AFILE   := 1
@@ -56,11 +56,7 @@ GCDAFILES := $(CFILES:.c=.c.gcda) $(CPPFILES:.cpp=.cpp.gcda)
 include targets.mk
 
 clean:
-	$(RM) $(TARGETS_DBG)
-	$(RM) $(TARGETS_REL)
-	$(RM) $(TARGETS_CHK)
-	$(RM) $(TARGETS_COV)
-	$(RM) $(TARGETS_ASAN)
+	$(RM) $(TARGETS)
 	$(RM) $(OFILES)
 	$(RM) $(GCNOFILES)
 	$(RM) $(GCDAFILES)
