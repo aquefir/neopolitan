@@ -10,7 +10,7 @@
 
 #include "shand.h"
 
-ptri uni_filesz( const char* );
+long uni_filesz( const char* );
 int uni_buffile( const char*, u8*, ptri );
 int uni_loadfile( const char*, u8**, ptri* );
 

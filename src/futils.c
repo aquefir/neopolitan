@@ -72,7 +72,7 @@ int uni_loadfile( const char* fname, unsigned char** ret, size_t* ret_sz )
 	assert( ret != NULL);
 	assert( ret_sz != NULL);
 
-	sz = bmpx_filesz( fname );
+	sz = uni_filesz( fname );
 
 	if( sz < 0 )
 	{
@@ -87,5 +87,5 @@ int uni_loadfile( const char* fname, unsigned char** ret, size_t* ret_sz )
 		return 1;
 	}
 
-	return bmpx_buffile( fname, *ret, *ret_sz );
+	return uni_buffile( fname, *ret, *ret_sz );
 }
