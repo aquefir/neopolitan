@@ -10,8 +10,8 @@
 
 #include "shand.h"
 
-long uni_filesz(const char *);
-int uni_buffile(const char *, u8 *, ptri);
-int uni_loadfile(const char *, u8 **, ptri *);
+long uni_filesz( const char* );
+int uni_buffile( const char*, u8*, ptri );
+int uni_loadfile( const char*, u8**, ptri* );
 
 #endif /* INC__UNILIB_FUTILS_H */

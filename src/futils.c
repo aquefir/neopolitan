@@ -16,68 +16,76 @@
 /* returns negative value on error. This should be pure C compatible, so no
  * fstat. */
 /* PURE FUNCTION */
-long uni_filesz(const char *fname) {
-  FILE *f;
-  long sz;
+long uni_filesz( const char* fname )
+{
+	FILE* f;
+	long sz;
 
-  assert(fname != NULL);
+	assert( fname != NULL );
 
-  f = fopen(fname, "rb");
+	f = fopen( fname, "rb" );
 
-  if (!f) {
-    return -1;
-  }
+	if( !f )
+	{
+		return -1;
+	}
 
-  if (fseek(f, 0, SEEK_END) != 0) {
-    fclose(f);
-    return -1;
-  }
+	if( fseek( f, 0, SEEK_END ) != 0 )
+	{
+		fclose( f );
+		return -1;
+	}
 
-  sz = ftell(f);
-  /* LONG_MAX may be returned, meaning it failed */
-  sz = sz == LONG_MAX ? -1 : sz;
+	sz = ftell( f );
+	/* LONG_MAX may be returned, meaning it failed */
+	sz = sz == LONG_MAX ? -1 : sz;
 
-  fclose(f);
-  return sz;
+	fclose( f );
+	return sz;
 }
 
-int uni_buffile(const char *fname, unsigned char *ret, size_t ret_sz) {
-  FILE *f;
-  size_t readsz;
+int uni_buffile( const char* fname, unsigned char* ret, size_t ret_sz )
+{
+	FILE* f;
+	size_t readsz;
 
-  assert(fname != NULL);
-  assert(ret != NULL);
+	assert( fname != NULL );
+	assert( ret != NULL );
 
-  f = fopen(fname, "rb");
-  if (!f) {
-    return 1;
-  }
+	f = fopen( fname, "rb" );
+	if( !f )
+	{
+		return 1;
+	}
 
-  readsz = fread(ret, 1, ret_sz, f);
-  fclose(f);
+	readsz = fread( ret, 1, ret_sz, f );
+	fclose( f );
 
-  return readsz != ret_sz ? 1 : 0;
+	return readsz != ret_sz ? 1 : 0;
 }
 
-int uni_loadfile(const char *fname, unsigned char **ret, size_t *ret_sz) {
-  long sz;
+int uni_loadfile( const char* fname, unsigned char** ret, size_t* ret_sz )
+{
+	long sz;
 
-  assert(fname != NULL);
-  assert(ret != NULL);
-  assert(ret_sz != NULL);
+	assert( fname != NULL );
+	assert( ret != NULL );
+	assert( ret_sz != NULL );
 
-  sz = uni_filesz(fname);
+	sz = uni_filesz( fname );
 
-  if (sz < 0) {
-    return 1;
-  }
+	if( sz < 0 )
+	{
+		return 1;
+	}
 
-  *ret_sz = (size_t)sz;
-  *ret = malloc(*ret_sz);
+	*ret_sz = (size_t)sz;
+	*ret    = malloc( *ret_sz );
 
-  if (*ret == NULL && *ret_sz > 0) {
-    return 1;
-  }
+	if( *ret == NULL && *ret_sz > 0 )
+	{
+		return 1;
+	}
 
-  return uni_buffile(fname, *ret, *ret_sz);
+	return uni_buffile( fname, *ret, *ret_sz );
 }

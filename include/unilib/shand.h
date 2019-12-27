@@ -19,13 +19,13 @@ typedef signed __int32 s32;
 typedef signed __int64 s64;
 #ifdef _M_IX86
 typedef unsigned __int32 ptri;
-#elif defined(_M_X64)
+#elif defined( _M_X64 )
 typedef unsigned __int64 ptri;
 #else
 #error "Must be compiling for i386 or AMD64 when targeting Windows"
 #endif /* _M_ arch */
 /* UNIX land */
-#elif defined(__clang__) || defined(__GNUC__)
+#elif defined( __clang__ ) || defined( __GNUC__ )
 typedef _Float16 f16; /* this is unsupported on ARM because of ABIs */
 typedef __INT64_TYPE__ s64;
 typedef __INT32_TYPE__ s32;
