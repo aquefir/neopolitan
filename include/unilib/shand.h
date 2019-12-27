@@ -25,7 +25,7 @@ typedef unsigned __int64 ptri;
 #error "Must be compiling for i386 or AMD64 when targeting Windows"
 #endif /* _M_ arch */
 /* UNIX land */
-#elif defined( __clang__ ) || defined( __GNUC__ )
+#elif defined(__clang__) || defined(__GNUC__)
 typedef _Float16 f16; /* this is unsupported on ARM because of ABIs */
 typedef __INT64_TYPE__ s64;
 typedef __INT32_TYPE__ s32;
