@@ -127,9 +127,12 @@ $(EXETARGET): $(OFILES)
 $(TESTARGET): $(OFILES) $(TES_OFILES)
 	$(CCLD) $(LDFLAGS) -o $@ $(LIB) $^
 
+DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGET))
+
 clean:
 	$(RM) $(TARGETS)
 	$(RM) $(TESTARGET)
+	$(RM)r $(DSYMS)
 	$(RM) $(OFILES)
 	$(RM) $(GCNOFILES)
 	$(RM) $(GCDAFILES)
