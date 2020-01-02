@@ -12,10 +12,12 @@
 ## this file expects the following variables to be defined:
 ## CFILES, CPPFILES, HFILES, HPPFILES, GCNOFILES, GCDAFILES, CFLAGS, CXXFLAGS,
 ## LDFLAGS, CC, CXX, AR, FMT, INCLUDES, INCLUDEL, LIBDIRS, LIBS, FWORKS,
-## OFILES, PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR
+## OFILES, PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR, TES_CFILES,
+## TES_CPPFILES, TES_HFILES, TES_HPPFILES, TES_GCNOFILES, TES_GCDAFILES
 
 # Add 3rd-party includes
-INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS))
+INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS)) \
+	$(3PLIBDIR)/teslib/include
 
 # Add 3rd-party library directories
 LIBDIRS += $(patsubst %,$(3PLIBDIR)/%lib,$(3PLIBS))
@@ -29,6 +31,8 @@ FWORK := $(patsubst %,-framework %,$(FWORKS))
 
 # Populated below
 TARGETS :=
+
+TESTARGET := $(PROJECT)_test
 
 # specify all target filenames
 EXETARGET := $(PROJECT)$(EXE)
@@ -53,7 +57,7 @@ else
 	CCLD ?= $(CXX)
 endif
 
-.PHONY: debug release check cov asan
+.PHONY: debug release check cov asan clean format
 
 debug: CFLAGS += -O0 -g3 -UNDEBUG
 debug: REALSTRIP := ':' ; # : is a no-op
@@ -70,7 +74,14 @@ check: $(TARGETS)
 cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-arcs -ftest-coverage
 cov: LDFLAGS += -fprofile-arcs
 cov: REALSTRIP := ':' ; # : is a no-op
+ifeq ($(strip $(NO_TES)),)
+cov: CFLAGS += -DTES_BUILD=1
+cov: LDFLAGS += -L$(3PLIBDIR)/teslib
+cov: LIB += -ltes
+cov: $(TESTARGET)
+else
 cov: $(TARGETS)
+endif
 
 # address sanitised build for valgrind
 ifeq ($(CC),clang)
@@ -83,7 +94,14 @@ asan: CFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g \
 endif
 asan: LDFLAGS += -fsanitize=address
 asan: REALSTRIP := ':' ; # : is a no-op
+ifeq ($(strip $(NO_TES)),)
+asan: CFLAGS += -DTES_BUILD=1
+asan: LDFLAGS += -L$(3PLIBDIR)/teslib
+asan: LIB += -ltes
+asan: $(TESTARGET)
+else
 asan: $(TARGETS)
+endif
 
 # Object file builds
 %.cpp.o: %.cpp
@@ -105,3 +123,21 @@ $(SOTARGET): $(OFILES)
 $(EXETARGET): $(OFILES)
 	$(CCLD) $(LDFLAGS) -o $@ $(LIB) $^
 	$(REALSTRIP) -s $^
+
+$(TESTARGET): $(OFILES) $(TES_OFILES)
+	$(CCLD) $(LDFLAGS) -o $@ $(LIB) $^
+
+clean:
+	$(RM) $(TARGETS)
+	$(RM) $(TESTARGET)
+	$(RM) $(OFILES)
+	$(RM) $(GCNOFILES)
+	$(RM) $(GCDAFILES)
+	$(RM) $(TES_OFILES)
+	$(RM) $(TES_GCNOFILES)
+	$(RM) $(TES_GCDAFILES)
+
+format:
+	for _file in $(CFILES) $(HFILES) $(CPPFILES) $(HPPFILES); do \
+		$(FMT) -i -style=file $$_file ; \
+	done
