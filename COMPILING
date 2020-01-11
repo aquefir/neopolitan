@@ -25,3 +25,55 @@ respectively depending on which target was chosen. This defaults to debug.
 Run ‘make clean’ to delete all of the project’s ofiles; run ‘make distclean’
 to do the same, additionally for in-tree 3rd-party libraries and their
 outputs.
+
+§3. TARGET PLATFORMS
+---------------------
+
+Development only happens on one of two platforms: macOS and Linux. All other
+platforms are target-only, and macOS and Linux may be targets as well, of
+course. The steps for each target will be described below.
+
+Before compiling this repository, be sure to address each subfolder of the
+3rdparty/ directory and compile them first.
+
+§3.1. APPLE macOS
+------------------
+
+Targeting macOS is only supported natively. The process uses XCode command
+line utilities. Valgrind, LLDB, and normal debug/release/check builds are
+supported. On recent versions of macOS (esp. Mojave and Catalina) you may need
+to dig around for a patched Valgrind that runs on those versions.
+
+§3.2. GNU/LINUX
+----------------
+
+Targeting Linux is only supported natively. The process can use GCC or LLVM
+based tools, and both GCC and Clang are actively used in development. As with
+macOS, Valgrind, LLDB, and the usual debug/release/check builds are supported.
+GDB is not actively used, so if you wish to do debugging, compile the program
+and its dependencies with Clang instead of GCC to use LLDB.
+
+§3.3. MICROSOFT WINDOWS
+------------------------
+
+Windows may be targeted for cross-compilation from either macOS or Linux.
+MinGW-W64 is used to achieve this (provided by the system’s package manager),
+and runtime testing is done in WINE. 32-bit Windows builds are not supported.
+For now, this target is still very much a work-in-progress.
+
+§3.4. NINTENDO SWITCH
+----------------------
+Not public. See additional company-provided documentation for details.
+
+§3.5. ANDROID (AOSP)
+---------------------
+
+Currently unevaluated. Pending support checks for a Google-free
+cross-compilation with future support for Vulkan from the development
+platforms specified above.
+
+§3.6. APPLE iOS
+----------------
+
+Currently unevaluated. Pending examination of Apple toolchains and C-friendly
+APIs, along with support systems for Vulkan use.
