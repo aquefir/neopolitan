@@ -1,7 +1,6 @@
 #!/usr/bin/git
 # -*- coding: utf-8 -*-
 
-/.vscode
 vgcore*
 
 *.o
