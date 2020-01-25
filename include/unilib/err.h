@@ -101,6 +101,23 @@ enum /* err */
 			return NULL; \
 		} \
 	} while( 0 )
+#define ASSERT_RETVAL( cnd, val ) \
+	do \
+	{ \
+		if( cnd ) \
+		{ \
+		} \
+		else \
+		{ \
+			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
+			            "function \"%s\".\nExpression: %s", \
+			   __FILE__, \
+			   __LINE__, \
+			   __func__, \
+			   #cnd ); \
+			return val; \
+		} \
+	} while( 0 )
 
 #define IMPL_ASSERT_SDL( v, r, file, line ) \
 	do \

@@ -42,19 +42,21 @@
 	}; \
 	struct _dummy
 
-struct uni_vec_header
+struct uni_vec
 {
-	ptri sz, cap;
+	ptri sz, cap, elem_sz;
+	void* data;
 };
 
-void* uni_vec_init( ptri, ptri );
-void uni_vec_fini( void* );
-void* uni_vec_reserve( void*, ptri, ptri );
-void* uni_vec_emplace( void*, ptri, void*, ptri, struct rangep );
-void* uni_vec_slackoff( void*, ptri );
-void* uni_vec_slice( void*, ptri, struct rangep );
-ptri uni_vec_readsz( void* );
-ptri uni_vec_readcap( void* );
+struct uni_vec uni_vec_init( ptri, ptri );
+struct uni_vec uni_vec_init_ex( ptri, ptri, void* );
+void uni_vec_fini( struct uni_vec );
+struct uni_vec uni_vec_dup( struct uni_vec );
+struct uni_vec uni_vec_reserve( struct uni_vec, ptri );
+struct uni_vec uni_vec_emplace( struct uni_vec, struct uni_vec,
+struct rangep );
+struct uni_vec uni_vec_slackoff( struct uni_vec );
+struct uni_vec uni_vec_slice( struct uni_vec, struct rangep );
 
 ptri uni_vec_getoffs( ptri );
 void* uni_vec_getmemstart( void*, ptri );

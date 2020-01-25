@@ -11,103 +11,149 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <tes/program.h>
 #include <unilib/err.h>
 #include <unilib/shand.h>
 
 static const ptri header_sz = sizeof( struct uni_vec_header );
 
-TES_STATIC void write_sz( void* v, ptri sz )
+UNI_API struct uni_vec uni_vec_init( ptri i_sz, ptri ini_cap )
 {
-	if( v != NULL && sz > 0 )
-	{
-		memcpy( v, (u8*)(&sz), sizeof(ptri) );
-	}
-}
-
-TES_STATIC void write_cap( void* v, ptri cap )
-{
-	if( v != NULL && cap > 0 )
-	{
-		memcpy( ((u8*)v) + sizeof(ptri), (u8*)(&cap), sizeof(ptri) );
-	}
-}
-
-UNI_API void* uni_vec_init( ptri i_sz, ptri ini_cap )
-{
-	const struct uni_vec_header head = { 0, ini_cap };
-	void* ret;
+	struct uni_vec ret = { 0, ini_cap, i_sz, NULL };
 
 	if(i_sz == 0)
 	{
-		return NULL;
+		return ret;
 	}
 
-	ret = malloc( sizeof(u8) * (header_sz + (ini_cap * i_sz)) );
+	ret.data = malloc( sizeof(u8) * (header_sz + (ini_cap * i_sz)) );
 
-	if(ret == NULL)
+	if(ret.data == NULL)
 	{
-		return NULL;
+		return ret;
 	}
 
-	memcpy( ret, &head, header_sz );
+	memcpy( ret.data, &head, header_sz );
 
 	return ret;
 }
 
-UNI_API void uni_vec_fini( void* v )
+UNI_API struct uni_vec uni_vec_init_ex( ptri i_sz, ptri cap, void* data )
 {
-	if(v != NULL)
+	return { cap, cap, i_sz, data };
+}
+
+UNI_API struct uni_vec uni_vec_dup( struct uni_vec v )
+{
+	struct uni_vec tmp = uni_vec_init( v.elem_sz, v.sz );
+	struct rangep range = { 0, v.sz - 1 };
+
+	return uni_vec_emplace( tmp, v, range )
+}
+
+UNI_API void uni_vec_fini( struct uni_vec v )
+{
+	if(v.data != NULL)
 	{
-		free( v );
+		free( v.data );
 	}
 }
 
-UNI_API void* uni_vec_reserve( void* v, ptri i_sz, ptri count )
+UNI_API struct uni_vec uni_vec_reserve( struct uni_vec v, ptri count )
 {
 	ptri sz, cap;
-	void* ret;
+	struct uni_vec ret = { v.sz, v.cap, v.elem_sz, v.data };
 
-	ASSERT_RETNUL( v != NULL );
+	ASSERT_RETVAL( ret.data != NULL, ret );
+	ASSERT_RETVAL( ret.cap > 0 ); /* ensure it’s not a slice */
 
-	if(i_sz == 0 || count == 0)
+	if(v.elem_sz == 0 || count == 0)
 	{
 		/* nothing to change, we’re done */
-		return v;
+		return ret;
 	}
 
-	/* get header data */
-	sz = uni_vec_readsz( v );
-	cap = uni_vec_readcap( v );
+	/* make new space, calculated by-byte */
+	ret.data = realloc( v.data, sizeof(u8) * (header_sz + 
+		(ret.cap * ret.elem_sz) + (count * ret.elem_sz)) );
 
-	ret = realloc( v, sizeof(u8) * (header_sz + (cap * i_sz) + \
-		(count * i_sz)) );
-
-	if(ret == NULL)
-	{
-		uni_perror( "realloc() failed in uni_vec_reserve()\n" );
-
-		return v;
-	}
+	ASSERT_RETVAL( ret.data != NULL, ret );
 
 	/* record and store the new capacity */
-	cap += count;
-
-	write_cap( v, cap );
+	ret.cap += count;
 
 	return ret;
 }
 
-UNI_API void* uni_vec_emplace( void* v, ptri i_sz, void* in, ptri in_sz,
+UNI_API struct uni_vec uni_vec_emplace( struct uni_vec v, struct uni_vec nu,
 struct rangep r )
 {
+	/* all of these values are in units of elements, not bytes */
 	const ptri r_sz = UNI_SIZEOF_RANGE( r );
-	const ptri new_needed = r_sz > in_sz ? 0 : r_sz - in_sz;
-	ptri sz, cap;
+	const ptri new_needed = r_sz > nu.sz ? 0 : r_sz - nu.sz;
+	struct uni_vec ret = { v.sz, v.cap, v.elem_sz, v.data };
+	const ptri shift_sz = new_needed - (ret.cap - ret.sz);
+	u8* data = (u8*)(ret.data);
 
-	ASSERT_RETNUL( v != NULL );
+	ASSERT_RETVAL( data != NULL, ret );
+	ASSERT_RETVAL( r.hi <= ret.sz, ret );
 
-	sz = uni_vec_readsz( v );
-	cap = uni_vec_readcap( v );
+	/* reserve new space if necessary */
+	if(ret.cap - ret.sz < new_needed)
+	{
+		ASSERT_RETVAL( ret.cap > 0, ret ); /* ensure it’s not a slice */
+
+		ret = uni_vec_reserve( ret, shift_sz );
+
+		if(ret.data == NULL)
+		{
+			return NULL;
+		}
+	}
+
+	if(r_sz < nu.sz)
+	{
+		/* range of v to overwrite is smaller than the new data
+		 * so we need to shift the old data over to make room */
+		/* shift size is the number of newly allocated elements */
+		const ptri latter_sz = v.sz - r.hi;
+		ptri i;
+
+		for(i = 0; i < latter_sz; ++i)
+		{
+			data[v.cap - i - 1] = data[v.sz - i - 1];
+		}
+	}
+
+	/* now we can copy over the new data */
+	memcpy( data + r.lo, ((u8*)nu.data), r_sz );
+
+	return ret;
+}
+
+UNI_API struct uni_vec uni_vec_slackoff( struct uni_vec v )
+{
+	struct uni_vec ret = { v.sz, v.cap, v.elem_sz, v.data };
+
+	ASSERT_RETVAL( ret.data != NULL, ret );
+	ASSERT_RETVAL( ret.cap > 0 ); /* ensure it’s not a slice */
+
+	if(ret.sz < ret.cap)
+	{
+		ret.data = realloc( v.data, sizeof(u8) * (v.sz) );
+
+		ASSERT_RETVAL( ret.data != NULL, ret );
+	}
+
+	return ret;
+}
+
+UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
+{
+	struct uni_vec ret;
+	
+	ret.sz = UNI_SIZEOF_RANGE( r );
+	ret.cap = 0;
 }
 
 /* *** */

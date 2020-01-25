@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 vgcore*
+/3rdparty/*
+!/3rdparty/.touched
 
 *.o
 *.obj

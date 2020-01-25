@@ -46,7 +46,5 @@ OFILES    := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
 GCNOFILES := $(CFILES:.c=.c.gcno) $(CPPFILES:.cpp=.cpp.gcno)
 GCDAFILES := $(CFILES:.c=.c.gcda) $(CPPFILES:.cpp=.cpp.gcda)
 
-NO_TES := 1
-
 # this defines all our usual targets
 include targets.mk
