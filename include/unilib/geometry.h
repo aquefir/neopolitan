@@ -5,10 +5,14 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC__UNILIB_GEOMETRY_H
-#define INC__UNILIB_GEOMETRY_H
+#ifndef INC_API__UNILIB_GEOMETRY_H
+#define INC_API__UNILIB_GEOMETRY_H
 
 #include "shand.h"
+
+#define UNI_SIZEOF_RANGE(RANGE) \
+	(((RANGE).lo > (RANGE).hi) ? ((RANGE).lo - (RANGE).hi) : \
+	((RANGE).hi - (RANGE).lo))
 
 struct point2
 {
@@ -50,4 +54,19 @@ struct bound3l
 	u64 l, w, h;
 };
 
-#endif /* INC__UNILIB_GEOMETRY_H */
+struct range
+{
+	s32 lo, hi;
+};
+
+struct rangel
+{
+	s64 lo, hi;
+};
+
+struct rangep
+{
+	ptri lo, hi;
+};
+
+#endif /* INC_API__UNILIB_GEOMETRY_H */

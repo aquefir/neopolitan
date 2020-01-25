@@ -5,8 +5,8 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC__UNILIB_SHAND_H
-#define INC__UNILIB_SHAND_H
+#ifndef INC_API__UNILIB_SHAND_H
+#define INC_API__UNILIB_SHAND_H
 
 #ifdef _MSC_VER
 typedef unsigned __int8 u8;
@@ -41,11 +41,26 @@ typedef long double f80;
 typedef double f64;
 typedef float f32;
 
-#if defined( __clang__) && (defined( __arm__) || defined( __aarch64__ ))
+#if defined( __clang__ ) && ( defined( __arm__ ) || defined( __aarch64__ ) )
 typedef _Float16 f16;
 #else
 /* this is unsupported outside ARM because of ABIs */
 typedef f32 f16;
 #endif
 
-#endif /* INC__UNILIB_SHAND_H */
+#define U8_MAX ( (u8)0xFF )
+#define U16_MAX ( (u16)0xFFFF )
+#define U32_MAX ( (u32)0xFFFFFFFF )
+#define U64_MAX ( (u64)0xFFFFFFFFFFFFFFFF )
+#define S8_MIN ( (s8)0x80 )
+#define S16_MIN ( (s16)0x8000 )
+#define S32_MIN ( (s32)0x80000000 )
+#define S64_MIN ( (s64)0x8000000000000000 )
+#define S8_MAX ( (s8)0x7F )
+#define S16_MAX ( (s16)0x7FFF )
+#define S32_MAX ( (s32)0x7FFFFFFF )
+#define S64_MAX ( (s64)0x7FFFFFFFFFFFFFFF )
+
+#define PTRI_MAX ( ( ptri )( -1 ) )
+
+#endif /* INC_API__UNILIB_SHAND_H */

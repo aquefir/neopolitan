@@ -5,8 +5,8 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC__UNILIB_DECL_H
-#define INC__UNILIB_DECL_H
+#ifndef INC_API__UNILIB_DECL_H
+#define INC_API__UNILIB_DECL_H
 
 #ifdef UNI_TEST
 #define UNI_STATIC
@@ -20,4 +20,4 @@
 #define UNI_API extern
 #endif
 
-#endif /* INC__UNILIB_DECL_H */
+#endif /* INC_API__UNILIB_DECL_H */

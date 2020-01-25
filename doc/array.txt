@@ -13,12 +13,25 @@ Variables of this type have two properties, accessible by dot notation:
  1. val: the array itself, as a pointer to the given type
  2. sz: the size of the array, expressed as the number of elements allocated
 
-§2. #UNI_DECL_ARR
+§2. #UNI_ARRAYP
+----------------
+
+Like §1, but for arrays of pointer types. Necessary for token pasting to work.
+
+§3. #UNI_DECL_ARR{_S,_P,_SP,}
 ------------------
 
-Declare an array type of another type, in the type namespace (no prefixes).
+Declare an array type of another type, in the type namespace (no prefixes). If
+the ‘_S’ suffix is used, prepend a ‘struct’ keyword for the type. If the ‘_P’
+suffix is used, make it a pointer to the type name. If ‘_SP’ is appended, make
+it a pointer to the type and also prepend the ‘struct’ keyword. These variants
+are needed to prevent token pasting from being broken by asterisks and spaces.
+It is possible to use typedefs instead, but this choice is left up to the API
+user as their types will need to be declared as such.
 
-§3. #UNI_DECL_ARR_S
+§4. #UNI_DECL_ARR_S
 --------------------
 
 Declare an array type of another struct type, in the struct namespace.
+
+§5. STRUCT UNI_VEC_HEADER

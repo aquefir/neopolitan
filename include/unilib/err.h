@@ -5,8 +5,10 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC__UNILIB_ERR_H
-#define INC__UNILIB_ERR_H
+#ifndef INC_API__UNILIB_ERR_H
+#define INC_API__UNILIB_ERR_H
+
+#include <stddef.h>
 
 #include <unilib/log.h>
 
@@ -80,6 +82,23 @@ enum /* err */
 			   __func__, \
 			   #r ); \
 			return ( r ); \
+		} \
+	} while( 0 )
+#define ASSERT_RETNUL( cnd ) \
+	do \
+	{ \
+		if( cnd ) \
+		{ \
+		} \
+		else \
+		{ \
+			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
+			            "function \"%s\".\nExpression: %s", \
+			   __FILE__, \
+			   __LINE__, \
+			   __func__, \
+			   #cnd ); \
+			return NULL; \
 		} \
 	} while( 0 )
 
@@ -189,4 +208,4 @@ enum /* err */
 
 extern void uni_assert_fail( const char*, const char*, unsigned, const char* );
 
-#endif /* INC__UNILIB_ERR_H */
+#endif /* INC_API__UNILIB_ERR_H */

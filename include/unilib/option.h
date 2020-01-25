@@ -5,8 +5,8 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC__UNILIB_OPTION_H
-#define INC__UNILIB_OPTION_H
+#ifndef INC_API__UNILIB_OPTION_H
+#define INC_API__UNILIB_OPTION_H
 
 #include "shand.h"
 
@@ -41,4 +41,4 @@
 	}; \
 	struct _dummy
 
-#endif /* INC__UNILIB_OPTION_H */
+#endif /* INC_API__UNILIB_OPTION_H */

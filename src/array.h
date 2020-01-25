@@ -5,13 +5,9 @@
  *                           All rights reserved.                           *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_FUTILS_H
-#define INC_API__UNILIB_FUTILS_H
+#ifndef INC__UNILIB_ARRAY_H
+#define INC__UNILIB_ARRAY_H
 
-#include "shand.h"
+#include <unilib/array.h>
 
-long uni_filesz( const char* );
-int uni_buffile( const char*, u8*, ptri );
-int uni_loadfile( const char*, u8**, ptri* );
-
-#endif /* INC_API__UNILIB_FUTILS_H */
+#endif /* INC__UNILIB_ARRAY_H */

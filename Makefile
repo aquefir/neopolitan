@@ -24,27 +24,21 @@ LIBDIRS   :=
 # frameworks (macOS only)
 FWORKS :=
 
-ifeq ($(UNAME),Windows)
-	LIBS     += mingw32
-	LIBDIRS  += $(USERPROFILE)/sysroot/lib
-	INCLUDES += $(USERPROFILE)/sysroot/include
-endif
-ifeq ($(UNAME),Linux)
-	LIBS     += m pthread
-endif
-
 CFILES    := \
+	src/array.c \
 	src/err.c \
 	src/futils.c \
 	src/log.c
 HFILES    := \
 	include/unilib/array.h \
+	include/unilib/decl.h \
 	include/unilib/err.h \
 	include/unilib/futils.h \
 	include/unilib/geometry.h \
 	include/unilib/log.h \
 	include/unilib/option.h \
-	include/unilib/shand.h
+	include/unilib/shand.h \
+	src/array.h
 CPPFILES  :=
 HPPFILES  :=
 OFILES    := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
