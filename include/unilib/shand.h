@@ -35,6 +35,17 @@ typedef __UINT32_TYPE__ u32;
 typedef __UINT16_TYPE__ u16;
 typedef __UINT8_TYPE__ u8;
 typedef __UINTPTR_TYPE__ ptri;
+#elif defined( __TINYC__ )
+#include <stdint.h>
+typedef int64_t s64;
+typedef int32_t s32;
+typedef int16_t s16;
+typedef int8_t s8;
+typedef uint64_t u64;
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t u8;
+typedef uintptr_t ptri;
 #endif
 
 typedef long double f80;

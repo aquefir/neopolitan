@@ -24,6 +24,9 @@ LIBDIRS   :=
 # frameworks (macOS only)
 FWORKS :=
 
+3PLIBDIR := 3rdparty
+3PLIBS :=
+
 CFILES    := \
 	src/array.c \
 	src/err.c \

@@ -34,4 +34,21 @@ user as their types will need to be declared as such.
 
 Declare an array type of another struct type, in the struct namespace.
 
-§5. STRUCT UNI_VEC_HEADER
+§5. STRUCT UNI_VEC
+-------------------
+
+Structure for keeping information about a vector.
+
+This structure offers four member variables:
+ 1. sz: the occupied size of the vector array, in number of elements
+ 2. cap: the available memory of the vector array, in number of elements
+ 3. elem_sz: the size of a single element, in bytes
+ 4. data: a pointer to the vector array data
+
+If sz > 0 and cap == 0, then the vector has been dwarfed as a slice. Reserve
+operations cannot be performed on slices, and this includes calls to
+uni_vec_reserve(). Also forbidden on slices are calls to uni_vec_emplace()
+which either shift elements or cause reallocation: the only permitted
+emplacements are 1:1, ergo the new data size is the same as the size of the
+range provided. If a fully-fledged vector object is needed, uni_vec_dup() may
+be used to copy the slice into a new object.

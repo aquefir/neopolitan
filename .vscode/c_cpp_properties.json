@@ -1,25 +1,18 @@
 {
-	"configurations": [ {
-			"name": "Mac",
-			"includePath": [
-				"${workspaceFolder}/include"
-			],
-			"cStandard": "c89",
-			"cppStandard": "c++11"
-		}, {
-			"name": "Linux",
-			"includePath": [
-				"${workspaceFolder}/include"
-			],
-			"cStandard": "c89",
-			"cppStandard": "c++11"
-		}, {
-			"name": "Win32",
-			"includePath": [
-				"${workspaceFolder}/include"
-			],
-			"cStandard": "c89",
-			"cppStandard": "c++11"
-		}
-	]
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/3rdparty/teslib/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c89",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
 }

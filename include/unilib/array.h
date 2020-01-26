@@ -8,8 +8,8 @@
 #ifndef INC_API__UNILIB_ARRAY_H
 #define INC_API__UNILIB_ARRAY_H
 
-#include "geometry.h"
-#include "shand.h"
+#include <unilib/geometry.h>
+#include <unilib/shand.h>
 
 #define UNI_ARRAY( TYPE ) struct arr_##TYPE
 #define UNI_ARRAYP( TYPE ) struct arrp_##TYPE
@@ -57,13 +57,5 @@ struct uni_vec uni_vec_emplace( struct uni_vec, struct uni_vec,
 struct rangep );
 struct uni_vec uni_vec_slackoff( struct uni_vec );
 struct uni_vec uni_vec_slice( struct uni_vec, struct rangep );
-
-ptri uni_vec_getoffs( ptri );
-void* uni_vec_getmemstart( void*, ptri );
-struct uni_vec_header uni_vec_getheader( void*, ptri );
-void uni_vec_setheader( void*, ptri, struct uni_vec_header );
-void* uni_vec_init( ptri, ptri );
-struct uni_vec_header uni_vec_header_addcap( struct uni_vec_header );
-void* uni_vec_addcap( void*, ptri );
 
 #endif /* INC_API__UNILIB_ARRAY_H */

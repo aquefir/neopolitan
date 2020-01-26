@@ -16,8 +16,12 @@
 ## TES_CPPFILES, TES_HFILES, TES_HPPFILES, TES_GCNOFILES, TES_GCDAFILES
 
 # Add 3rd-party includes
-INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS)) \
-	$(3PLIBDIR)/teslib/include
+INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS))
+
+ifeq ($(strip $(NO_TES)),)
+INCLUDES += $(3PLIBDIR)/teslib/include
+3PLIBS += tes
+endif
 
 # Add 3rd-party library directories
 LIBDIRS += $(patsubst %,$(3PLIBDIR)/%lib,$(3PLIBS))
@@ -25,8 +29,12 @@ LIBS += $(3PLIBS)
 
 # Variable transformations for command invocation
 LIB := $(patsubst %,-l%,$(LIBS)) $(patsubst %,-L%,$(LIBDIRS))
+ifeq ($(strip $(CC)),tcc)
+INCLUDE := $(patsubst %,-I%,$(INCLUDES)) $(patsubst %,-isystem %,$(INCLUDEL))
+else
 INCLUDE := $(patsubst %,-isystem %,$(INCLUDES)) \
 	$(patsubst %,-iquote %,$(INCLUDEL))
+endif
 FWORK := $(patsubst %,-framework %,$(FWORKS))
 
 # Populated below
@@ -59,18 +67,34 @@ endif
 
 .PHONY: debug release check cov asan clean format
 
+ifeq ($(strip $(CC)),tcc)
+debug: CFLAGS += -UNDEBUG
+else
 debug: CFLAGS += -O0 -g3 -UNDEBUG
+endif
 debug: REALSTRIP := ':' ; # : is a no-op
 debug: $(TARGETS)
 
+ifeq ($(strip $(CC)),tcc)
+release: CFLAGS += -DNDEBUG=1
+else
 release: CFLAGS += -O2 -DNDEBUG=1
+endif
 release: REALSTRIP := $(STRIP) ;
 release: $(TARGETS)
 
+ifeq ($(strip $(CC)),tcc)
+check: CFLAGS += -Wall -Werror -Wunsupported -DNDEBUG=1
+else
 check: CFLAGS += -Wextra -Werror -Os -DNDEBUG=1
+endif
 check: REALSTRIP := ':' ; # : is a no-op
 check: $(TARGETS)
 
+ifeq ($(strip $(CC)),tcc)
+cov: CFLAGS += -UNDEBUG
+cov: $(TARGETS)
+else
 cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-arcs -ftest-coverage
 cov: LDFLAGS += -fprofile-arcs
 cov: REALSTRIP := ':' ; # : is a no-op
@@ -81,10 +105,15 @@ cov: LIB += -ltes
 cov: $(TESTARGET)
 else
 cov: $(TARGETS)
-endif
+endif # no_tes
+endif # tcc
 
 # address sanitised build for valgrind
-ifeq ($(CC),clang)
+ifeq ($(strip $(CC)),tcc)
+asan: CFLAGS += -UNDEBUG
+asan: $(TARGETS)
+else
+ifeq ($(strip $(CC)),clang)
 asan: CFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
 	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
 	-fno-sanitize-recover=all
@@ -101,7 +130,8 @@ asan: LIB += -ltes
 asan: $(TESTARGET)
 else
 asan: $(TARGETS)
-endif
+endif # no_tes
+endif # tcc
 
 # Object file builds
 %.cpp.o: %.cpp

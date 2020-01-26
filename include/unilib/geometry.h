@@ -8,7 +8,7 @@
 #ifndef INC_API__UNILIB_GEOMETRY_H
 #define INC_API__UNILIB_GEOMETRY_H
 
-#include "shand.h"
+#include <unilib/shand.h>
 
 #define UNI_SIZEOF_RANGE(RANGE) \
 	((((RANGE).lo > (RANGE).hi) ? ((RANGE).lo - (RANGE).hi) : \
