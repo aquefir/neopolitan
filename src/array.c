@@ -108,8 +108,8 @@ UNI_API struct uni_vec uni_vec_emplace(
 	if( r_sz < nu.sz )
 	{
 		/* range of v to overwrite is smaller than the new data
-		 * so we need to shift the old data over to make room */
-		/* shift size is the number of newly allocated elements */
+		 * so we need to shift the old data over to make room
+		 * shift size is the number of newly allocated elements */
 		const ptri latter_sz = v.sz - r.hi;
 		ptri i;
 
@@ -142,16 +142,21 @@ UNI_API struct uni_vec uni_vec_slackoff( struct uni_vec v )
 	return ret;
 }
 
-#if 0
 UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
 {
 	struct uni_vec ret;
 
-	ret.sz = UNI_SIZEOF_RANGE( r );
-	ret.cap = 0;
+	/* new size is the size of the range, of course */
+	ret.sz  = UNI_SIZEOF_RANGE( r );
+	ret.cap = 0; /* This is a sentinel! */
+
+	/* sorry, can’t slice beyond the input vector! */
+	ASSERT_RETVAL( v.sz <= r.hi, v );
+
+	/* finally, advance the pointer in ret */
+	ret.data += ret.elem_sz * r.lo;
 
 	return ret;
 }
-#endif /* 0 */
 
 /* *** */
