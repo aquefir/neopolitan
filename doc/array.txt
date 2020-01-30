@@ -166,7 +166,7 @@ Implicit requirements:
 §13. UNI_VEC_SLICE
 -------------------
 
-This function takes a ‘slice’ of a vector, given a range. It takes the
+This function returns a ‘slice’ of a vector, given a range. It takes the
 following arguments:
 	0. The input vector, from which the slice is taken.
 	1. Range of the input vector by which to delimit the slice.
