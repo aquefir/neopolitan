@@ -45,7 +45,7 @@ UNI_API struct uni_vec uni_vec_init_ex( ptri i_sz, ptri cap, void* data )
 UNI_API struct uni_vec uni_vec_dup( struct uni_vec v )
 {
 	struct uni_vec tmp = uni_vec_init( v.elem_sz, v.sz );
-	struct rangep range = { 0, v.sz - 1 };
+	struct rangep range = { 0, v.sz };
 
 	return uni_vec_emplace( tmp, v, range );
 }
@@ -60,7 +60,6 @@ UNI_API void uni_vec_fini( struct uni_vec v )
 
 UNI_API struct uni_vec uni_vec_reserve( struct uni_vec v, ptri count )
 {
-	ptri sz, cap;
 	struct uni_vec ret = { v.sz, v.cap, v.elem_sz, v.data };
 
 	ASSERT_RETVAL( ret.data != NULL, ret );
@@ -96,12 +95,11 @@ struct rangep r )
 
 	ASSERT_RETVAL( data != NULL, ret );
 	ASSERT_RETVAL( r.hi <= ret.sz, ret );
+	ASSERT_RETVAL( ret.cap > 0, ret ); /* ensure it’s not a slice */
 
 	/* reserve new space if necessary */
 	if(ret.cap - ret.sz < new_needed)
 	{
-		ASSERT_RETVAL( ret.cap > 0, ret ); /* ensure it’s not a slice */
-
 		ret = uni_vec_reserve( ret, shift_sz );
 
 		ASSERT_RETVAL( ret.data != NULL, ret );
@@ -144,12 +142,16 @@ UNI_API struct uni_vec uni_vec_slackoff( struct uni_vec v )
 	return ret;
 }
 
+#if 0
 UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
 {
 	struct uni_vec ret;
 
 	ret.sz = UNI_SIZEOF_RANGE( r );
 	ret.cap = 0;
+
+	return ret;
 }
+#endif /* 0 */
 
 /* *** */
