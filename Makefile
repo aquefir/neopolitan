@@ -42,9 +42,16 @@ HFILES    := \
 	include/unilib/option.h \
 	include/unilib/shand.h \
 	src/array.h
-CPPFILES  :=
-HPPFILES  :=
-OFILES    := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
+CPPFILES :=
+HPPFILES :=
+OFILES   := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
+
+TES_CFILES   := \
+	test/main.c
+TES_HFILES   :=
+TES_CPPFILES :=
+TES_HPPFILES :=
+TES_OFILES   := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 # address-sanitisation metadata
 GCNOFILES := $(CFILES:.c=.c.gcno) $(CPPFILES:.cpp=.cpp.gcno)
 GCDAFILES := $(CFILES:.c=.c.gcda) $(CPPFILES:.cpp=.cpp.gcda)
