@@ -149,3 +149,35 @@ Implicit requirements:
 	- arg[0] must be a valid object of ‘struct uni_vec’ type.
 	- arg[1] must be a valid object of ‘struct uni_vec’ type.
 	- arg[2] must be a valid object of ‘struct rangep’ type.
+
+§12. UNI_VEC_SLACKOFF
+----------------------
+
+This function ‘slacks off’ excess allocated memory, resizing the capacity to
+be just large enough to contain the data present. It takes the following
+arguments:
+	0. Input vector array object to slim down.
+
+Returns the vector with the new, minimum allocation.
+
+Implicit requirements:
+	- arg[0] must be a valid object of ‘struct uni_vec’ type.
+
+§13. UNI_VEC_SLICE
+-------------------
+
+This function takes a ‘slice’ of a vector, given a range. It takes the
+following arguments:
+	0. The input vector, from which the slice is taken.
+	1. Range of the input vector by which to delimit the slice.
+
+Returns a vector array slice object of the input vector. The size of the
+vector will be as large as the slice, while the capacity will be zero,
+denoting its incapacity to be modified.
+
+Requirements:
+	- The range’s .hi must not exceed the .sz of the input vector.
+
+Implicit requirements:
+	- arg[0] must be a valid object of ‘struct uni_vec’ type.
+	- arg[1] must be a valid object of ‘struct rangep’ type.
