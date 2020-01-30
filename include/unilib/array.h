@@ -45,7 +45,7 @@
 struct uni_vec
 {
 	ptri sz, cap, elem_sz;
-	void* data;
+	u8* data;
 };
 
 struct uni_vec uni_vec_init( ptri, ptri );
