@@ -53,8 +53,8 @@ struct uni_vec uni_vec_init_ex( ptri, ptri, void* );
 void uni_vec_fini( struct uni_vec );
 struct uni_vec uni_vec_dup( struct uni_vec );
 struct uni_vec uni_vec_reserve( struct uni_vec, ptri );
-struct uni_vec uni_vec_emplace( struct uni_vec, struct uni_vec,
-struct rangep );
+struct uni_vec uni_vec_emplace(
+   struct uni_vec, struct uni_vec, struct rangep );
 struct uni_vec uni_vec_slackoff( struct uni_vec );
 struct uni_vec uni_vec_slice( struct uni_vec, struct rangep );
 

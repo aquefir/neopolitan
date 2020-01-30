@@ -10,9 +10,10 @@
 
 #include <unilib/shand.h>
 
-#define UNI_SIZEOF_RANGE(RANGE) \
-	((((RANGE).lo > (RANGE).hi) ? ((RANGE).lo - (RANGE).hi) : \
-	((RANGE).hi - (RANGE).lo)) + 1)
+#define UNI_SIZEOF_RANGE( RANGE ) \
+	( ( ( ( RANGE ).lo > ( RANGE ).hi ) ? ( ( RANGE ).lo - ( RANGE ).hi ) \
+	                                    : ( ( RANGE ).hi - ( RANGE ).lo ) ) + \
+	   1 )
 
 struct point2
 {

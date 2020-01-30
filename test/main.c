@@ -7,14 +7,8 @@
 
 #include <tes/battery.h>
 
-extern void tes_pre( int ac, char* av[] )
-{
-}
+extern void tes_pre( int ac, char* av[] ) {}
 
-extern int tes_tests( void )
-{
-}
+extern int tes_tests( void ) {}
 
-extern void tes_post( void )
-{
-}
+extern void tes_post( void ) {}
