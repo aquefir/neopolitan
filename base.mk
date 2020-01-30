@@ -2,110 +2,131 @@
 ## This Makefile provides multi-platform build normalisation for the C and C++
 ## compilation toolchains. It is included at the top of the main Makefile.
 
-ifneq ($(OS),Windows_NT)
-A     := a
-EXE   :=
+# Check Make version (we need at least GNU Make 3.82). Fortunately,
+# 'undefine' directive has been introduced exactly in GNU Make 3.82.
+ifeq ($(filter undefine,$(value .FEATURES)),)
+$(error Unsupported Make version. \
+    The build system does not work properly with GNU Make $(MAKE_VERSION), \
+    please use GNU Make 3.82 or above)
+endif
+
 UNAME := $(shell uname -s)
+
+# Set up the original variables
 ifeq ($(strip $(UNAME)),Darwin)
-# macOS
-SO := dylib
-ifeq "$(origin CC)" "default"
-CC := $(shell whereis clang)
+
+## macOS
+##
+
+SO            := dylib
+CC.DEFAULT    := $(shell whereis clang)
+CC.CUSTOM     := $(CC)
+CC.NAME       := clang
+CXX.DEFAULT   := $(shell whereis clang++)
+CXX.CUSTOM    := $(CXX)
+CXX.NAME      := clang++
+CPP.DEFAULT   := $(shell whereis clang) -E
+CPP.CUSTOM    := $(CPP)
+CPP.NAME      := clang
+AR.DEFAULT    := $(shell whereis ar)
+AR.CUSTOM     := $(AR)
+AR.NAME       := ar
+STRIP.DEFAULT := $(shell whereis strip)
+STRIP.CUSTOM  := $(STRIP)
+STRIP.NAME    := strip
+
+else ifeq ($(strip $(UNAME)),Linux)
+
+## Linux
+##
+
+SO            := so
+CC.DEFAULT    := $(shell which gcc)
+CC.CUSTOM     := $(CC)
+CC.NAME       := gcc
+CXX.DEFAULT   := $(shell which g++)
+CXX.CUSTOM    := $(CXX)
+CXX.NAME      := g++
+CPP.DEFAULT   := $(shell which gcc) -E
+CPP.CUSTOM    := $(CC) -E
+CPP.NAME      := gcc
+AR.DEFAULT    := $(shell which ar)
+AR.CUSTOM     := $(AR)
+AR.NAME       := ar
+STRIP.DEFAULT := $(shell which strip)
+STRIP.CUSTOM  := $(STRIP)
+STRIP.NAME    := strip
+
 endif
-ifeq "$(origin CXX)" "default"
-CXX := $(shell whereis clang++)
-endif
-ifeq "$(origin CPP)" "default"
-CPP := $(shell whereis clang) -E
-endif
-ifndef AR
-AR := $(shell whereis ar)
-endif
-ifdef AR
-ifeq "$(origin AR)" "default"
-AR := $(shell whereis ar)
-endif
-endif
-ifndef STRIP
-# if GNU binutils is installed, $(which strip) returns GNU strip
-# this will trash Mach-O binaries, so don’t use it
-STRIP := $(shell whereis strip)
-endif
-ifdef STRIP
-ifeq "$(origin STRIP)" "default"
-STRIP := $(shell whereis strip)
-endif
-endif
+
+# Set up the variables by defaults
+ifeq ($(origin CC),undefined)
+CC    := $(CC.DEFAULT)
+CXX   := $(CXX.DEFAULT)
+CPP   := $(CPP.DEFAULT)
+AR    := $(AR.DEFAULT)
+STRIP := $(STRIP.DEFAULT)
+else ifeq ($(origin CC),default)
+CC    := $(CC.DEFAULT)
+CXX   := $(CXX.DEFAULT)
+CPP   := $(CPP.DEFAULT)
+AR    := $(AR.DEFAULT)
+STRIP := $(STRIP.DEFAULT)
 else
-# non-macOS *nix
-SO := so
-ifeq "$(origin CC)" "default"
-CC := gcc
+# environment [override], file, command line, override, automatic
+CC    := $(CC.CUSTOM)
+CXX   := $(CXX.CUSTOM)
+CPP   := $(CPP.CUSTOM)
+AR    := $(AR.CUSTOM)
+STRIP := $(STRIP.CUSTOM)
 endif
-ifeq "$(origin CXX)" "default"
-CXX := g++
-endif
-ifeq "$(origin CPP)" "default"
-CPP := gcc -E
-endif
-ifndef AR
-AR := ar
-endif
-ifdef AR
-ifeq "$(origin AR)" "default"
-AR := ar
-endif
-endif
-ifndef STRIP
-STRIP := strip
-endif
-ifdef STRIP
-ifeq "$(origin STRIP)" "default"
-STRIP := strip
-endif
-endif
+
+# Base build tool flags
+CFLAGS   := -Wall -fPIC
+CXXFLAGS := -Wall -fPIC
+LDFLAGS  := -pie
+ARFLAGS  := -rcs
 
 # Deterministic build flags, for both clang and GCC
 SOURCE_DATE_EPOCH := 0
 ZERO_AR_DATE := 1
-CFLAGS := -ffile-prefix-map=OLD=NEW -std=c89 -x c
-CXXFLAGS := -std=c++11 -x c++
-LDFLAGS :=
-ARFLAGS := -rcs
 
-ifeq ($(CC),clang)
-CFLAGS += -frandom-seed
-CXXFLAGS += -frandom-seed
+ifeq ($(CC.NAME),clang)
+CFLAGS += -ansi -frandom-seed=0 -x c
+else ifeq ($(CC.NAME),gcc)
+CFLAGS += -ansi -ffile-prefix-map=OLD=NEW -frandom-seed=69 -x c
+else ifeq ($(CC.CUSTOM),tcc)
+CFLAGS += -std=c89 -x c
+endif
+
+ifeq ($(CXX.NAME),clang++)
+CXXFLAGS += -std=c++11 -frandom-seed=0 -x c++
+else ifeq ($(CXX.NAME),g++)
+CXXFLAGS += -std=c++11 -ffile-prefix-map=OLD=NEW -frandom-seed=69 -x c++
 endif
 
 export ZERO_AR_DATE
 export SOURCE_DATE_EPOCH
 
-endif # non-WinNT
-else
-
-UNAME    := Windows
-CFLAGS   :=
-CXXFLAGS :=
-LDFLAGS  :=
-EXE      := .exe
-SO       := dll
-A        := lib
-
-endif # uname -s
-
-FMT := clang-format$(EXE)
+FMT := clang-format
 
 export UNAME
 export SO
-export A
-export EXE
 export FMT
 export CC
 export CXX
 export CPP
 export AR
+export CCLD
+export CXXLD
 export STRIP
+export CC.NAME
+export CXX.NAME
+export CPP.NAME
+export AR.NAME
+export CCLD.NAME
+export CXXLD.NAME
+export STRIP.NAME
 export CFLAGS
 export CXXFLAGS
 export LDFLAGS
