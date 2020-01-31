@@ -1,6 +1,6 @@
 Universal C Library: Error Handling
 
-Copyright © 2019 ARQADIUM, LLC
+Copyright © 2019-2020 ARQADIUM LLC
 All rights reserved.
 
 §1. ENUM ERR_CODE

@@ -5,7 +5,7 @@ Boilerplate for C-like languages:
 /****************************************************************************\
  *                           Universal C Library™                           *
  *                                                                          *
- *                      Copyright © 2019 ARQADIUM, LLC                      *
+ *                    Copyright © 2019-2020 ARQADIUM LLC                    *
  *                           All rights reserved.                           *
 \****************************************************************************/
 
@@ -14,6 +14,6 @@ Hash-based boilerplate (Python, POSIX shell, Makefile):
 ##############################################################################
 ##                           Universal C Library™                           ##
 ##                                                                          ##
-##                      Copyright © 2019 ARQADIUM, LLC                      ##
+##                    Copyright © 2019-2020 ARQADIUM LLC                    ##
 ##                           All rights reserved.                           ##
 ##############################################################################
