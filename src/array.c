@@ -149,6 +149,8 @@ UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
 	/* new size is the size of the range, of course */
 	ret.sz  = UNI_SIZEOF_RANGE( r );
 	ret.cap = 0; /* This is a sentinel! */
+	ret.elem_sz = v.elem_sz;
+	ret.data = v.data;
 
 	/* sorry, can’t slice beyond the input vector! */
 	ASSERT_RETVAL( v.sz <= r.hi, v );
