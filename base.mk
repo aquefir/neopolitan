@@ -52,8 +52,6 @@ AR.CUSTOM     := $(AR)
 STRIP.DEFAULT := $(shell which strip)
 STRIP.CUSTOM  := $(STRIP)
 
-endif
-
 # Set up the variables by defaults
 ifeq ($(origin CC),undefined)
 CC         := $(CC.DEFAULT)
@@ -89,11 +87,8 @@ CXX.NAME   := $(CXX.CUSTOM)
 CPP.NAME   := $(CPP.CUSTOM)
 AR.NAME    := $(AR.CUSTOM)
 STRIP.NAME := $(STRIP.CUSTOM)
-endif
-
-$(info CC := $(CC))
-$(info CXX := $(CXX))
-$(info CC.CUSTOM := $(CC.CUSTOM))
+endif # $(origin CC)
+endif # $(UNAME)
 
 # Base build tool flags
 CFLAGS   := -Wall -fPIC
