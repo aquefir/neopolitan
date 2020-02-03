@@ -32,6 +32,8 @@ UNI_API struct uni_vec uni_vec_init( ptri i_sz, ptri ini_cap )
 		return ret;
 	}
 
+	ret.sz = ini_cap;
+
 	return ret;
 }
 
@@ -117,10 +119,28 @@ UNI_API struct uni_vec uni_vec_emplace(
 		{
 			data[v.cap - i - 1] = data[v.sz - i - 1];
 		}
+
+		ret.sz += latter_sz;
 	}
 
 	/* now we can copy over the new data */
 	memcpy( data + r.lo, ( (u8*)nu.data ), r_sz );
+
+	if( r_sz > nu.sz )
+	{
+		/* range of v to overwrite is larger than the new data
+		 * so we need to shift the remainder over to remain contiguous.
+		 * shift size is the net number of elements lost */
+		const ptri net_loss = r_sz - nu.sz - 1;
+		ptri i;
+
+		for( i = 0; i < net_loss; ++i )
+		{
+			data[v.sz + i] = data[v.sz + net_loss + i];
+		}
+
+		ret.sz -= net_loss;
+	}
 
 	return ret;
 }

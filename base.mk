@@ -84,7 +84,7 @@ endif
 # Base build tool flags
 CFLAGS   := -Wall -fPIC
 CXXFLAGS := -Wall -fPIC
-LDFLAGS  := -pie
+LDFLAGS  := -fPIE
 ARFLAGS  := -rcs
 
 # Deterministic build flags, for both clang and GCC

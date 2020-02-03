@@ -60,9 +60,9 @@ endif
 # Use ?= so that this can be overridden. This is useful when some projects in
 # a solution need $(CXX) linkage when the main project lacks any $(CPPFILES)
 ifeq ($(strip $(CPPFILES)),)
-	CCLD ?= $(CC)
+	CCLD := $(CC)
 else
-	CCLD ?= $(CXX)
+	CCLD := $(CXX)
 endif
 
 .PHONY: debug release check cov asan clean format
@@ -121,7 +121,7 @@ endif # CC.CUSTOM
 ifeq ($(strip $(NO_TES)),)
 cov: CXXFLAGS += -O0 -g3 -UNDEBUG -fprofile-instr-generate \
 	-fcoverage-mapping -DTES_BUILD=1
-cov: LDFLAGS += -L$(3PLIBDIR)/teslib
+cov: LDFLAGS += -fprofile-instr-generate -fcoverage-mapping
 cov: LIB += -ltes
 cov: $(TESTARGET)
 else
@@ -150,8 +150,9 @@ ifeq ($(strip $(NO_TES)),)
 asan: CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
 	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
 	-fno-sanitize-recover=all -DTES_BUILD=1
-asan: LDFLAGS += -fsanitize=address -L$(3PLIBDIR)/teslib
+#asan: LDFLAGS += -fsanitize=address -L$(3PLIBDIR)/teslib
 asan: LIB += -ltes
+asan: $(TESTARGET)
 else
 asan: CXXFLAGS += -UTES_BUILD
 asan: $(TARGETS)

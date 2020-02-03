@@ -50,6 +50,7 @@ OFILES   := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
 
 # test suite sources
 TES_CFILES   := \
+	test/array.c \
 	test/main.c
 TES_HFILES   :=
 TES_CPPFILES :=
