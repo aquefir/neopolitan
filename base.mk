@@ -43,43 +43,57 @@ else ifeq ($(strip $(UNAME)),Linux)
 SO            := so
 CC.DEFAULT    := $(shell which gcc)
 CC.CUSTOM     := $(CC)
-CC.NAME       := gcc
 CXX.DEFAULT   := $(shell which g++)
 CXX.CUSTOM    := $(CXX)
-CXX.NAME      := g++
 CPP.DEFAULT   := $(shell which gcc) -E
 CPP.CUSTOM    := $(CC) -E
-CPP.NAME      := gcc
 AR.DEFAULT    := $(shell which ar)
 AR.CUSTOM     := $(AR)
-AR.NAME       := ar
 STRIP.DEFAULT := $(shell which strip)
 STRIP.CUSTOM  := $(STRIP)
-STRIP.NAME    := strip
 
 endif
 
 # Set up the variables by defaults
 ifeq ($(origin CC),undefined)
-CC    := $(CC.DEFAULT)
-CXX   := $(CXX.DEFAULT)
-CPP   := $(CPP.DEFAULT)
-AR    := $(AR.DEFAULT)
-STRIP := $(STRIP.DEFAULT)
+CC         := $(CC.DEFAULT)
+CXX        := $(CXX.DEFAULT)
+CPP        := $(CPP.DEFAULT)
+AR         := $(AR.DEFAULT)
+STRIP      := $(STRIP.DEFAULT)
+CC.NAME    := gcc
+CXX.NAME   := g++
+CPP.NAME   := gcc
+AR.NAME    := ar
+STRIP.NAME := strip
 else ifeq ($(origin CC),default)
-CC    := $(CC.DEFAULT)
-CXX   := $(CXX.DEFAULT)
-CPP   := $(CPP.DEFAULT)
-AR    := $(AR.DEFAULT)
-STRIP := $(STRIP.DEFAULT)
+CC         := $(CC.DEFAULT)
+CXX        := $(CXX.DEFAULT)
+CPP        := $(CPP.DEFAULT)
+AR         := $(AR.DEFAULT)
+STRIP      := $(STRIP.DEFAULT)
+CC.NAME    := gcc
+CXX.NAME   := g++
+CPP.NAME   := gcc
+AR.NAME    := ar
+STRIP.NAME := strip
 else
 # environment [override], file, command line, override, automatic
-CC    := $(CC.CUSTOM)
-CXX   := $(CXX.CUSTOM)
-CPP   := $(CPP.CUSTOM)
-AR    := $(AR.CUSTOM)
-STRIP := $(STRIP.CUSTOM)
+CC         := $(CC.CUSTOM)
+CXX        := $(CXX.CUSTOM)
+CPP        := $(CPP.CUSTOM)
+AR         := $(AR.CUSTOM)
+STRIP      := $(STRIP.CUSTOM)
+CC.NAME    := $(CC.CUSTOM)
+CXX.NAME   := $(CXX.CUSTOM)
+CPP.NAME   := $(CPP.CUSTOM)
+AR.NAME    := $(AR.CUSTOM)
+STRIP.NAME := $(STRIP.CUSTOM)
 endif
+
+$(info CC := $(CC))
+$(info CXX := $(CXX))
+$(info CC.CUSTOM := $(CC.CUSTOM))
 
 # Base build tool flags
 CFLAGS   := -Wall -fPIC
