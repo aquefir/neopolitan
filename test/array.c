@@ -11,6 +11,7 @@
 
 #include <unilib/array.h>
 #include <unilib/shand.h>
+#include <unilib/log.h>
 
 int testing_vec( void )
 {
@@ -37,10 +38,12 @@ int testing_vec( void )
 
 	v = v2;
 
+	/* make vector from stack-allocated array */
 	v3 = uni_vec_init_ex( sizeof( u8 ), 8, samp );
 
 	TES_ASSERT_NE( v3.data, NULL );
 
+	/* emplace new data */
 	v2 = uni_vec_emplace( v, v3, range );
 
 	TES_ASSERT_NE( v2.data, NULL );
@@ -54,6 +57,22 @@ int testing_vec( void )
 	{
 		TES_ASSERT_EQ( v.data[i], samp[i] );
 	}
+
+	/* emplace for removal of last 2 elements, no insertion */
+	v2.data = NULL;
+	v2.sz = v2.cap = 0;
+	range.lo       = 6;
+	range.hi       = 8;
+
+	v2 = uni_vec_emplace( v, v2, range );
+
+	TES_ASSERT_NE( v2.data, NULL );
+	v = v2;
+
+	TES_ASSERT_EQ( v.sz, 6 );
+
+	uni_vec_fini( v3 );
+	uni_vec_fini( v );
 
 	return 0;
 }

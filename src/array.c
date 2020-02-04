@@ -73,7 +73,7 @@ UNI_API void* uni_vec_getone( struct uni_vec v, ptri index )
 {
 	u8* ret;
 
-	ret = v.data + (sizeof(v.elem_sz) * index);
+	ret = v.data + ( sizeof( v.elem_sz ) * index );
 
 	return ret;
 }
@@ -151,15 +151,15 @@ UNI_API struct uni_vec uni_vec_emplace(
 	{
 		/* we need to shift the remainder over to remain contiguous.
 		 * shift size is the net number of elements lost */
-		const ptri net_loss = r_sz - nu.sz - 1;
+		const ptri net_loss = r_sz - nu.sz;
 		ptri i;
 
-		for( i = 0; i < net_loss; ++i )
+		for( i = 0; i < net_loss && (ret.sz - net_loss) + i < v.sz; ++i )
 		{
-			data[v.sz + i] = data[v.sz + net_loss + i];
+			data[v.sz - net_loss + i] = data[v.sz + i];
 		}
 
-		ret.sz -= net_loss;
+		ret.sz = ret.sz - net_loss;
 	}
 
 	return ret;

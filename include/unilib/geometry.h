@@ -11,8 +11,9 @@
 #include <unilib/shand.h>
 
 #define UNI_SIZEOF_RANGE( RANGE ) \
-	( ( ( ( RANGE ).lo > ( RANGE ).hi ) ? ( ( RANGE ).lo - ( RANGE ).hi ) \
-	                                    : ( ( RANGE ).hi - ( RANGE ).lo ) ) + \
+	( ( ( ( RANGE ).lo > ( RANGE ).hi ) \
+	        ? ( ( RANGE ).lo - ( ( RANGE ).hi - 1 ) ) \
+	        : ( ( ( RANGE ).hi - 1 ) - ( RANGE ).lo ) ) + \
 	   1 )
 
 struct point2
