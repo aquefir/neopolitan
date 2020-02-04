@@ -39,7 +39,16 @@ UNI_API struct uni_vec uni_vec_init( ptri i_sz, ptri ini_cap )
 
 UNI_API struct uni_vec uni_vec_init_ex( ptri i_sz, ptri cap, void* data )
 {
-	struct uni_vec ret = {cap, cap, i_sz, data};
+	struct uni_vec ret = {cap, cap, i_sz, NULL};
+	u8* tmp;
+
+	tmp = malloc( sizeof( u8 ) * cap );
+
+	ASSERT_RETVAL( tmp != NULL, ret );
+
+	ret.data = tmp;
+
+	memcpy( ret.data, data, cap );
 
 	return ret;
 }
@@ -167,10 +176,10 @@ UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
 	struct uni_vec ret;
 
 	/* new size is the size of the range, of course */
-	ret.sz  = UNI_SIZEOF_RANGE( r );
-	ret.cap = 0; /* This is a sentinel! */
+	ret.sz      = UNI_SIZEOF_RANGE( r );
+	ret.cap     = 0; /* This is a sentinel! */
 	ret.elem_sz = v.elem_sz;
-	ret.data = v.data;
+	ret.data    = v.data;
 
 	/* sorry, can’t slice beyond the input vector! */
 	ASSERT_RETVAL( v.sz <= r.hi, v );
