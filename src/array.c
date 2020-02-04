@@ -53,6 +53,14 @@ UNI_API struct uni_vec uni_vec_init_ex( ptri i_sz, ptri cap, void* data )
 	return ret;
 }
 
+UNI_API void uni_vec_fini( struct uni_vec v )
+{
+	if( v.data != NULL )
+	{
+		free( v.data );
+	}
+}
+
 UNI_API struct uni_vec uni_vec_dup( struct uni_vec v )
 {
 	struct uni_vec tmp  = uni_vec_init( v.elem_sz, v.sz );
@@ -61,12 +69,13 @@ UNI_API struct uni_vec uni_vec_dup( struct uni_vec v )
 	return uni_vec_emplace( tmp, v, range );
 }
 
-UNI_API void uni_vec_fini( struct uni_vec v )
+UNI_API void* uni_vec_getone( struct uni_vec v, ptri index )
 {
-	if( v.data != NULL )
-	{
-		free( v.data );
-	}
+	u8* ret;
+
+	ret = v.data + (sizeof(v.elem_sz) * index);
+
+	return ret;
 }
 
 UNI_API struct uni_vec uni_vec_reserve( struct uni_vec v, ptri count )
@@ -132,13 +141,15 @@ UNI_API struct uni_vec uni_vec_emplace(
 		ret.sz += latter_sz;
 	}
 
-	/* now we can copy over the new data */
-	memcpy( data + r.lo, ( (u8*)nu.data ), r_sz );
+	/* now we can copy over the new data, if desired */
+	if( nu.data != NULL )
+	{
+		memcpy( data + r.lo, ( (u8*)nu.data ), r_sz );
+	}
 
 	if( r_sz > nu.sz )
 	{
-		/* range of v to overwrite is larger than the new data
-		 * so we need to shift the remainder over to remain contiguous.
+		/* we need to shift the remainder over to remain contiguous.
 		 * shift size is the net number of elements lost */
 		const ptri net_loss = r_sz - nu.sz - 1;
 		ptri i;

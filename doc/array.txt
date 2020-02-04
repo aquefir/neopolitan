@@ -105,6 +105,12 @@ and its own copy of the data payload. As this operation creates a new object,
 it is useful for creating new, independent arrays from slices taken of other
 arrays, so that it can be resized and emplaced into normally.
 
+§10. UNI_VEC_GETONE
+--------------------
+
+Read and return a single element by index from a vectory array object. This is
+a reference; do not free this pointer, since it is not separately allocated!
+
 §10. UNI_VEC_RESERVE
 ---------------------
 
