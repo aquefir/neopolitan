@@ -154,7 +154,7 @@ UNI_API struct uni_vec uni_vec_emplace(
 		const ptri net_loss = r_sz - nu.sz;
 		ptri i;
 
-		for( i = 0; i < net_loss && (ret.sz - net_loss) + i < v.sz; ++i )
+		for( i = 0; i < net_loss && ( ret.sz - net_loss ) + i < v.sz; ++i )
 		{
 			data[v.sz - net_loss + i] = data[v.sz + i];
 		}
