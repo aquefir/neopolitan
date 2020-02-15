@@ -112,16 +112,16 @@ cov: CFLAGS += -UNDEBUG
 cov: $(TARGETS)
 else
 ifeq ($(strip $(NO_TES)),)
-cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-instr-generate -fcoverage-mapping \
+cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-generate \
 	-DTES_BUILD=1
 else
 cov: -UTES_BUILD
 endif # NO_TES
 endif # CC.CUSTOM
 ifeq ($(strip $(NO_TES)),)
-cov: CXXFLAGS += -O0 -g3 -UNDEBUG -fprofile-instr-generate \
+cov: CXXFLAGS += -O0 -g3 -UNDEBUG -fprofile-generate \
 	-fcoverage-mapping -DTES_BUILD=1
-cov: LDFLAGS += -fprofile-instr-generate -fcoverage-mapping
+cov: LDFLAGS += -fprofile-generate
 cov: LIB += -ltes
 cov: $(TESTARGET)
 else
@@ -171,16 +171,16 @@ $(ATARGET): $(OFILES)
 
 # Shared library builds
 $(SOTARGET): $(OFILES)
-	$(CCLD) $(LDFLAGS) -shared -o $@ $(LIB) $^
+	$(CCLD) $(LDFLAGS) -shared -o $@ $^ $(LIB)
 	$(REALSTRIP) -s $^
 
 # Executable builds
 $(EXETARGET): $(OFILES)
-	$(CCLD) $(LDFLAGS) -o $@ $(LIB) $^
+	$(CCLD) $(LDFLAGS) -o $@ $^ $(LIB)
 	$(REALSTRIP) -s $^
 
 $(TESTARGET): $(OFILES) $(TES_OFILES)
-	$(CCLD) $(LDFLAGS) -o $@ $(LIB) $^
+	$(CCLD) $(LDFLAGS) -o $@ $^ $(LIB)
 
 DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGET))
 

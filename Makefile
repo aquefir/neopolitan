@@ -33,7 +33,8 @@ CFILES    := \
 	src/array.c \
 	src/err.c \
 	src/futils.c \
-	src/log.c
+	src/log.c \
+	src/sort.c
 HFILES    := \
 	include/unilib/array.h \
 	include/unilib/decl.h \
@@ -43,6 +44,7 @@ HFILES    := \
 	include/unilib/log.h \
 	include/unilib/option.h \
 	include/unilib/shand.h \
+	include/unilib/sort.h \
 	src/array.h
 CPPFILES :=
 HPPFILES :=
@@ -51,7 +53,8 @@ OFILES   := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
 # test suite sources
 TES_CFILES   := \
 	test/array.c \
-	test/main.c
+	test/main.c \
+	test/sort.c
 TES_HFILES   :=
 TES_CPPFILES :=
 TES_HPPFILES :=
