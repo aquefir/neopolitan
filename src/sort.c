@@ -8,132 +8,114 @@
 #include <string.h>
 
 #include <unilib/array.h>
+#include <unilib/err.h>
 #include <unilib/sort.h>
 #include <tes/program.h>
 
-TES_STATIC void tdmerge( struct uni_vec a, ptri lo, ptri mid, ptri hi,
-struct uni_vec b, PFN_uni_cmpdata cmp )
+TES_STATIC void merge( struct uni_vec a, ptri lo, ptri mid, ptri hi,
+PFN_uni_cmpdata cmp )
 {
-	ptri i, j, k;
+	ptri i, j, k, l_sz, r_sz;
+	struct uni_vec l, r, tmp;
+	struct rangep l_rng, r_rng, range;
 
-	i = lo;
-	j = mid;
+	/* create temporary vectors of left/right halves
+	 * set up their ranges and sizes */
+	l_rng.lo = lo;
+	l_rng.hi = r_rng.lo = mid;
+	r_rng.hi = hi;
+	l_sz = mid - lo + 1;
+	r_sz = hi - mid;
 
-	/* loop through the run */
-	for(k = lo; k < hi; ++k)
+	/* slice out the left and right ranges */
+	l = uni_vec_slice( a, l_rng );
+	r = uni_vec_slice( a, r_rng );
+
+	i = 0; /* init index of left subvector */
+	j = 0; /* init index of right subvector */
+
+	/* merge left and right together */
+	for(k = lo; i < l_sz && j < r_sz; ++k)
 	{
-		void* cur_ai = ((u8*)a.data) + (a.elem_sz * i);
-		void* cur_aj = ((u8*)a.data) + (a.elem_sz * j);
-		void* cur_b = ((u8*)b.data) + (b.elem_sz * k);
+		void* left = uni_vec_getone( l, i );
+		void* right = uni_vec_getone( r, j );
 
-		if(i < mid && (j >= hi || cmp( a.elem_sz, cur_ai, cur_aj )))
+		range.lo = k;
+		range.hi = k + 1;
+
+		uni_print( "lo = %lu, hi = %lu", range.lo, range.hi );
+		uni_print( "len = %lu", a.sz );
+
+		if( cmp( a.elem_sz, left, right ) )
 		{
-			memcpy( cur_b, cur_ai, a.elem_sz );
+			tmp = uni_vec_emplace( a, l, range );
+
+			ASSERT_RET( tmp.data != NULL );
+
+			a = tmp;
 			i++;
 		}
 		else
 		{
-			memcpy( cur_b, cur_aj, a.elem_sz );
+			tmp = uni_vec_emplace( a, r, range );
+
+			ASSERT_RET( tmp.data != NULL );
+
+			a = tmp;
 			j++;
 		}
 	}
-}
 
-TES_STATIC void tdmerge2( struct uni_vec2 a, ptri lo, ptri mid, ptri hi,
-struct uni_vec2 b, PFN_uni_cmpdata cmp )
-{
-	ptri i, j, k;
-
-	i = lo;
-	j = mid;
-
-	for(k = 0; k < hi; ++k)
+	/* copy the remaining elements of l, if any */
+	while( i < l_sz )
 	{
-		void* cur_ai = ((u8*)a.vec[0].data) + (a.vec[0].elem_sz * i);
-		void* cur_aj = ((u8*)a.vec[0].data) + (a.vec[0].elem_sz * j);
-		void* cur_b = ((u8*)b.vec[0].data) + (b.vec[0].elem_sz * k);
-		void* cur_ai2 = ((u8*)a.vec[1].data) + (a.vec[1].elem_sz * i);
-		void* cur_aj2 = ((u8*)a.vec[1].data) + (a.vec[1].elem_sz * j);
-		void* cur_b2 = ((u8*)b.vec[1].data) + (b.vec[1].elem_sz * k);
+		range.lo = k;
+		range.hi = k + 1;
+		tmp = uni_vec_emplace( a, l, range );
 
-		if(i < mid && (j >= hi || cmp( a.vec[0].elem_sz, cur_ai, cur_aj )))
-		{
-			memcpy( cur_b, cur_ai, a.vec[0].elem_sz );
-			memcpy( cur_b2, cur_ai2, a.vec[1].elem_sz );
-			i++;
-		}
-		else
-		{
-			memcpy( cur_b, cur_aj, a.vec[0].elem_sz );
-			memcpy( cur_b2, cur_aj2, a.vec[1].elem_sz );
-			j++;
-		}
+		ASSERT_RET( tmp.data != NULL );
+
+		a = tmp;
+		i++;
+		k++;
+	}
+
+	/* copy the remaining elements of r, if any */
+	while( j < r_sz )
+	{
+		range.lo = k;
+		range.hi = k + 1;
+		tmp = uni_vec_emplace( a, r, range );
+
+		ASSERT_RET( tmp.data != NULL );
+
+		a = tmp;
+		j++;
+		k++;
 	}
 }
 
-TES_STATIC void td_splmerge( struct uni_vec b, ptri lo, ptri hi,
-struct uni_vec a, PFN_uni_cmpdata cmp )
+TES_STATIC void splitmerge( struct uni_vec vec, ptri lo, ptri hi,
+PFN_uni_cmpdata cmp )
 {
-	ptri mid;
-
-	/* if the array size is one, it is sorted */
-	if(hi - lo == 1)
+	if( lo < hi && hi - lo > 1 )
 	{
-		return;
+		ptri mid = lo + (hi - lo) / 2;
+
+		splitmerge( vec, lo, mid, cmp );
+		splitmerge( vec, mid, hi, cmp );
+
+		merge( vec, lo, mid, hi, cmp );
 	}
-
-	/* split the run into halves by finding the mid-point */
-	mid = (hi + lo) / 2;
-
-	/* recursively sort each half */
-	td_splmerge( a, lo, mid, b, cmp );
-	td_splmerge( a, mid, hi, b, cmp );
-
-	/* merge the runs back together */
-	tdmerge( b, lo, mid, hi, a, cmp );
 }
 
-TES_STATIC void td_splmerge2( struct uni_vec2 b, ptri lo, ptri hi,
-struct uni_vec2 a, PFN_uni_cmpdata cmp )
+struct uni_vec uni_mergesort( struct uni_vec vec, PFN_uni_cmpdata cmp )
 {
-	ptri mid;
+	struct uni_vec dupvec;
 
-	if(hi - lo == 1)
-	{
-		return;
-	}
+	dupvec = uni_vec_dup( vec );
 
-	mid = (hi + lo) / 2;
+	splitmerge( dupvec, 0, dupvec.sz, cmp );
 
-	td_splmerge2( a, lo, mid, b, cmp );
-	td_splmerge2( a, mid, hi, b, cmp );
-
-	tdmerge2( b, lo, mid, hi, a, cmp );
-}
-
-struct uni_vec uni_mergesort( struct uni_vec a, PFN_uni_cmpdata cmp )
-{
-	struct uni_vec b;
-	ptri n;
-
-	b = uni_vec_dup( a );
-	n = b.sz;
-
-	td_splmerge( b, 0, n, a, cmp );
-
-	return a;
-}
-
-struct uni_vec2 uni_omergesort2( struct uni_vec2 a, PFN_uni_cmpdata cmp )
-{
-	struct uni_vec2 b;
-	ptri n;
-
-	b.vec[0] = uni_vec_dup( a.vec[0] );
-	b.vec[1] = uni_vec_dup( a.vec[1] );
-	n = b.vec[0].sz;
-
-	td_splmerge2( b, 0, n, a, cmp );
-
-	return a;
+	return dupvec;
 }

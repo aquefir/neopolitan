@@ -150,7 +150,7 @@ ifeq ($(strip $(NO_TES)),)
 asan: CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
 	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
 	-fno-sanitize-recover=all -DTES_BUILD=1
-#asan: LDFLAGS += -fsanitize=address -L$(3PLIBDIR)/teslib
+asan: LDFLAGS += -fsanitize=address  -fsanitize=undefined -L$(3PLIBDIR)/teslib
 asan: LIB += -ltes
 asan: $(TESTARGET)
 else

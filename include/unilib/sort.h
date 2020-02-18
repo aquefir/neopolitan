@@ -18,6 +18,8 @@ struct uni_vec2
 };
 
 struct uni_vec uni_mergesort( struct uni_vec, PFN_uni_cmpdata );
+#if 0
 struct uni_vec2 uni_omergesort2( struct uni_vec2, PFN_uni_cmpdata );
+#endif
 
 #endif /* INC_API__UNILIB_SORT_H */

@@ -19,8 +19,10 @@ typedef signed __int32 s32;
 typedef signed __int64 s64;
 #ifdef _M_IX86
 typedef unsigned __int32 ptri;
+typedef signed __int32 ssize_t;
 #elif defined( _M_X64 )
 typedef unsigned __int64 ptri;
+typedef signed __int64 ssize_t;
 #else
 #error "Must be compiling for i386 or AMD64 when targeting Windows"
 #endif /* _M_ arch */
@@ -35,6 +37,7 @@ typedef __UINT32_TYPE__ u32;
 typedef __UINT16_TYPE__ u16;
 typedef __UINT8_TYPE__ u8;
 typedef __UINTPTR_TYPE__ ptri;
+typedef __INTPTR_TYPE__ ssize_t;
 #elif defined( __TINYC__ )
 #include <stdint.h>
 typedef int64_t s64;
@@ -46,6 +49,7 @@ typedef uint32_t u32;
 typedef uint16_t u16;
 typedef uint8_t u8;
 typedef uintptr_t ptri;
+typedef intptr_t ssize_t;
 #endif
 
 typedef long double f80;

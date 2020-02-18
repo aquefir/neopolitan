@@ -42,13 +42,13 @@ UNI_API struct uni_vec uni_vec_init_ex( ptri i_sz, ptri cap, void* data )
 	struct uni_vec ret = {cap, cap, i_sz, NULL};
 	u8* tmp;
 
-	tmp = malloc( sizeof( u8 ) * cap );
+	tmp = malloc( i_sz * cap );
 
 	ASSERT_RETVAL( tmp != NULL, ret );
 
-	ret.data = tmp;
+	memcpy( tmp, data, cap );
 
-	memcpy( ret.data, data, cap );
+	ret.data = tmp;
 
 	return ret;
 }
@@ -104,82 +104,63 @@ UNI_API struct uni_vec uni_vec_reserve( struct uni_vec v, ptri count )
 }
 
 UNI_API struct uni_vec uni_vec_emplace(
-   struct uni_vec v, struct uni_vec nu, struct rangep r )
+	struct uni_vec v1, struct uni_vec v2, struct rangep r )
 {
-	/* all of these values are in units of elements, not bytes */
-	const ptri r_sz       = UNI_SIZEOF_RANGE( r );
-	const ptri new_needed = r_sz > nu.sz ? 0 : r_sz - nu.sz;
-	struct uni_vec ret    = {v.sz, v.cap, v.elem_sz, v.data};
-	const ptri shift_sz   = new_needed - ( ret.cap - ret.sz );
-	u8* data              = (u8*)( ret.data );
+	/* all lengths & sizes are in elements, not bytes unless noted otherwise */
+	const ptri r_len = UNI_SIZEOF_RANGE( r );
+	const ptri nu_elems_needed = r_len > v2.sz ? r_len - v2.sz : 0;
+	const ptri remainder = nu_elems_needed - ( v1.cap - v1.sz );
+	u8* data_b = (u8*)v1.data;
 
-	ASSERT_RETVAL( data != NULL, ret );
-	ASSERT_RETVAL( r.hi <= ret.sz, ret );
-	ASSERT_RETVAL( ret.cap > 0, ret ); /* ensure it’s not a slice */
-
-	/* reserve new space if necessary */
-	if( ret.cap - ret.sz < new_needed )
+	/* reserve new space if needed */
+	if( v1.cap - v1.sz < nu_elems_needed )
 	{
-		ret = uni_vec_reserve( ret, shift_sz );
+		struct uni_vec tmp;
 
-		ASSERT_RETVAL( ret.data != NULL, ret );
+		tmp = uni_vec_reserve( v1, remainder );
+
+		ASSERT_RETVAL( tmp.data != NULL, v1 );
 	}
 
-	if( r_sz < nu.sz )
+	if( r_len < v2.sz )
 	{
-		/* range of v to overwrite is smaller than the new data
+		/* range of v1 to overwrite is smaller than the new data,
 		 * so we need to shift the old data over to make room
 		 * shift size is the number of newly allocated elements */
-		const ptri latter_sz = v.sz - r.hi;
 		ptri i;
 
-		for( i = 0; i < latter_sz; ++i )
+		for( i = v1.sz; i >= r.hi + remainder; --i)
 		{
-			data[v.cap - i - 1] = data[v.sz - i - 1];
+			memcpy( data_b + (v1.elem_sz * i),
+				data_b + (v1.elem_sz * (i - remainder)),
+				v1.elem_sz );
 		}
-
-		ret.sz += latter_sz;
 	}
-
-	/* now we can copy over the new data, if desired */
-	if( nu.data != NULL )
+	else if( r_len > v2.sz )
 	{
-		memcpy( data + r.lo, ( (u8*)nu.data ), r_sz );
-	}
-
-	if( r_sz > nu.sz )
-	{
-		/* we need to shift the remainder over to remain contiguous.
-		 * shift size is the net number of elements lost */
-		const ptri net_loss = r_sz - nu.sz;
+		/* range of v1 to overwrite is larger than the new data,
+		 * so we need to shift the old data in to keep the vector
+		 * contiguous */
 		ptri i;
+		ptri diff = r_len - v2.sz;
 
-		for( i = 0; i < net_loss && ( ret.sz - net_loss ) + i < v.sz; ++i )
+		for( i = r.lo + v2.sz; i < v1.sz - diff; ++i )
 		{
-			data[v.sz - net_loss + i] = data[v.sz + i];
+			memcpy( data_b + (v1.elem_sz * i),
+				data_b + (v1.elem_sz * (i + diff)), v1.elem_sz );
 		}
 
-		ret.sz = ret.sz - net_loss;
+		v1.sz -= diff;
 	}
 
-	return ret;
-}
-
-UNI_API struct uni_vec uni_vec_slackoff( struct uni_vec v )
-{
-	struct uni_vec ret = {v.sz, v.cap, v.elem_sz, v.data};
-
-	ASSERT_RETVAL( ret.data != NULL, ret );
-	ASSERT_RETVAL( ret.cap > 0, ret ); /* ensure it’s not a slice */
-
-	if( ret.sz < ret.cap )
+	/* copy over the new data, if needed */
+	if( v2.data != NULL )
 	{
-		ret.data = realloc( v.data, sizeof( u8 ) * ( v.sz ) );
-
-		ASSERT_RETVAL( ret.data != NULL, ret );
+		memcpy( data_b + (v1.elem_sz * r.lo),
+			( (u8*)v2.data ), (v1.elem_sz * v2.sz) );
 	}
 
-	return ret;
+	return v1;
 }
 
 UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
@@ -193,7 +174,7 @@ UNI_API struct uni_vec uni_vec_slice( struct uni_vec v, struct rangep r )
 	ret.data    = v.data;
 
 	/* sorry, can’t slice beyond the input vector! */
-	ASSERT_RETVAL( v.sz <= r.hi, v );
+	ASSERT_RETVAL( r.hi <= v.sz, ret );
 
 	/* finally, advance the pointer in ret */
 	ret.data += ret.elem_sz * r.lo;

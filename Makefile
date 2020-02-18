@@ -30,11 +30,9 @@ FWORKS :=
 
 # sources
 CFILES    := \
-	src/array.c \
 	src/err.c \
 	src/futils.c \
-	src/log.c \
-	src/sort.c
+	src/log.c
 HFILES    := \
 	include/unilib/array.h \
 	include/unilib/decl.h \
@@ -43,9 +41,7 @@ HFILES    := \
 	include/unilib/geometry.h \
 	include/unilib/log.h \
 	include/unilib/option.h \
-	include/unilib/shand.h \
-	include/unilib/sort.h \
-	src/array.h
+	include/unilib/shand.h
 CPPFILES :=
 HPPFILES :=
 OFILES   := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
