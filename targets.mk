@@ -23,12 +23,14 @@ INCLUDES += $(3PLIBDIR)/teslib/include
 3PLIBS += tes
 endif
 
+LIBS += pthread m
+
 # Add 3rd-party library directories
 LIBDIRS += $(patsubst %,$(3PLIBDIR)/%lib,$(3PLIBS))
 LIBS += $(3PLIBS)
 
 # Variable transformations for command invocation
-LIB := $(patsubst %,-l%,$(LIBS)) $(patsubst %,-L%,$(LIBDIRS))
+LIB := $(patsubst %,-L%,$(LIBDIRS)) $(patsubst %,-l%,$(LIBS))
 ifeq ($(CC.CUSTOM),tcc)
 INCLUDE := $(patsubst %,-I%,$(INCLUDES)) $(patsubst %,-isystem %,$(INCLUDEL))
 else
@@ -60,9 +62,9 @@ endif
 # Use ?= so that this can be overridden. This is useful when some projects in
 # a solution need $(CXX) linkage when the main project lacks any $(CPPFILES)
 ifeq ($(strip $(CPPFILES)),)
-	CCLD := $(CC)
+	CCLD ?= $(CC)
 else
-	CCLD := $(CXX)
+	CCLD ?= $(CXX)
 endif
 
 .PHONY: debug release check cov asan clean format
@@ -97,9 +99,9 @@ release: $(TARGETS)
 ifeq ($(CC.CUSTOM),tcc)
 check: CFLAGS += -Werror -Wunsupported -DNDEBUG=1
 else
-check: CFLAGS += -Wextra -Werror -Os -DNDEBUG=1
+check: CFLAGS += -Wextra -Werror -Wno-unused-variable -Os -DNDEBUG=1
 endif
-check: CXXFLAGS += -Wextra -Werror -Os -DNDEBUG=1
+check: CXXFLAGS += -Wextra -Werror -Wno-unused-variable -Os -DNDEBUG=1
 check: REALSTRIP := ':' ; # : is a no-op
 check: $(TARGETS)
 
@@ -112,16 +114,16 @@ cov: CFLAGS += -UNDEBUG
 cov: $(TARGETS)
 else
 ifeq ($(strip $(NO_TES)),)
-cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-generate \
+cov: CFLAGS += -O0 -g3 -UNDEBUG -fprofile-instr-generate -fcoverage-mapping \
 	-DTES_BUILD=1
 else
 cov: -UTES_BUILD
 endif # NO_TES
 endif # CC.CUSTOM
 ifeq ($(strip $(NO_TES)),)
-cov: CXXFLAGS += -O0 -g3 -UNDEBUG -fprofile-generate \
+cov: CXXFLAGS += -O0 -g3 -UNDEBUG -fprofile-instr-generate \
 	-fcoverage-mapping -DTES_BUILD=1
-cov: LDFLAGS += -fprofile-generate
+cov: LDFLAGS += -fprofile-instr-generate -fcoverage-mapping
 cov: LIB += -ltes
 cov: $(TESTARGET)
 else
@@ -150,7 +152,7 @@ ifeq ($(strip $(NO_TES)),)
 asan: CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
 	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
 	-fno-sanitize-recover=all -DTES_BUILD=1
-asan: LDFLAGS += -fsanitize=address  -fsanitize=undefined -L$(3PLIBDIR)/teslib
+#asan: LDFLAGS += -fsanitize=address -L$(3PLIBDIR)/teslib
 asan: LIB += -ltes
 asan: $(TESTARGET)
 else

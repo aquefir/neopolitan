@@ -26,8 +26,11 @@ CXX.DEFAULT   := $(shell whereis clang++)
 CXX.CUSTOM    := $(CXX)
 CXX.NAME      := clang++
 CPP.DEFAULT   := $(shell whereis clang) -E
-CPP.CUSTOM    := $(CPP)
+CPP.CUSTOM    := $(CC) -E
 CPP.NAME      := clang
+LD.DEFAULT    := $(shell which clang)
+LD.CUSTOM     := $(LD)
+LD.NAME       := clang
 AR.DEFAULT    := $(shell whereis ar)
 AR.CUSTOM     := $(AR)
 AR.NAME       := ar
@@ -35,7 +38,8 @@ STRIP.DEFAULT := $(shell whereis strip)
 STRIP.CUSTOM  := $(STRIP)
 STRIP.NAME    := strip
 
-else ifeq ($(strip $(UNAME)),Linux)
+endif
+ifeq ($(strip $(UNAME)),Linux)
 
 ## Linux
 ##
@@ -43,38 +47,41 @@ else ifeq ($(strip $(UNAME)),Linux)
 SO            := so
 CC.DEFAULT    := $(shell which gcc)
 CC.CUSTOM     := $(CC)
+CC.NAME       := gcc
 CXX.DEFAULT   := $(shell which g++)
 CXX.CUSTOM    := $(CXX)
+CXX.NAME      := g++
 CPP.DEFAULT   := $(shell which gcc) -E
 CPP.CUSTOM    := $(CC) -E
+CPP.NAME      := gcc
+LD.DEFAULT    := $(shell which gcc)
+LD.CUSTOM     := $(LD)
+LD.NAME       := gcc
 AR.DEFAULT    := $(shell which ar)
 AR.CUSTOM     := $(AR)
+AR.NAME       := ar
 STRIP.DEFAULT := $(shell which strip)
 STRIP.CUSTOM  := $(STRIP)
+STRIP.NAME    := strip
+
+endif # $(UNAME)
 
 # Set up the variables by defaults
 ifeq ($(origin CC),undefined)
 CC         := $(CC.DEFAULT)
 CXX        := $(CXX.DEFAULT)
 CPP        := $(CPP.DEFAULT)
+LD         := $(LD.DEFAULT)
 AR         := $(AR.DEFAULT)
 STRIP      := $(STRIP.DEFAULT)
-CC.NAME    := gcc
-CXX.NAME   := g++
-CPP.NAME   := gcc
-AR.NAME    := ar
-STRIP.NAME := strip
-else ifeq ($(origin CC),default)
+endif
+ifeq ($(origin CC),default)
 CC         := $(CC.DEFAULT)
 CXX        := $(CXX.DEFAULT)
 CPP        := $(CPP.DEFAULT)
+LD         := $(LD.DEFAULT)
 AR         := $(AR.DEFAULT)
 STRIP      := $(STRIP.DEFAULT)
-CC.NAME    := gcc
-CXX.NAME   := g++
-CPP.NAME   := gcc
-AR.NAME    := ar
-STRIP.NAME := strip
 else
 # environment [override], file, command line, override, automatic
 CC         := $(CC.CUSTOM)
@@ -85,10 +92,10 @@ STRIP      := $(STRIP.CUSTOM)
 CC.NAME    := $(CC.CUSTOM)
 CXX.NAME   := $(CXX.CUSTOM)
 CPP.NAME   := $(CPP.CUSTOM)
+LD.NAME    := $(LD.CUSTOM)
 AR.NAME    := $(AR.CUSTOM)
 STRIP.NAME := $(STRIP.CUSTOM)
 endif # $(origin CC)
-endif # $(UNAME)
 
 # Base build tool flags
 CFLAGS   := -Wall -fPIC
@@ -119,6 +126,21 @@ export SOURCE_DATE_EPOCH
 
 FMT := clang-format
 
+$(info SYSTEM COMPILATION DEFAULTS PRINTOUT)
+$(info =====================================)
+$(info System := $(UNAME))
+$(info Shared library extension := $(SO))
+$(info Autoformatter := $(FMT))
+$(info C compiler := cmd:$(CC) name:$(CC.NAME))
+$(info C++ compiler := cmd:$(CXX) name:$(CXX.NAME))
+$(info C preprocessor := cmd:$(CPP) name:$(CPP.NAME))
+$(info Static library archiver := cmd:$(AR) name:$(AR.NAME))
+$(info Program linker := cmd:$(LD) name:$(LD.NAME))
+$(info Symbol stripper := cmd:$(STRIP) name:$(STRIP.NAME))
+$(info C flags := $(CFLAGS))
+$(info C++ flags := $(CXXFLAGS))
+$(info Linker flags := $(LDFLAGS))
+
 export UNAME
 export SO
 export FMT
@@ -127,14 +149,12 @@ export CXX
 export CPP
 export AR
 export CCLD
-export CXXLD
 export STRIP
 export CC.NAME
 export CXX.NAME
 export CPP.NAME
 export AR.NAME
-export CCLD.NAME
-export CXXLD.NAME
+export LD.NAME
 export STRIP.NAME
 export CFLAGS
 export CXXFLAGS
