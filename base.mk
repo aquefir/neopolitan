@@ -140,6 +140,7 @@ $(info Symbol stripper := cmd:$(STRIP) name:$(STRIP.NAME))
 $(info C flags := $(CFLAGS))
 $(info C++ flags := $(CXXFLAGS))
 $(info Linker flags := $(LDFLAGS))
+$(info )
 
 export UNAME
 export SO
