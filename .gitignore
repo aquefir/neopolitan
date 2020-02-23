@@ -3,7 +3,7 @@
 
 vgcore*
 /3rdparty/*
-!/3rdparty/.touched
+!/3rdparty/README
 *_test
 vgcore*
 *.gcno

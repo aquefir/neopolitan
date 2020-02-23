@@ -2,7 +2,7 @@
  *                           Universal C Library™                           *
  *                                                                          *
  *                    Copyright © 2019-2020 ARQADIUM LLC                    *
- *                           All rights reserved.                           *
+ *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
 #ifndef INC_API__UNILIB_DECL_H
