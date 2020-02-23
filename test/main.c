@@ -7,25 +7,11 @@
 
 #include <tes/battery.h>
 
-extern int testing_vec( void );
-extern int testing_sort( void );
-
 extern void tes_pre( int ac, char* av[] ) {}
 
 extern int tes_tests( void )
 {
-	int r;
-
-	r = testing_vec( );
-
-	if( r )
-	{
-		return r;
-	}
-
-	r = testing_sort( );
-
-	return r;
+	return 0;
 }
 
 extern void tes_post( void ) {}

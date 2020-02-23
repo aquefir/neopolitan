@@ -18,8 +18,8 @@
 # Add 3rd-party includes
 INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS))
 
-ifeq ($(strip $(NO_TES)),)
 INCLUDES += $(3PLIBDIR)/teslib/include
+ifeq ($(strip $(NO_TES)),)
 3PLIBS += tes
 endif
 
