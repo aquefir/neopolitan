@@ -7,7 +7,9 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/3rdparty/teslib/include"
             ],
-            "defines": [],
+            "defines": [
+                "__VSCODE_INTELLISENSE__"
+            ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c89",
             "cppStandard": "c++11",
