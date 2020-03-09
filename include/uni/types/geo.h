@@ -5,15 +5,15 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_GEOMETRY_H
-#define INC_API__UNILIB_GEOMETRY_H
+#ifndef INC_API__UNI_TYPES_GEO_H
+#define INC_API__UNI_TYPES_GEO_H
 
-#include <unilib/shand.h>
+#include "int.h"
 
-#define UNI_SIZEOF_RANGE( RANGE ) \
-	( ( ( ( RANGE ).lo > ( RANGE ).hi ) \
-	        ? ( ( RANGE ).lo - ( ( RANGE ).hi - 1 ) ) \
-	        : ( ( ( RANGE ).hi - 1 ) - ( RANGE ).lo ) ) + \
+#define UNI_SIZEOF_RANGE( R ) \
+	( ( ( ( R ).lo > ( R ).hi ) \
+	        ? ( ( R ).lo - ( ( R ).hi - 1 ) ) \
+	        : ( ( ( R ).hi - 1 ) - ( R ).lo ) ) + \
 	   1 )
 
 struct point2
@@ -71,4 +71,4 @@ struct rangep
 	ptri lo, hi;
 };
 
-#endif /* INC_API__UNILIB_GEOMETRY_H */
+#endif /* INC_API__UNI_TYPES_GEO_H */

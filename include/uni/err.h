@@ -5,12 +5,12 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_ERR_H
-#define INC_API__UNILIB_ERR_H
+#ifndef INC_API__UNI_ERR_H
+#define INC_API__UNI_ERR_H
 
 #include <stddef.h>
 
-#include <unilib/log.h>
+#include "log.h"
 
 enum /* err */
 {
@@ -225,4 +225,4 @@ enum /* err */
 
 extern void uni_assert_fail( const char*, const char*, unsigned, const char* );
 
-#endif /* INC_API__UNILIB_ERR_H */
+#endif /* INC_API__UNI_ERR_H */

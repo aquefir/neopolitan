@@ -5,19 +5,13 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_DECL_H
-#define INC_API__UNILIB_DECL_H
-
-#ifdef UNI_TEST
-#define UNI_STATIC
-#else
-#define UNI_STATIC static
-#endif
+#ifndef INC_API__UNI_DECL_H
+#define INC_API__UNI_DECL_H
 
 #ifdef __cplusplus
-#define UNI_API extern "C"
+#define UNI_C_API extern "C"
 #else
-#define UNI_API extern
+#define UNI_C_API
 #endif
 
-#endif /* INC_API__UNILIB_DECL_H */
+#endif /* INC_API__UNI_DECL_H */

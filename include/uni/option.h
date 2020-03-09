@@ -5,10 +5,10 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_OPTION_H
-#define INC_API__UNILIB_OPTION_H
+#ifndef INC_API__UNI_OPTION_H
+#define INC_API__UNI_OPTION_H
 
-#include "shand.h"
+#include "types/int.h"
 
 #define UNI_OPTION( TYPE ) struct opt_##TYPE
 #define UNI_OPTIONP( TYPE ) struct optp_##TYPE
@@ -41,4 +41,4 @@
 	}; \
 	struct _dummy
 
-#endif /* INC_API__UNILIB_OPTION_H */
+#endif /* INC_API__UNI_OPTION_H */

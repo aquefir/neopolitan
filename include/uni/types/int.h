@@ -5,8 +5,8 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNILIB_SHAND_H
-#define INC_API__UNILIB_SHAND_H
+#ifndef INC_API__UNI_TYPES_INT_H
+#define INC_API__UNI_TYPES_INT_H
 
 #ifdef _MSC_VER
 typedef unsigned __int8 u8;
@@ -19,10 +19,8 @@ typedef signed __int32 s32;
 typedef signed __int64 s64;
 #ifdef _M_IX86
 typedef unsigned __int32 ptri;
-typedef signed __int32 ssize_t;
 #elif defined( _M_X64 )
 typedef unsigned __int64 ptri;
-typedef signed __int64 ssize_t;
 #else
 #error "Must be compiling for i386 or AMD64 when targeting Windows"
 #endif /* _M_ arch */
@@ -37,7 +35,6 @@ typedef __UINT32_TYPE__ u32;
 typedef __UINT16_TYPE__ u16;
 typedef __UINT8_TYPE__ u8;
 typedef __UINTPTR_TYPE__ ptri;
-typedef __INTPTR_TYPE__ ssize_t;
 #elif defined( __TINYC__ )
 #include <stdint.h>
 typedef int64_t s64;
@@ -49,18 +46,6 @@ typedef uint32_t u32;
 typedef uint16_t u16;
 typedef uint8_t u8;
 typedef uintptr_t ptri;
-typedef intptr_t ssize_t;
-#endif
-
-typedef long double f80;
-typedef double f64;
-typedef float f32;
-
-#if defined( __clang__ ) && ( defined( __arm__ ) || defined( __aarch64__ ) )
-typedef _Float16 f16;
-#else
-/* this is unsupported outside ARM because of ABIs */
-typedef f32 f16;
 #endif
 
 #define U8_MAX ( (u8)0xFF )
@@ -78,4 +63,4 @@ typedef f32 f16;
 
 #define PTRI_MAX ( ( ptri )( -1 ) )
 
-#endif /* INC_API__UNILIB_SHAND_H */
+#endif /* INC_API__UNI_TYPES_INT_H */
