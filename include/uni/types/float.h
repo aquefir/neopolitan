@@ -22,14 +22,6 @@ typedef float f16;
 
 typedef float f32;
 typedef double f64;
-#if !defined( __VSCODE_INTELLISENSE__ )
-#if defined( __i386__ ) || defined( __x86_64__ )
-typedef __float80 f80;
-#else
-typedef double f80;
-#endif
-#else
 typedef long double f80;
-#endif /* !defined( __VSCODE_INTELLISENSE__ ) */
 
 #endif /* INC_API__UNI_TYPES_FLOAT_H */
