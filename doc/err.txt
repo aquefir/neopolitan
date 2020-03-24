@@ -1,6 +1,6 @@
-Universal C Library: Error Handling
+Aquefir One Library: Error Handling
 
-Copyright © 2019-2020 ARQADIUM LLC
+Copyright © 2019-2020 Aquefir
 Released under BSD-2-Clause.
 
 §1. ENUM ERR_CODE

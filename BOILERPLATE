@@ -3,17 +3,17 @@ This file contains the project’s copypastable boilerplate comment headers.
 Boilerplate for C-like languages:
 
 /****************************************************************************\
- *                           Universal C Library™                           *
+ *                           Aquefir One Library™                           *
  *                                                                          *
- *                    Copyright © 2019-2020 ARQADIUM LLC                    *
+ *                      Copyright © 2019-2020 Aquefir                       *
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
 Hash-based boilerplate (Python, POSIX shell, Makefile):
 
 ##############################################################################
-##                           Universal C Library™                           ##
+##                           Aquefir One Library™                           ##
 ##                                                                          ##
-##                    Copyright © 2019-2020 ARQADIUM LLC                    ##
+##                      Copyright © 2019-2020 Aquefir                       ##
 ##                       Released under BSD-2-Clause.                       ##
 ##############################################################################

@@ -1,7 +1,7 @@
 /****************************************************************************\
- *                           Universal C Library™                           *
+ *                           Aquefir One Library™                           *
  *                                                                          *
- *                    Copyright © 2019-2020 ARQADIUM LLC                    *
+ *                      Copyright © 2019-2020 Aquefir                       *
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 

@@ -1,6 +1,6 @@
-Universal C Library: Array Construct
+Aquefir One Library: Array Construct
 
-Copyright © 2019-2020 ARQADIUM LLC
+Copyright © 2019-2020 Aquefir
 Released under BSD-2-Clause.
 
 §1. #UNI_ARRAY
