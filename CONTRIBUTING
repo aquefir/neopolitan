@@ -1,9 +1,9 @@
-Universal C Library™ Contributor’s Guide
+Aquefir One Library™ Contributor’s Guide
 
 Written by Alexander Nicholi
 
-Copyright © 2019-2020 ARQADIUM LLC
-All rights reserved.
+Copyright © 2019-2020 Aquefir
+Released under BSD-2-Clause.
 
 
 
@@ -28,7 +28,7 @@ order of abstraction:
 §2. APPLICATION OF MODULARITY
 ------------------------------
 
-1. Modules are in play with Θώθ, using Brian Will’s distinction of ‘state
+1. Modules are in play with unilib, using Brian Will’s distinction of ‘state
 modules’ and ‘logic modules’. This status is affixed onto every interface
 (header file) when possible, for coordination.
 
@@ -64,14 +64,16 @@ be declared const as well, even within structs.
 §3. HABITS & HYGIENE BUCKET LIST
 ---------------------------------
 
-1. Header guards should use the format /^INC__([A-Z]+)_(([A-Z]+_)*[A-Z]+)_H$/,
-where $1 is the project shortname in its all-caps form (in this case, ‘OWO’),
-$2 is the relative path to the file, in all-caps without its extension, and $3
-inside $2 contains the directory parts of the path with the directory separator
+1. Header guards should use the format /^INC(_API)?__([A-Z]+)_(([A-Z]+_)*[A-Z]+)_H$/,
+where $2 is the project shortname in its all-caps form (in this case, ‘OWO’),
+$3 is the relative path to the file, in all-caps without its extension, and $4
+inside $3 contains the directory parts of the path with the directory separator
 replaced with an underscore. Directories in between the repository root and the
 source root are not included in said directory parts (like ‘src/’, or a subdir
-for #include conflict resolution). For example, the header guard for
-‘src/owo/scenes/title.h’ would be ‘INC__OWO_SCENES_TITLE_H’.
+for #include conflict resolution). $1 is present to separate public API header
+guards from private API ones. So, for example, the header guard for
+‘src/scenes/title.h’ would be ‘INC__UNI_SCENES_TITLE_H’, and the header guard
+for ‘include/uni/scenes/title.h’ would be ‘INC_API__UNI_SCENES_TITLE_H’.
 
 2. Header should hoist a comment boilerplate block with the project name and
 its copyright notice. See BOILERPLATE for copy-pastable renditions of this.
