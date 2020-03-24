@@ -5,7 +5,7 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#include <unilib/futils.h>
+#include <uni/futils.h>
 
 #include <assert.h>
 #include <limits.h>

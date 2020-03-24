@@ -5,12 +5,12 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#include <unilib/log.h>
+#include <uni/log.h>
 
 #include <stdarg.h>
 #include <stdio.h>
 
-#include <unilib/err.h>
+#include <uni/err.h>
 
 int uni_print( const char* fmt, ... )
 {

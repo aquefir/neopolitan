@@ -5,10 +5,10 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#include <unilib/err.h>
+#include <uni/err.h>
 
 #include <stdlib.h>
-#include <unilib/log.h>
+#include <uni/log.h>
 
 void uni_assert_fail(
    const char* expr, const char* file, unsigned line, const char* func )
