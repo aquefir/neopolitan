@@ -44,10 +44,10 @@ long uni_filesz( const char* fname )
 	return sz;
 }
 
-int uni_buffile( const char* fname, unsigned char* ret, size_t ret_sz )
+int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 {
 	FILE* f;
-	size_t readsz;
+	ptri readsz;
 
 	assert( fname != NULL );
 	assert( ret != NULL );
@@ -64,7 +64,7 @@ int uni_buffile( const char* fname, unsigned char* ret, size_t ret_sz )
 	return readsz != ret_sz ? 1 : 0;
 }
 
-int uni_loadfile( const char* fname, unsigned char** ret, size_t* ret_sz )
+int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 {
 	long sz;
 
@@ -79,7 +79,7 @@ int uni_loadfile( const char* fname, unsigned char** ret, size_t* ret_sz )
 		return 1;
 	}
 
-	*ret_sz = (size_t)sz;
+	*ret_sz = (ptri)sz;
 	*ret    = malloc( *ret_sz );
 
 	if( *ret == NULL && *ret_sz > 0 )
