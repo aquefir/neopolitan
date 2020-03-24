@@ -1,7 +1,7 @@
 /****************************************************************************\
- *                           Universal C Library™                           *
+ *                           Aquefir One Library™                           *
  *                                                                          *
- *                    Copyright © 2019-2020 ARQADIUM LLC                    *
+ *                      Copyright © 2019-2020 Aquefir                       *
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
@@ -12,36 +12,42 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <uni/option.h>
+#include <uni/types/int.h>
 
-/* returns negative value on error. This should be pure C compatible, so no
- * fstat. */
+/* This should be pure C compatible, so no fstat. */
 /* PURE FUNCTION */
-long uni_filesz( const char* fname )
+UNI_OPTION( ptri ) uni_filesz( const char* fname )
 {
 	FILE* f;
+	UNI_OPTION( ptri ) ret;
 	long sz;
 
-	assert( fname != NULL );
+	ret.val = 0;
+	ret.is = 0;
 
 	f = fopen( fname, "rb" );
 
 	if( !f )
 	{
-		return -1;
+		return ret;
 	}
 
 	if( fseek( f, 0, SEEK_END ) != 0 )
 	{
 		fclose( f );
-		return -1;
+
+		return ret;
 	}
 
 	sz = ftell( f );
 	/* LONG_MAX may be returned, meaning it failed */
-	sz = sz == LONG_MAX ? -1 : sz;
+	ret.is = sz == LONG_MAX ? 0 : 1;
+	ret.val = sz == LONG_MAX ? 0 : (ptri)sz;
 
 	fclose( f );
-	return sz;
+
+	return ret;
 }
 
 int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
@@ -66,7 +72,7 @@ int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 
 int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 {
-	long sz;
+	UNI_OPTION( ptri ) sz;
 
 	assert( fname != NULL );
 	assert( ret != NULL );
@@ -74,12 +80,12 @@ int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 
 	sz = uni_filesz( fname );
 
-	if( sz < 0 )
+	if( !sz.is )
 	{
 		return 1;
 	}
 
-	*ret_sz = (ptri)sz;
+	*ret_sz = sz.val;
 	*ret    = malloc( *ret_sz );
 
 	if( *ret == NULL && *ret_sz > 0 )
