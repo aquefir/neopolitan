@@ -10,31 +10,25 @@
 ## This works with both C and C++ code, and is continuously tested on macOS
 ## Mojave and Arch Linux.
 ## this file expects the following variables to be defined:
-## CFILES, CPPFILES, HFILES, HPPFILES, GCNOFILES, GCDAFILES, CFLAGS, CXXFLAGS,
-## LDFLAGS, CC, CXX, AR, FMT, INCLUDES, INCLUDEL, LIBDIRS, LIBS, FWORKS,
-## OFILES, PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR, TES_CFILES,
-## TES_CPPFILES, TES_HFILES, TES_HPPFILES, TES_GCNOFILES, TES_GCDAFILES
+## CFILES, CPPFILES, HFILES, HPPFILES, CFLAGS, CXXFLAGS, LDFLAGS, CC, CXX, AR,
+## FMT, INCLUDES, INCLUDEL, DEFINES, UNDEFINES, LIBDIRS, LIBS, FWORKS,
+## PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR, SO, EXE, UNAME, TP, TC,
+## TES_CFILES, TES_CPPFILES, TES_HFILES, TES_HPPFILES
 
-# Add 3rd-party includes
+# Incorporate 3rdparty dependencies
 INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS))
-
-INCLUDES += $(3PLIBDIR)/teslib/include
-ifeq ($(strip $(NO_TES)),)
-3PLIBS += tes
-endif
-
-# Add 3rd-party library directories
-LIBDIRS += $(patsubst %,$(3PLIBDIR)/%lib,$(3PLIBS))
-LIBS += $(3PLIBS)
+LIBDIRS  += $(patsubst %,$(3PLIBDIR)/%lib,$(3PLIBS))
+LIBS     += $(3PLIBS)
 
 # Variable transformations for command invocation
 LIB := $(patsubst %,-L%,$(LIBDIRS)) $(patsubst %,-l%,$(LIBS))
-ifeq ($(CC.CUSTOM),tcc)
+ifeq ($(CC),tcc)
 INCLUDE := $(patsubst %,-I%,$(INCLUDES)) $(patsubst %,-isystem %,$(INCLUDEL))
 else
 INCLUDE := $(patsubst %,-isystem %,$(INCLUDES)) \
 	$(patsubst %,-iquote %,$(INCLUDEL))
 endif
+DEFINE := $(patsubst %,-D%,$(DEFINES)) $(patsubst %,-U%,$(UNDEFINES))
 FWORK := $(patsubst %,-framework %,$(FWORKS))
 
 # Populated below
@@ -43,7 +37,7 @@ TARGETS :=
 TESTARGETS := $(TES_CFILES:.tes.c=.c.tes) $(TES_CPPFILES:.tes.cpp=.cpp.tes)
 
 # specify all target filenames
-EXETARGET := $(PROJECT)
+EXETARGET := $(PROJECT)$(EXE)
 SOTARGET  := lib$(PROJECT).$(SO)
 ATARGET   := lib$(PROJECT).a
 
@@ -65,105 +59,100 @@ else
 	CCLD ?= $(CXX)
 endif
 
-.PHONY: debug release check cov asan clean format
+.PHONY: debug release check cov asan ubsan clean format
 
 ## Debug build
 ## useful for: normal testing, valgrind, LLDB
 ##
-ifeq ($(CC.CUSTOM),tcc)
-debug: CFLAGS += -UNDEBUG
-else
-debug: CFLAGS += -O0 -g3 -UNDEBUG
-endif
-debug: CXXFLAGS += -O0 -g3 -UNDEBUG
+debug: DEFINE += -UNDEBUG
+debug: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+debug: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.DEBUG)
+endif # tcc
+debug: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.DEBUG)
 debug: REALSTRIP := ':' ; # : is a no-op
 debug: $(TARGETS)
 
 ## Release build
 ## useful for: deployment
 ##
-ifeq ($(CC.CUSTOM),tcc)
-release: CFLAGS += -DNDEBUG=1
-else
-release: CFLAGS += -O2 -DNDEBUG=1
-endif
-release: CXXFLAGS += -O2 -DNDEBUG=1
+release: DEFINE += -DNDEBUG=1
+release: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+release: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.RELEASE)
+endif # tcc
+release: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.RELEASE)
 release: REALSTRIP := $(STRIP) ;
 release: $(TARGETS)
 
 ## Sanity check build
 ## useful for: pre-tool bug squashing
 ##
-ifeq ($(CC.CUSTOM),tcc)
-check: CFLAGS += -Werror -Wunsupported -DNDEBUG=1
-else
-check: CFLAGS += -Wextra -Werror -Wno-unused-variable -Os -DNDEBUG=1
-endif
-check: CXXFLAGS += -Wextra -Werror -Wno-unused-variable -Os -DNDEBUG=1
+check: DEFINE += -UNDEBUG
+check: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+check: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.CHECK)
+endif # tcc
+check: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.CHECK)
 check: REALSTRIP := ':' ; # : is a no-op
 check: $(TARGETS)
 
 ## Code coverage build
 ## useful for: checking coverage of test suite
 ##
+cov: DEFINE += -UNDEBUG -D_CODECOV
+cov: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+cov: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.COV)
+endif # tcc
+cov: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.COV)
 cov: REALSTRIP := ':' ; # : is a no-op
-ifeq ($(CC.CUSTOM),tcc)
-cov: CFLAGS += -UNDEBUG
-cov: $(TARGETS)
-else
 ifeq ($(strip $(NO_TES)),)
-ifeq ($(strip $(CC.NAME)),gcc)
-cov: CFLAGS += -O1 -g3 -UNDEBUG -fprofile-arcs -ftest-coverage -DTES_BUILD=1
-cov: LDFLAGS += -fprofile-arcs -ftest-coverage
-else ifeq ($(strip $(CC.NAME)),clang)
-cov: CFLAGS += -O1 -g3 -UNDEBUG -fprofile-instr-generate -fcoverage-mapping \
-	-DTES_BUILD=1
-cov: LDFLAGS += -fprofile-instr-generate -fcoverage-mapping
-endif
-else
-cov: -UTES_BUILD
-endif # NO_TES
-endif # CC.CUSTOM
-ifeq ($(strip $(NO_TES)),)
-ifeq ($(strip $(CXX.NAME)),g++)
-cov: CXXFLAGS += -O1 -g3 -UNDEBUG -fprofile-arcs -ftest-coverage -DTES_BUILD=1
-else ifeq ($(strip $(CC.NAME)),clang++)
-cov: CXXFLAGS += -O1 -g3 -UNDEBUG -fprofile-instr-generate \
-	-fcoverage-mapping -DTES_BUILD=1
-endif
+cov: DEFINE += -DTES_BUILD=1
 cov: $(TESTARGETS)
 else
-cov: -UTES_BUILD
+cov: DEFINE += -UTES_BUILD
 cov: $(TARGETS)
-endif # NO_TES
+endif # $(NO_TES)
 
 ## Address sanitised build
 ## useful for: squashing memory issues
 ##
+asan: DEFINE += -UNDEBUG -D_ASAN
+asan: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+asan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.ASAN)
+endif # tcc
+asan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.ASAN)
 asan: REALSTRIP := ':' ; # : is a no-op
-ifeq ($(CC.CUSTOM),tcc)
-asan: CFLAGS += -UNDEBUG
-asan: $(TARGETS)
-else
 ifeq ($(strip $(NO_TES)),)
-asan: CFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
-	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
-	-fno-sanitize-recover=all -DTES_BUILD=1
-else
-asan: CFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g \
-	-fno-common -fno-optimize-sibling-calls -UTES_BUILD
-endif # NO_TES
-endif # CC.CUSTOM
-ifeq ($(strip $(NO_TES)),)
-asan: CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer -O1 -g3 \
-	-fno-common -fno-optimize-sibling-calls -fsanitize=undefined \
-	-fno-sanitize-recover=all -DTES_BUILD=1
-#asan: LDFLAGS += -fsanitize=address -L$(3PLIBDIR)/teslib
+asan: DEFINE += -DTES_BUILD=1
 asan: $(TESTARGETS)
 else
-asan: CXXFLAGS += -UTES_BUILD
+asan: DEFINE += -UTES_BUILD
 asan: $(TARGETS)
-endif
+endif # $(NO_TES)
+
+## Undefined Behaviour sanitised build
+## useful for: squashing UB :-)
+##
+ubsan: DEFINE += -UNDEBUG -D_UBSAN
+ubsan: CFLAGS += $(CFLAGS.COMMON)
+ifneq ($(CC),tcc)
+ubsan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.UBSAN)
+endif # tcc
+ubsan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.UBSAN)
+ubsan: REALSTRIP := ':' ; # : is a no-op
+ifeq ($(strip $(NO_TES)),)
+ubsan: DEFINE += -DTES_BUILD=1
+ubsan: $(TESTARGETS)
+else
+ubsan: DEFINE += -UTES_BUILD
+ubsan: $(TARGETS)
+endif # $(NO_TES)
+
+OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
+TES_OFILES := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 
 # Object file builds
 %.cpp.o: %.cpp
@@ -198,18 +187,18 @@ $(EXETARGET): $(OFILES)
 	$(CCLD) $(LDFLAGS) -o $@ $^ $(LIB)
 	$(REALSTRIP) -s $^
 
-DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGET))
+DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGETS))
 
 clean:
 	$(RM) $(TARGETS)
 	$(RM) $(TESTARGETS)
 	$(RM) -r $(DSYMS)
 	$(RM) $(OFILES)
-	$(RM) $(GCNOFILES)
-	$(RM) $(GCDAFILES)
+	$(RM) $(CFILES:.c=.c.gcno) $(CPPFILES:.cpp=.cpp.gcno)
+	$(RM) $(CFILES:.c=.c.gcda) $(CPPFILES:.cpp=.cpp.gcda)
 	$(RM) $(TES_OFILES)
-	$(RM) $(TES_GCNOFILES)
-	$(RM) $(TES_GCDAFILES)
+	$(RM) $(TES_CFILES:.c=.c.gcno) $(TES_CPPFILES:.cpp=.cpp.gcno)
+	$(RM) $(TES_CFILES:.c=.c.gcda) $(TES_CPPFILES:.cpp=.cpp.gcda)
 
 ifeq ($(strip $(NO_TES)),)
 format: $(TES_CFILES) $(TES_HFILES) $(TES_CPPFILES) $(TES_HPPFILES)
