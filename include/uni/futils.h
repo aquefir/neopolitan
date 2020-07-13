@@ -9,10 +9,8 @@
 #define INC_API__UNI_FUTILS_H
 
 #include "decl.h"
-#include "option.h"
+#include "types/options.h"
 #include "types/int.h"
-
-UNI_DECL_OPT( ptri );
 
 UNI_OPTION( ptri ) uni_filesz( const char* );
 int uni_buffile( const char*, u8*, ptri );

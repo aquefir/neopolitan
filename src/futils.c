@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <uni/option.h>
+#include <uni/types/options.h>
 #include <uni/types/int.h>
 
 /* This should be pure C compatible, so no fstat. */
