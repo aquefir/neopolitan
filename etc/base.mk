@@ -13,17 +13,43 @@ endif
 ## UNAME -> host
 ## TP    -> target platform
 ## TC    -> toolchain
+## TROOT -> target sysroot (include, lib, etc.)
 
 UNAME := $(shell uname -s)
 # User can specify TP=Win32 at the command line
 TP ?= $(UNAME)
-TC ?= llvm
 ifeq ($(strip $(UNAME)),Darwin)
+TC ?= llvm
 ifneq ($(strip $(TC)),llvm)
 ifneq ($(strip $(TC)),xcode)
 $(error Invalid toolchain specified. macOS supports either llvm or xcode)
 endif # $(TC) xcode
 endif # $(TC) llvm
+endif # $(UNAME)
+ifeq ($(strip $(UNAME)),Linux)
+TC ?= gnu
+ifneq ($(strip $(TC)),gnu)
+ifneq ($(strip $(TC)),llvm)
+$(error Invalid toolchain specified. Linux supports either llvm or gnu)
+endif # $(TC) llvm
+endif # $(TC) gnu
+endif # $(UNAME)
+
+# Initialise $(TROOT)
+ifeq ($(strip $(UNAME)),Darwin)
+ifeq ($(strip $(TP)),Win32)
+TROOT := /usr/local/i686-w64-mingw32
+else ifeq ($(strip $(TC)),llvm)
+TROOT := /usr/local/opt/llvm
+else
+TROOT := /usr
+endif # $(TP)
+else ifeq ($(strip $(UNAME)),Linux)
+ifeq ($(strip $(TP)),Win32)
+TROOT := /usr/i686-w64-mingw32
+else
+TROOT := /usr
+endif # $(TP)
 endif # $(UNAME)
 
 ## Specify the default host variables
@@ -35,18 +61,30 @@ CC.DARWIN       := /usr/local/opt/llvm/bin/clang # brew LLVM
 else
 CC.DARWIN       := /usr/bin/clang # Xcode
 endif
+ifeq ($(strip $(TC)),gnu)
 CC.LINUX        := /usr/bin/gcc
+else
+CC.LINUX        := /usr/bin/clang
+endif
 CC.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-gcc
 CC.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-gcc
+CC.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-gcc
+CC.LINUX.WIN64  := /usr/bin/i686-w64-mingw32-gcc
 
 ifeq ($(strip $(TC)),llvm)
 CXX.DARWIN       := /usr/local/opt/llvm/bin/clang++ # brew LLVM
 else
 CXX.DARWIN       := /usr/bin/clang++ # Xcode
 endif
+ifeq ($(strip $(TC)),gnu)
 CXX.LINUX        := /usr/bin/g++
+else
+CXX.LINUX        := /usr/bin/clang++
+endif
 CXX.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-g++
 CXX.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-g++
+CXX.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-g++
+CXX.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-g++
 
 ifeq ($(strip $(TC)),llvm)
 AR.DARWIN := /usr/local/opt/llvm/bin/llvm-ar # brew LLVM
@@ -56,6 +94,8 @@ endif
 AR.LINUX        := /usr/bin/ar
 AR.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-ar
 AR.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-ar
+AR.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-ar
+AR.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-ar
 
 ifeq ($(strip $(TC)),llvm)
 STRIP.DARWIN       := /usr/local/opt/llvm/bin/llvm-strip # brew LLVM
@@ -65,10 +105,13 @@ endif
 STRIP.LINUX        := /usr/bin/strip
 STRIP.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-strip
 STRIP.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-strip
+STRIP.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-strip
+STRIP.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-strip
 
 TC.DARWIN := $(TC) # see above for eval
 TC.LINUX  := gnu
 TC.WIN32  := mingw32
+TC.WIN64  := mingw64
 
 ## Specify the default target variables
 ## form: <var>.<target>
@@ -77,9 +120,8 @@ TC.WIN32  := mingw32
 SO.DARWIN := dylib
 SO.LINUX  := so
 SO.WIN32  := dll
-SO.WIN32  := dll
 
-CFLAGS.COMMON          := -O2 -pipe
+CFLAGS.COMMON          := -pipe
 CFLAGS.GCOMMON         := -fPIC -ansi -Wpedantic -x c -frandom-seed=69420
 CFLAGS.GCOMMON.DEBUG   := -O0 -g3 -Wall -Wpedantic
 CFLAGS.GCOMMON.RELEASE := -O2 -w
@@ -119,13 +161,13 @@ CXXFLAGS.LINUX  := -march=sandybridge -mtune=skylake
 CXXFLAGS.WIN32  := -march=sandybridge -mtune=skylake
 
 LDFLAGS := -fPIE
-ifeq ($(strip $(TC)),llvm)
-LDFLAGS += -fprofile-arcs -ftest-coverage
-else ifeq ($(strip $(TC)),xcode)
-LDFLAGS += -fprofile-arcs -ftest-coverage
-else
-LDFLAGS += -fprofile-instr-generate -fcoverage-mapping
-endif
+#ifeq ($(strip $(TC)),llvm)
+#LDFLAGS += -fprofile-arcs -ftest-coverage
+#else ifeq ($(strip $(TC)),xcode)
+#LDFLAGS += -fprofile-arcs -ftest-coverage
+#else
+#LDFLAGS += -Wl,-fprofile-instr-generate -Wl,-fcoverage-mapping
+#endif
 
 ## Resolve the correct host-target suffixes
 ##
@@ -188,6 +230,7 @@ CXXFLAGS := $(CXXFLAGS.COMMON) $(CXXFLAGS.$(tsuf))
 #LDFLAGS
 ARFLAGS  := -rcs
 
+# Make builds deterministic
 ifeq ($(strip $(TC)),gnu)
 CFLAGS   += -ffile-prefix-map=OLD=NEW
 CXXFLAGS += -ffile-prefix-map=OLD=NEW

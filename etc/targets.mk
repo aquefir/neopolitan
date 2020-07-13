@@ -82,7 +82,7 @@ ifneq ($(CC),tcc)
 release: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.RELEASE)
 endif # tcc
 release: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.RELEASE)
-release: REALSTRIP := $(STRIP) ;
+release: REALSTRIP := $(STRIP)
 release: $(TARGETS)
 
 ## Sanity check build
@@ -151,6 +151,7 @@ ubsan: DEFINE += -UTES_BUILD
 ubsan: $(TARGETS)
 endif # $(NO_TES)
 
+# Define object files
 OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
 TES_OFILES := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 
