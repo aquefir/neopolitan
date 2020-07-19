@@ -7,11 +7,10 @@
 
 #include <uni/futils.h>
 
-#include <assert.h>
-#include <limits.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <uni/err.h>
 #include <uni/types/options.h>
 #include <uni/types/int.h>
 
@@ -24,7 +23,7 @@ UNI_OPTION( ptri ) uni_filesz( const char* fname )
 	long sz;
 
 	ret.val = 0;
-	ret.is = 0;
+	ret.is  = 0;
 
 	f = fopen( fname, "rb" );
 
@@ -42,8 +41,8 @@ UNI_OPTION( ptri ) uni_filesz( const char* fname )
 
 	sz = ftell( f );
 	/* LONG_MAX may be returned, meaning it failed */
-	ret.is = sz == LONG_MAX ? 0 : 1;
-	ret.val = sz == LONG_MAX ? 0 : (ptri)sz;
+	ret.is  = sz == S64_MAX ? 0 : 1;
+	ret.val = sz == S64_MAX ? 0 : (ptri)sz;
 
 	fclose( f );
 
@@ -55,8 +54,8 @@ int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 	FILE* f;
 	ptri readsz;
 
-	assert( fname != NULL );
-	assert( ret != NULL );
+	ASSERT( fname != NULL );
+	ASSERT( ret != NULL );
 
 	f = fopen( fname, "rb" );
 	if( !f )
@@ -74,9 +73,9 @@ int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 {
 	UNI_OPTION( ptri ) sz;
 
-	assert( fname != NULL );
-	assert( ret != NULL );
-	assert( ret_sz != NULL );
+	ASSERT( fname != NULL );
+	ASSERT( ret != NULL );
+	ASSERT( ret_sz != NULL );
 
 	sz = uni_filesz( fname );
 
