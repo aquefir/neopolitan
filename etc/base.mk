@@ -15,42 +15,30 @@ endif
 ## TC    -> toolchain
 ## TROOT -> target sysroot (include, lib, etc.)
 
-UNAME := $(shell uname -s)
-# User can specify TP=Win32 at the command line
-TP ?= $(UNAME)
-ifeq ($(strip $(UNAME)),Darwin)
-TC ?= llvm
-ifneq ($(strip $(TC)),llvm)
-ifneq ($(strip $(TC)),xcode)
-$(error Invalid toolchain specified. macOS supports either llvm or xcode)
-endif # $(TC) xcode
-endif # $(TC) llvm
-endif # $(UNAME)
-ifeq ($(strip $(UNAME)),Linux)
-TC ?= gnu
-ifneq ($(strip $(TC)),gnu)
-ifneq ($(strip $(TC)),llvm)
-$(error Invalid toolchain specified. Linux supports either llvm or gnu)
-endif # $(TC) llvm
-endif # $(TC) gnu
-endif # $(UNAME)
+## There are several target platforms $(TP) in use. By ident, these include:
+# Darwin - Apple macOS on x86-64 [$(TC)s: gnu, xcode, llvm]
+# Linux - GNU/Linux on i386 and x86-64 [$(TC)s: gnu, llvm]
+# Win32 - Microsoft Windows on i386 [$(TC)s: mingw32]
+# Win64 - Microsoft Windows on x86-64 [$(TC)s: mingw32]
+# GBA - Nintendo Game Boy Advance on ARMv4T [$(TC)s: dkarm]
 
-# Initialise $(TROOT)
-ifeq ($(strip $(UNAME)),Darwin)
-ifeq ($(strip $(TP)),Win32)
-TROOT := /usr/local/i686-w64-mingw32
-else ifeq ($(strip $(TC)),llvm)
-TROOT := /usr/local/opt/llvm
-else
-TROOT := /usr
-endif # $(TP)
-else ifeq ($(strip $(UNAME)),Linux)
-ifeq ($(strip $(TP)),Win32)
-TROOT := /usr/i686-w64-mingw32
-else
-TROOT := /usr
-endif # $(TP)
-endif # $(UNAME)
+## There are two families of toolchains $(TC) in use: GNU and LLVM.
+# GNU:
+#   gnu - standard GCC toolchain for targeting UNIX
+#   mingw32 - GCC for targeting Windows
+#   dkarm - devkitARM, a GCC for targeting GBA and (3)DS
+# LLVM:
+#   xcode - Apple-provided Clang and tools
+#   llvm - bona fide LLVM toolchain from homebrew
+# additionally, TinyCC is supported as a C compiler with either family of
+# tools for Unices using ELF (Linux, BSDs, ...).
+
+# Host
+UNAME := $(shell uname -s)
+
+# Target platform
+# User can specify TP={Win32,Win64,GBA} at the command line
+TP ?= $(UNAME)
 
 ## Specify the default host variables
 ## form: <var>.<host>[.<target>]
@@ -70,6 +58,8 @@ CC.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-gcc
 CC.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-gcc
 CC.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-gcc
 CC.LINUX.WIN64  := /usr/bin/i686-w64-mingw32-gcc
+CC.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
+CC.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
 
 ifeq ($(strip $(TC)),llvm)
 CXX.DARWIN       := /usr/local/opt/llvm/bin/clang++ # brew LLVM
@@ -85,6 +75,8 @@ CXX.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-g++
 CXX.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-g++
 CXX.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-g++
 CXX.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-g++
+CXX.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-g++
+CXX.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-g++
 
 ifeq ($(strip $(TC)),llvm)
 AR.DARWIN := /usr/local/opt/llvm/bin/llvm-ar # brew LLVM
@@ -96,6 +88,8 @@ AR.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-ar
 AR.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-ar
 AR.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-ar
 AR.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-ar
+AR.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-ar
+AR.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-ar
 
 ifeq ($(strip $(TC)),llvm)
 STRIP.DARWIN       := /usr/local/opt/llvm/bin/llvm-strip # brew LLVM
@@ -107,11 +101,8 @@ STRIP.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-strip
 STRIP.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-strip
 STRIP.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-strip
 STRIP.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-strip
-
-TC.DARWIN := $(TC) # see above for eval
-TC.LINUX  := gnu
-TC.WIN32  := mingw32
-TC.WIN64  := mingw64
+STRIP.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-strip
+STRIP.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-strip
 
 ## Specify the default target variables
 ## form: <var>.<target>
@@ -120,6 +111,8 @@ TC.WIN64  := mingw64
 SO.DARWIN := dylib
 SO.LINUX  := so
 SO.WIN32  := dll
+SO.WIN64  := dll
+SO.GBA    := nosharedlibsforgba # deliberate. check urself
 
 CFLAGS.COMMON          := -pipe
 CFLAGS.GCOMMON         := -fPIC -ansi -Wpedantic -x c -frandom-seed=69420
@@ -140,6 +133,8 @@ CFLAGS.GCOMMON.UBSAN   := -O1 -g3 -fsanitize=undefined \
 CFLAGS.DARWIN := -march=ivybridge -mtune=skylake
 CFLAGS.LINUX  := -march=sandybridge -mtune=skylake
 CFLAGS.WIN32  := -march=sandybridge -mtune=skylake
+CFLAGS.WIN64  := -march=sandybridge -mtune=skylake
+CFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork
 
 CXXFLAGS.COMMON := -pipe -fPIC -std=c++11 -x c++ -frandom-seed=69420
 CXXFLAGS.COMMON.DEBUG   := -O0 -g3 -Wall -Wpedantic
@@ -159,6 +154,8 @@ CXXFLAGS.COMMON.UBSAN   := -O1 -g3 -fsanitize=undefined \
 CXXFLAGS.DARWIN := -march=ivybridge -mtune=skylake
 CXXFLAGS.LINUX  := -march=sandybridge -mtune=skylake
 CXXFLAGS.WIN32  := -march=sandybridge -mtune=skylake
+CXXFLAGS.WIN64  := -march=sandybridge -mtune=skylake
+CXXFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork
 
 LDFLAGS := -fPIE
 #ifeq ($(strip $(TC)),llvm)
@@ -168,6 +165,36 @@ LDFLAGS := -fPIE
 #else
 #LDFLAGS += -Wl,-fprofile-instr-generate -Wl,-fcoverage-mapping
 #endif
+
+# Initialise $(TROOT)
+TROOT.DARWIN.WIN32 := /usr/local/i686-w64-mingw32
+TROOT.DARWIN.WIN64 := /usr/local/x86_64-w64-mingw32
+TROOT.DARWIN.GBA   := /opt/devkitpro/devkitARM
+TROOT.DARWIN       := /usr
+TROOT.LINUX.WIN32  := /usr/i686-w64-mingw32
+TROOT.LINUX.WIN64  := /usr/x86_64-w64-mingw32
+TROOT.LINUX.GBA    := /opt/devkitpro/devkitARM
+TROOT.LINUX        := /usr
+
+# These are config.h synthetics to tell code about its particularities
+CDEFS.DARWIN := DARWIN LILENDIAN AMD64
+CDEFS.LINUX  := LINUX LILENDIAN
+ifneq ($(strip $(shell uname -a | grep x86_64)),)
+CDEFS.LINUX += AMD64
+else ifneq ($(strip $(shell uname -a | grep i386)),)
+CDEFS.LINUX += IA32
+else
+$(error Linux is not supported outside of x86.)
+endif
+CDEFS.WIN32  := WINDOWS WIN32 LILENDIAN IA32
+CDEFS.WIN64  := WINDOWS WIN64 LILENDIAN AMD64
+CDEFS.GBA    := GBA ARMV4T LILENDIAN
+
+TC.DARWIN := llvm
+TC.LINUX  := gnu
+TC.WIN32  := mingw32
+TC.WIN64  := mingw32
+TC.GBA    := dkarm
 
 ## Resolve the correct host-target suffixes
 ##
@@ -179,6 +206,12 @@ tsuf := DARWIN
 else ifeq ($(strip $(TP)),Win32)
 suf := DARWIN.WIN32
 tsuf := WIN32
+else ifeq ($(strip $(TP)),Win64)
+suf := DARWIN.WIN64
+tsuf := WIN64
+else ifeq ($(strip $(TP)),GBA)
+suf := DARWIN.GBA
+tsuf := GBA
 else ifeq ($(strip $(TP)),Linux)
 $(error Cross-compilation to Linux is not supported on macOS)
 else
@@ -191,6 +224,12 @@ tsuf := LINUX
 else ifeq ($(strip $(TP)),Win32)
 suf := LINUX.WIN32
 tsuf := WIN32
+else ifeq ($(strip $(TP)),Win64)
+suf := LINUX.WIN64
+tsuf := WIN64
+else ifeq ($(strip $(TP)),GBA)
+suf := DARWIN.GBA
+tsuf := GBA
 else ifeq ($(strip $(TP)),Darwin)
 $(error Cross-compilation to macOS is not supported on Linux)
 else
@@ -202,6 +241,8 @@ endif # $(UNAME)
 
 ifeq ($(strip $(TP)),Win32)
 EXE := .exe
+else ifeq ($(strip $(TP)),Win64)
+EXE := .exe
 else
 EXE :=
 endif # $(TP)
@@ -210,7 +251,7 @@ endif # $(TP)
 ##
 
 SO := $(SO.$(tsuf))
-TC := $(TC.$(tsuf))
+TC ?= $(TC.$(tsuf))
 
 CC.DEFAULT    := $(CC.$(suf))
 CC.CUSTOM     := $(CC)
@@ -229,12 +270,16 @@ endif # $(CC.CUSTOM)
 CXXFLAGS := $(CXXFLAGS.COMMON) $(CXXFLAGS.$(tsuf))
 #LDFLAGS
 ARFLAGS  := -rcs
+CDEFS    := $(CDEFS.$(tsuf))
 
 # Make builds deterministic
 ifeq ($(strip $(TC)),gnu)
 CFLAGS   += -ffile-prefix-map=OLD=NEW
 CXXFLAGS += -ffile-prefix-map=OLD=NEW
 else ifeq ($(strip $(TC)),mingw32)
+CFLAGS   += -ffile-prefix-map=OLD=NEW
+CXXFLAGS += -ffile-prefix-map=OLD=NEW
+else ifeq ($(strip $(TC)),dkarm)
 CFLAGS   += -ffile-prefix-map=OLD=NEW
 CXXFLAGS += -ffile-prefix-map=OLD=NEW
 endif
@@ -292,6 +337,8 @@ UNDEFINES :=
 ifeq ($(strip $(CC.CUSTOM)),tcc)
 DEFINES += SDL_DISABLE_IMMINTRIN_H=1
 endif
+
+DEFINES += $(patsubst %,CFG_%,$(CDEFS))
 
 $(info SYSTEM COMPILATION DEFAULTS PRINTOUT)
 $(info =====================================)
