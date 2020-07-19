@@ -30,13 +30,15 @@ FWORKS :=
 # 3PLIBDIR is the base directory
 # 3PLIBS is the folder names in the base directory for each library
 3PLIBDIR := 3rdparty
-3PLIBS   :=
+3PLIBS   := tes
 
 # sources
 CFILES   := \
 	src/err.c \
 	src/futils.c \
-	src/log.c
+	src/log.c \
+	src/str.c \
+	src/utf8.c
 HFILES   := \
 	include/uni/types/float.h \
 	include/uni/types/geo.h \
@@ -55,12 +57,15 @@ HFILES   := \
 	include/uni/option.h \
 	include/uni/str.h \
 	include/uni/utf8.h \
-	include/uni/ver.h
+	include/uni/ver.h \
+	src/str.h
 CPPFILES :=
 HPPFILES :=
 
 # test suite sources
-TES_CFILES   :=
+TES_CFILES   := \
+	src/str.tes.c \
+	src/utf8.tes.c
 TES_HFILES   :=
 TES_CPPFILES :=
 TES_HPPFILES :=

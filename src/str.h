@@ -5,12 +5,9 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNI_UTF8_H
-#define INC_API__UNI_UTF8_H
+#ifndef INC__UNI_STR_H
+#define INC__UNI_STR_H
 
-#include "types/int.h"
-#include "types/options.h"
+#include <uni/str.h>
 
-int uni_validu8( const char* );
-
-#endif /* INC_API__UNI_UTF8_H */
+#endif /* INC__UNI_STR_H */
