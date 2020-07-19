@@ -7,7 +7,11 @@
 
 #include <uni/err.h>
 
+#ifdef CFG_GBA
+#include <uni/gbabios.h>
+#else
 #include <stdlib.h>
+#endif /* CFG_GBA */
 #include <uni/log.h>
 
 void uni_assert_fail(
@@ -20,5 +24,9 @@ void uni_assert_fail(
 	   func,
 	   expr );
 
+#ifdef CFG_GBA
+	_bios_halt( );
+#else
 	abort( );
+#endif
 }
