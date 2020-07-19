@@ -9,7 +9,7 @@
 #define INC_API__UNI_TYPES_OPTIONS_H
 
 #include "float.h"
-#include "geo.h"
+#include "mathprim.h"
 #include "int.h"
 #include "opt.h"
 #include "vec.h"

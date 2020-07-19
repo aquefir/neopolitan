@@ -5,11 +5,13 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC_API__UNI_LOG_H
-#define INC_API__UNI_LOG_H
+#ifndef INC_API__UNI_UTF8_H
+#define INC_API__UNI_UTF8_H
 
-int uni_print( const char*, ... );
-int uni_pwarn( const char*, ... );
-int uni_perror( const char*, ... );
+#include "types/int.h"
+#include "types/options.h"
 
-#endif /* INC_API__UNI_LOG_H */
+int uni_validu8( const char* );
+UNI_OPTION( ptri ) uni_u8cpcount( const char* );
+
+#endif /* INC_API__UNI_UTF8_H */

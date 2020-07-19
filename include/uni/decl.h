@@ -14,12 +14,17 @@
 #define UNI_C_API
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
-#define UNI_DEPRECATED __attribute__((deprecated))
-#elif defined(_MSC_VER)
-#define UNI_DEPRECATED __declspec(deprecated)
+#ifndef UNI_NODEPREC
+#if defined( __GNUC__ ) || defined( __clang__ )
+#define UNI_DEPRECATED __attribute__( ( deprecated ) )
+#elif defined( _MSC_VER )
+#define UNI_DEPRECATED __declspec( deprecated )
 #else
-#pragma message("WARNING: You need to implement UNI_DEPRECATED for this compiler")
+#pragma message( \
+   "WARNING: You need to implement UNI_DEPRECATED for this compiler" )
+#define UNI_DEPRECATED
+#endif
+#else
 #define UNI_DEPRECATED
 #endif
 

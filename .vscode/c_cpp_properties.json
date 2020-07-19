@@ -8,7 +8,9 @@
                 "${workspaceFolder}/3rdparty/teslib/include"
             ],
             "defines": [
-                "__VSCODE_INTELLISENSE__"
+                "CFG_LINUX",
+                "CFG_AMD64",
+                "CFG_LILENDIAN"
             ],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c89",

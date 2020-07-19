@@ -38,22 +38,29 @@ CFILES   := \
 	src/futils.c \
 	src/log.c
 HFILES   := \
-	include/unilib/array.h \
-	include/unilib/decl.h \
-	include/unilib/err.h \
-	include/unilib/futils.h \
-	include/unilib/geometry.h \
-	include/unilib/log.h \
-	include/unilib/option.h \
-	include/unilib/shand.h
+	include/uni/types/float.h \
+	include/uni/types/geo.h \
+	include/uni/types/int.h \
+	include/uni/types/mathprim.h \
+	include/uni/types/opt.h \
+	include/uni/types/options.h \
+	include/uni/types/vec.h \
+	include/uni/chkmath.h \
+	include/uni/decl.h \
+	include/uni/endian.h \
+	include/uni/err.h \
+	include/uni/futils.h \
+	include/uni/log.h \
+	include/uni/memory.h \
+	include/uni/option.h \
+	include/uni/str.h \
+	include/uni/utf8.h \
+	include/uni/ver.h
 CPPFILES :=
 HPPFILES :=
 
 # test suite sources
-TES_CFILES   := \
-	test/array.c \
-	test/main.c \
-	test/sort.c
+TES_CFILES   :=
 TES_HFILES   :=
 TES_CPPFILES :=
 TES_HPPFILES :=

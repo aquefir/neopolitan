@@ -8,67 +8,9 @@
 #ifndef INC_API__UNI_TYPES_GEO_H
 #define INC_API__UNI_TYPES_GEO_H
 
-#include "int.h"
+#pragma message( \
+   "DEPRECATED: Please #include <uni/types/mathprim.h>. <uni/types/geo.h> is deprecated" )
 
-#define UNI_SIZEOF_RANGE( R ) \
-	( ( ( ( R ).lo > ( R ).hi ) \
-	        ? ( ( R ).lo - ( ( R ).hi - 1 ) ) \
-	        : ( ( ( R ).hi - 1 ) - ( R ).lo ) ) + \
-	   1 )
-
-struct point2
-{
-	s32 x, y;
-};
-
-struct point2l
-{
-	s64 x, y;
-};
-
-struct point3
-{
-	s32 x, y, z;
-};
-
-struct point3l
-{
-	s64 x, y, z;
-};
-
-struct bound2
-{
-	u32 l, w;
-};
-
-struct bound2l
-{
-	u64 l, w;
-};
-
-struct bound3
-{
-	u32 l, w, h;
-};
-
-struct bound3l
-{
-	u64 l, w, h;
-};
-
-struct range
-{
-	s32 lo, hi;
-};
-
-struct rangel
-{
-	s64 lo, hi;
-};
-
-struct rangep
-{
-	ptri lo, hi;
-};
+#include "mathprim.h"
 
 #endif /* INC_API__UNI_TYPES_GEO_H */

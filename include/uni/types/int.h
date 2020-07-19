@@ -8,6 +8,10 @@
 #ifndef INC_API__UNI_TYPES_INT_H
 #define INC_API__UNI_TYPES_INT_H
 
+#if !defined( NULL )
+#define NULL ( (void*)0 )
+#endif /* !defined( NULL ) */
+
 #ifdef _MSC_VER
 typedef unsigned __int8 u8;
 typedef unsigned __int16 u16;
@@ -47,6 +51,8 @@ typedef uint16_t u16;
 typedef uint8_t u8;
 typedef uintptr_t ptri;
 #endif
+
+typedef u32 char32;
 
 #define U8_MAX ( (u8)0xFF )
 #define U16_MAX ( (u16)0xFFFF )
