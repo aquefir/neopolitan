@@ -38,14 +38,10 @@ ptri uni_strlen( const char* );
 ptri uni_strlencp( const char* );
 char* uni_strdup( const char* );
 char* uni_strndup( const char*, ptri );
-char* uni_strncpdup( const char*, ptri );
 char** uni_strdupv( char** );
 char* uni_strnfill( ptri, char );
-char* uni_strncpfill( ptri, char32 );
 char* uni_strstr( const char*, const char* );
-char* uni_strnstr( const char*, const char*, ptri );
 char* uni_strrstr( const char*, const char* );
-char* uni_strrnstr( const char*, const char*, ptri );
 int uni_strpre( const char*, const char* );
 int uni_strsuf( const char*, const char* );
 int uni_isascii( const char* );
@@ -70,7 +66,6 @@ char** uni_strsplit( const char*, const char*, int );
 char* uni_strjoin( const char*, ... );
 char* uni_strjoinv( const char*, const char** );
 ptri uni_strlenv( const char** );
-ptri uni_strlencpv( const char** );
 int uni_strcmpv( const char**, const char** );
 
 #endif /* INC_API__UNI_STR_H */
