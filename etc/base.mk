@@ -157,14 +157,17 @@ CXXFLAGS.WIN32  := -march=sandybridge -mtune=skylake
 CXXFLAGS.WIN64  := -march=sandybridge -mtune=skylake
 CXXFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork
 
-LDFLAGS := -fPIE
-#ifeq ($(strip $(TC)),llvm)
-#LDFLAGS += -fprofile-arcs -ftest-coverage
-#else ifeq ($(strip $(TC)),xcode)
-#LDFLAGS += -fprofile-arcs -ftest-coverage
-#else
-#LDFLAGS += -Wl,-fprofile-instr-generate -Wl,-fcoverage-mapping
-#endif
+LDFLAGS       := -fPIE
+LDFLAGS.COV   :=
+LDFLAGS.ASAN  := -fsanitize=address -fno-omit-frame-pointer
+LDFLAGS.UBSAN := -fsanitize=undefined
+ifeq ($(strip $(TC)),llvm)
+LDFLAGS.COV += -fprofile-arcs -ftest-coverage
+else ifeq ($(strip $(TC)),xcode)
+LDFLAGS.COV += -fprofile-arcs -ftest-coverage
+else
+LDFLAGS.COV += -Wl,-fprofile-instr-generate -Wl,-fcoverage-mapping
+endif
 
 # Initialise $(TROOT)
 TROOT.DARWIN.WIN32 := /usr/local/i686-w64-mingw32

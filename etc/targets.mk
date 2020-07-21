@@ -106,6 +106,7 @@ ifneq ($(CC),tcc)
 cov: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.COV)
 endif # tcc
 cov: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.COV)
+cov: LDFLAGS += $(LDFLAGS.COV)
 cov: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
 cov: DEFINE += -DTES_BUILD=1
@@ -124,6 +125,8 @@ ifneq ($(CC),tcc)
 asan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.ASAN)
 endif # tcc
 asan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.ASAN)
+asan: LDFLAGS += $(LDFLAGS.ASAN)
+
 asan: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
 asan: DEFINE += -DTES_BUILD=1
@@ -142,6 +145,7 @@ ifneq ($(CC),tcc)
 ubsan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.UBSAN)
 endif # tcc
 ubsan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.UBSAN)
+ubsan: LDFLAGS += $(LDFLAGS.UBSAN)
 ubsan: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
 ubsan: DEFINE += -DTES_BUILD=1
