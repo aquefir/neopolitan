@@ -18,4 +18,7 @@ void* uni_tryalloc0( ptri );
 void* uni_tryrealloc( void*, ptri );
 void uni_free( void* );
 
+void uni_memset( void*, u8, ptri );
+void uni_memcpy( void*, void*, ptri );
+
 #endif /* INC_API__UNI_MEMORY_H */
