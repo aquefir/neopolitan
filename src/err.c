@@ -14,6 +14,15 @@
 #endif /* CFG_GBA */
 #include <uni/log.h>
 
+void uni_die( void )
+{
+#ifdef CFG_GBA
+	_bios_halt( );
+#else
+	abort( );
+#endif
+}
+
 void uni_assert_fail(
    const char* expr, const char* file, unsigned line, const char* func )
 {

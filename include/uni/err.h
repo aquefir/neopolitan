@@ -131,6 +131,7 @@ enum /* err */
 
 #define ASSERT_NOP( x, o ) IMPL_ASSERT_NOP( ( x ), ( o ), __FILE__, __LINE__ )
 
+extern void uni_die( void );
 extern void uni_assert_fail( const char*, const char*, unsigned, const char* );
 
 #endif /* INC_API__UNI_ERR_H */
