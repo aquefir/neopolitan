@@ -62,8 +62,9 @@ char* uni_strchomp( char*, char );
 char* uni_strchug( char*, char );
 char** uni_strsplit( const char*, const char*, int );
 char* uni_strjoin( const char*, ... );
-char* uni_strjoinv( const char*, const char** );
-ptri uni_strlenv( const char** );
-int uni_strcmpv( const char**, const char** );
+char* uni_strjoinv( const char*, char** );
+ptri uni_strlenv( char** );
+int uni_strcmpv( char**, char** );
+void uni_strfreev( char** );
 
 #endif /* INC_API__UNI_STR_H */

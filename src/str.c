@@ -152,7 +152,7 @@ char* uni_strstr( const char* nee, const char* hay )
 
 			if(match)
 			{
-				return hay + i;
+				return (char*)(hay + i);
 			}
 		}
 
@@ -193,7 +193,7 @@ char* uni_strrstr( const char* nee, const char* hay )
 
 			if(match)
 			{
-				ret = hay + i;
+				ret = (char*)(hay + i);
 			}
 		}
 
@@ -361,7 +361,7 @@ int uni_isupper( char c )
 	return (u8)c >= 0x41 && (u8)c <= 0x5A;
 }
 
-int uni_isupper( char c )
+int uni_islower( char c )
 {
 	return (u8)c >= 0x61 && (u8)c <= 0x7A;
 }
@@ -448,5 +448,128 @@ char* uni_strchug( char* in, char c )
 		in[in_sz - offs] = '\0';
 
 		return in;
+	}
+}
+
+char** uni_strsplit( const char* in, const char* delim, int max )
+{
+	if(!in || !delim)
+	{
+		uni_die( );
+	}
+
+	{
+		char** ret;
+		ptri i, last_i, sz, ret_i, ret_sz;
+		const ptri in_sz = uni_strlen( in );
+		const ptri delim_sz = uni_strlen( delim );
+
+		if(delim_sz > in_sz)
+		{
+			return uni_alloc0( sizeof(char*) );
+		}
+
+		if(max < 1)
+		{
+			max = S32_MAX;
+			ret_sz = 0;
+			ret = NULL;
+		}
+		else
+		{
+			ret_sz = max + 1;
+			ret = uni_alloc( sizeof(char*) * ret_sz );
+		}
+
+		ret_i = 0;
+		last_i = 0;
+
+		for(i = 0; i < in_sz - delim_sz + 1; ++i)
+		{
+			if(uni_memcmp( in + i, delim, delim_sz ))
+			{
+				/* we hit a delimiter. allocate it off */
+				if(ret_sz == 0)
+				{
+					ret = uni_alloc( sizeof(char*) * 2 );
+					ret_sz = 2;
+				}
+				else while(ret_i >= ret_sz)
+				{
+					ret = uni_realloc( ret, sizeof(char*) * (ret_sz * 2 ) );
+					ret_sz <<= 1; /* *= 2 */
+				}
+
+				sz = i - last_i;
+				ret[ret_i] = uni_alloc( sizeof(char) * (sz + 1) );
+				i += delim_sz - 1;
+
+				if(sz > 0)
+				{
+					uni_memcpy( ret[ret_i], in + last_i, sz );
+				}
+
+				last_i = i + 1;
+				ret[ret_i][sz] = '\0';
+				ret_i++;
+			}
+		}
+
+		while(ret_i >= ret_sz)
+		{
+			ret = uni_realloc( ret, sizeof(char*) * (ret_sz << 1) );
+				ret_sz <<= 1; /* *= 2 */
+		}
+
+		sz = i - last_i;
+		ret[ret_i] = uni_alloc( sizeof(char) * (sz + 1) );
+
+		if(sz > 0)
+		{
+			uni_memcpy( ret[ret_i], in + last_i, sz );
+		}
+
+		ret[ret_i][sz] = '\0';
+		ret_i++;
+
+		ret[ret_i] = NULL;
+		ret_i++;
+
+		return ret;
+	}
+}
+
+ptri uni_strlenv( char** arr )
+{
+	if(!arr)
+	{
+		uni_die( );
+	}
+
+	{
+		ptri i;
+
+		for(i = 0; arr[i] != NULL; ++i);
+
+		return i;
+	}
+}
+
+void uni_strfreev( char** arr )
+{
+	if(!arr)
+	{
+		uni_die( );
+	}
+
+	{
+		ptri i;
+
+		for(i = 0; arr[i] != NULL; ++i)
+		{
+			uni_free( arr[i] );
+		}
+
+		uni_free( arr );
 	}
 }
