@@ -37,6 +37,7 @@ CFILES   := \
 	src/err.c \
 	src/futils.c \
 	src/log.c \
+	src/memory.c \
 	src/str.c \
 	src/utf8.c
 HFILES   := \

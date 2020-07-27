@@ -111,12 +111,34 @@ void uni_memset( void* p, u8 n, ptri sz )
 	}
 }
 
-void uni_memcpy( void* dst, void* src, ptri sz )
+void uni_memcpy( void* dst, const void* src, ptri sz )
 {
 	if( dst != NULL && src != NULL && sz > 0 )
 	{
 		memcpy( dst, src, sz );
 	}
+}
+
+int uni_memcmp( const void* a, const void* b, ptri sz )
+{
+	if( a && b && sz )
+	{
+		u8* aa = (u8*)a;
+		u8* bb = (u8*)b;
+		ptri i;
+
+		for(i = 0; i < sz; ++i)
+		{
+			if(aa[i] != bb[i])
+			{
+				return 0;
+			}
+		}
+
+		return 1;
+	}
+
+	return 0;
 }
 
 #endif /* CFG_GBA */
