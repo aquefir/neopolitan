@@ -7,6 +7,7 @@
 
 #include "str.h"
 
+#include <stdarg.h>
 #include <uni/err.h>
 #include <uni/memory.h>
 
@@ -579,5 +580,141 @@ void uni_strfreev( char** arr )
 		}
 
 		uni_free( arr );
+	}
+}
+
+int uni_strequv( char** arr_a, char** arr_b )
+{
+	if(!arr_a || !arr_b)
+	{
+		uni_die( );
+	}
+
+	{
+		ptri i;
+		const ptri arr_a_sz = uni_strlenv( arr_a );
+		const ptri arr_b_sz = uni_strlenv( arr_b );
+
+		if(arr_a_sz != arr_b_sz)
+		{
+			return 0;
+		}
+
+		for(i = 0; i < arr_a_sz; ++i)
+		{
+			if(!uni_strequ( arr_a[i], arr_b[i] ))
+			{
+				return 0;
+			}
+		}
+
+		return 1;
+	}
+}
+
+char* uni_strjoin( const char* delim, ... )
+{
+	if(!delim)
+	{
+		uni_die( );
+	}
+
+	{
+		va_list args;
+		char* s;
+		char* ret;
+		ptri sz, sz2, i;
+		const ptri delim_sz = uni_strlen( delim );
+
+		va_start( args, delim );
+
+		s = va_arg( args, char* );
+
+		if(!s)
+		{
+			ret = uni_strdup( "" );
+			va_end( args );
+
+			return ret;
+		}
+
+		/* get the total size to allocate first */
+		sz = uni_strlen( s ) + 1;
+
+		s = va_arg( args, char* );
+
+		while( s )
+		{
+			sz += delim_sz + uni_strlen( s );
+			s = va_arg( args, char* );
+		}
+
+		va_end( args );
+
+		/* build the newly joined string */
+		ret = uni_alloc( sizeof(char) * (sz + 1) );
+
+		va_start( args, delim );
+
+		s = va_arg( args, char* );
+		sz2 = uni_strlen( s );
+		uni_memcpy( ret, s, sz2 );
+		i = sz2;
+
+		s = va_arg( args, char* );
+
+		while( s )
+		{
+			sz2 = uni_strlen( s );
+			uni_memcpy( ret + i, delim, delim_sz );
+			uni_memcpy( ret + i + delim_sz, s, sz2 );
+			i += sz2 + delim_sz;
+			s = va_arg( args, char* );
+		}
+
+		ret[i] = '\0';
+		va_end( args );
+
+		return ret;
+	}
+}
+
+char* uni_strjoinv( const char* delim, char** arr )
+{
+	if(!delim || !arr)
+	{
+		uni_die( );
+	}
+
+	{
+		ptri i, j, sz;
+		char* ret;
+		const ptri delim_sz = uni_strlen( delim );
+		const ptri arr_sz = uni_strlenv( arr );
+
+		for(i = 0, sz = 0; i < arr_sz; ++i)
+		{
+			sz += uni_strlen( arr[i] ) + (i > 0 ? delim_sz : 0);
+		}
+
+		ret = uni_alloc( sizeof(char) * (sz + 1) );
+
+		for(i = 0, j = 0; i < arr_sz; ++i)
+		{
+			const ptri str_sz = uni_strlen( arr[i] );
+
+			if(i)
+			{
+				uni_memcpy( ret + j, delim, delim_sz );
+				j += delim_sz;
+			}
+
+			uni_memcpy( ret + j, arr[i], str_sz );
+			j += str_sz;
+		}
+
+		ret[j] = '\0';
+
+		return ret;
 	}
 }

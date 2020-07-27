@@ -15,6 +15,7 @@ TES_OPEN( );
 
 {
 char** tmpsv;
+char* tmp2[] = {"aaa", "bc", "xzx", "134", NULL};
 
 TES_ASSERT_EQ( uni_strlen( "123456789" ), 9 );
 TES_ASSERT_EQ( uni_strlen( "hello world" ), 11 );
@@ -53,6 +54,10 @@ TES_ASSERT_EQ( uni_strlenv( tmpsv ), 2 );
 TES_ASSERT_STR_EQ( tmpsv[0], "red blahh  " );
 TES_ASSERT_STR_EQ( tmpsv[1], "ccc do" );
 uni_strfreev( tmpsv );
+
+TES_ASSERT_STR_EQ( uni_strjoinv( ";;", tmp2 ), "aaa;;bc;;xzx;;134" );
+TES_ASSERT_STR_EQ( uni_strjoin( ";;", "aaa", "bc", "xzx", "134", NULL ),
+	"aaa;;bc;;xzx;;134");
 
 }
 
