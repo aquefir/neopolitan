@@ -486,7 +486,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 
 		for(i = 0; i < in_sz - delim_sz + 1; ++i)
 		{
-			if(uni_memcmp( in + i, delim, delim_sz ))
+			if(uni_memcmp( in + i, delim, delim_sz ) )
 			{
 				/* we hit a delimiter. allocate it off */
 				if(ret_sz == 0)
@@ -512,6 +512,14 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 				last_i = i + 1;
 				ret[ret_i][sz] = '\0';
 				ret_i++;
+
+				if(ret_i >= max - 1)
+				{
+					/* set counter to the end so remainder gets scooped up */
+					i = in_sz - delim_sz + 1;
+
+					break;
+				}
 			}
 		}
 
@@ -521,7 +529,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 				ret_sz <<= 1; /* *= 2 */
 		}
 
-		sz = i - last_i;
+		sz = i - last_i + delim_sz;
 		ret[ret_i] = uni_alloc( sizeof(char) * (sz + 1) );
 
 		if(sz > 0)

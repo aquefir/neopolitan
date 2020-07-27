@@ -35,6 +35,25 @@ TES_ASSERT_STR_EQ( tmpsv[2], "" );
 TES_ASSERT_STR_EQ( tmpsv[3], "cccc" );
 TES_ASSERT_STR_EQ( tmpsv[4], "do" );
 uni_strfreev( tmpsv );
+
+tmpsv = uni_strsplit( "red blahh  cccc do", "  ", -1 );
+TES_ASSERT_EQ( uni_strlenv( tmpsv ), 2 );
+TES_ASSERT_STR_EQ( tmpsv[0], "red blahh" );
+TES_ASSERT_STR_EQ( tmpsv[1], "cccc do" );
+uni_strfreev( tmpsv );
+
+tmpsv = uni_strsplit( "red blahh  cccc do", "blah", -1 );
+TES_ASSERT_EQ( uni_strlenv( tmpsv ), 2 );
+TES_ASSERT_STR_EQ( tmpsv[0], "red " );
+TES_ASSERT_STR_EQ( tmpsv[1], "h  cccc do" );
+uni_strfreev( tmpsv );
+
+tmpsv = uni_strsplit( "red blahh  cccc do", "c", 2 );
+TES_ASSERT_EQ( uni_strlenv( tmpsv ), 2 );
+TES_ASSERT_STR_EQ( tmpsv[0], "red blahh  " );
+TES_ASSERT_STR_EQ( tmpsv[1], "ccc do" );
+uni_strfreev( tmpsv );
+
 }
 
 TES_CLOSE( );
