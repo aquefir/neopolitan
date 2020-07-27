@@ -166,7 +166,7 @@ LDFLAGS.COV += -fprofile-arcs -ftest-coverage
 else ifeq ($(strip $(TC)),xcode)
 LDFLAGS.COV += -fprofile-arcs -ftest-coverage
 else
-LDFLAGS.COV += -Wl,-fprofile-instr-generate -Wl,-fcoverage-mapping
+LDFLAGS.COV += -fprofile-instr-generate -fcoverage-mapping
 endif
 
 # Initialise $(TROOT)
