@@ -9,8 +9,6 @@
 
 #include "str.h"
 
-#include <stdio.h>
-
 TES_OPEN( );
 
 {
