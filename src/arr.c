@@ -7,6 +7,7 @@
 
 #include "arr.h"
 
+#include <stdarg.h>
 #include <uni/err.h>
 #include <uni/memory.h>
 
@@ -116,24 +117,26 @@ ptri uni_arr_getsz( struct uni_arr* arr )
 
 void* uni_arr_make( struct uni_arr* arr )
 {
-	void* ret;
-	ptri sz;
-
 	if( !arr )
 	{
 		uni_die( );
 	}
 
-	if( !arr->data )
 	{
-		return NULL;
+		void* ret;
+		ptri sz;
+
+		if( !arr->data )
+		{
+			return NULL;
+		}
+
+		sz  = arr->elemsz * arr->sz;
+		ret = uni_alloc( sz );
+		uni_memcpy( ret, arr->data, sz );
+
+		return ret;
 	}
-
-	sz  = arr->elemsz * arr->sz;
-	ret = uni_alloc( sz );
-	uni_memcpy( ret, arr->data, sz );
-
-	return ret;
 }
 
 void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
@@ -147,7 +150,7 @@ void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
 		void* ret;
 		ptri sz;
 
-		if( !arr->data || r.hi >= arr->sz || r.lo >= r.hi )
+		if( !arr->data || r.hi <= r.lo || r.hi > arr->sz )
 		{
 			return NULL;
 		}
@@ -162,7 +165,7 @@ void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
 
 int uni_arr_app( struct uni_arr* arr, void* data )
 {
-	if( !arr )
+	if( !arr || !data )
 	{
 		uni_die( );
 	}
@@ -181,7 +184,7 @@ int uni_arr_app( struct uni_arr* arr, void* data )
 
 int uni_arr_prep( struct uni_arr* arr, void* data )
 {
-	if( !arr )
+	if( !arr || !data )
 	{
 		uni_die( );
 	}
@@ -212,4 +215,160 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 	}
 
 	return 0;
+}
+
+int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
+{
+	if( !arr || !data || ind > arr->sz )
+	{
+		uni_die( );
+	}
+
+	while( arr->sz >= arr->cap )
+	{
+		arr->data = uni_realloc( arr->data, arr->cap << 1 );
+		arr->cap <<= 1; /* *= 2 */
+	}
+
+	if( ind < arr->sz )
+	{
+		ptri i;
+
+		for( i = arr->sz - 1; i >= ind; --i )
+		{
+			uni_memcpy( arr->data + ( arr->elemsz * ( i + 1 ) ),
+			   arr->data + ( arr->elemsz * i ),
+			   arr->elemsz );
+		}
+
+		uni_memcpy( arr->data + ( arr->elemsz * ind ), data, arr->elemsz );
+	}
+	else
+	{
+		uni_memcpy( arr->data + ( arr->elemsz * arr->sz ), data, arr->elemsz );
+	}
+
+	return 0;
+}
+
+void uni_arr_ovr( struct uni_arr* arr, ptri ind, void* data )
+{
+	if( !arr || !data || ind >= arr->sz )
+	{
+		uni_die( );
+	}
+
+	uni_memcpy( arr->data + ( arr->elemsz * ind ), data, arr->elemsz );
+}
+
+struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
+{
+	if( !arr )
+	{
+		uni_die( );
+	}
+
+	{
+		struct uni_arr* ret;
+		struct uni_arr* cur;
+		ptri newsz, i;
+		u32 elemsz;
+		va_list args;
+
+		va_start( args, arr );
+
+		cur    = va_arg( args, struct uni_arr* );
+		elemsz = 0;
+		newsz  = 0;
+
+		while( cur )
+		{
+			newsz += cur->sz;
+			elemsz = elemsz == 0 ? cur->elemsz : elemsz;
+
+			if( cur->elemsz != elemsz )
+			{
+				return NULL;
+			}
+
+			cur = va_arg( args, struct uni_arr* );
+		}
+
+		va_end( args );
+
+		ret = uni_arr_initsz( elemsz, newsz );
+
+		va_start( args, arr );
+
+		cur = va_arg( args, struct uni_arr* );
+		i   = 0;
+
+		while( cur )
+		{
+			uni_memcpy( ret->data + ( ret->elemsz * i ),
+			   cur->data,
+			   ( ret->elemsz * cur->sz ) );
+			i += cur->sz;
+
+			va_arg( args, struct uni_arr* );
+		}
+
+		return ret;
+	}
+}
+
+struct uni_arr* uni_arr_concv( struct uni_arr** arr )
+{
+	if( !arr )
+	{
+		uni_die( );
+	}
+
+	{
+		struct uni_arr* ret;
+		ptri newsz, i;
+		u32 elemsz;
+
+		for( i = 0, newsz = 0, elemsz = 0; arr[i] != NULL; ++i )
+		{
+			elemsz = elemsz == 0 ? arr[i]->elemsz : elemsz;
+			newsz += arr[i]->sz;
+
+			if( arr[i]->elemsz != elemsz )
+			{
+				return NULL;
+			}
+		}
+
+		ret = uni_arr_initsz( elemsz, newsz );
+
+		for( i = 0; arr[i] != NULL; ++i )
+		{
+			uni_memcpy( ret->data + ( ret->elemsz * i ),
+			   arr[i]->data,
+			   ret->elemsz * arr[i]->sz );
+		}
+
+		return ret;
+	}
+}
+
+struct uni_arr* uni_arr_slice( struct uni_arr* arr, struct rangep r )
+{
+	if( !arr || r.hi <= r.lo || r.hi > arr->sz )
+	{
+		uni_die( );
+	}
+
+	{
+		struct uni_arr* ret;
+		const ptri sz = r.hi - r.lo;
+
+		ret = uni_arr_initsz( arr->elemsz, sz );
+
+		uni_memcpy(
+		   ret->data, arr->data + ( arr->elemsz * r.lo ), arr->elemsz * sz );
+
+		return ret;
+	}
 }
