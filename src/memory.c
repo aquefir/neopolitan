@@ -61,10 +61,7 @@ void* uni_realloc( void* p, ptri sz )
 	return ret;
 }
 
-void* uni_tryalloc( ptri sz )
-{
-	return malloc( sz );
-}
+void* uni_tryalloc( ptri sz ) { return malloc( sz ); }
 
 void* uni_tryalloc0( ptri sz )
 {
@@ -127,9 +124,9 @@ int uni_memcmp( const void* a, const void* b, ptri sz )
 		u8* bb = (u8*)b;
 		ptri i;
 
-		for(i = 0; i < sz; ++i)
+		for( i = 0; i < sz; ++i )
 		{
-			if(aa[i] != bb[i])
+			if( aa[i] != bb[i] )
 			{
 				return 0;
 			}

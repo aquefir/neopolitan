@@ -34,6 +34,7 @@ FWORKS :=
 
 # sources
 CFILES   := \
+	src/arr.c \
 	src/err.c \
 	src/futils.c \
 	src/log.c \
@@ -48,6 +49,7 @@ HFILES   := \
 	include/uni/types/opt.h \
 	include/uni/types/options.h \
 	include/uni/types/vec.h \
+	include/uni/arr.h \
 	include/uni/chkmath.h \
 	include/uni/decl.h \
 	include/uni/endian.h \
@@ -59,7 +61,9 @@ HFILES   := \
 	include/uni/str.h \
 	include/uni/utf8.h \
 	include/uni/ver.h \
-	src/str.h
+	src/arr.h \
+	src/str.h \
+	src/utf8.h
 CPPFILES :=
 HPPFILES :=
 

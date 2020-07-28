@@ -18,6 +18,7 @@ struct uni_str* uni_str_init( const char* );
 struct uni_str* uni_str_initsz( ptri );
 void uni_str_fini( struct uni_str* );
 struct uni_str* uni_str_dup( struct uni_str* );
+ptri uni_str_getsz( struct uni_str* );
 char* uni_str_make( struct uni_str* );
 char* uni_str_mkslice( struct uni_str*, struct rangep );
 
@@ -30,9 +31,9 @@ int uni_str_prepu8( struct uni_str*, char32 );
 int uni_str_ins( struct uni_str*, ptri, const char* );
 int uni_str_insch( struct uni_str*, ptri, char );
 int uni_str_insu8( struct uni_str*, ptri, char32 );
-int uni_str_wri( struct uni_str*, ptri, const char* );
-int uni_str_wrich( struct uni_str*, ptri, char );
-int uni_str_wriu8( struct uni_str*, ptri, char32 );
+int uni_str_ovr( struct uni_str*, ptri, const char* );
+int uni_str_ovrch( struct uni_str*, ptri, char );
+int uni_str_ovru8( struct uni_str*, ptri, char32 );
 
 ptri uni_strlen( const char* );
 ptri uni_strlencp( const char* );

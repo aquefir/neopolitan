@@ -32,7 +32,7 @@ ptri uni_strlencp( const char* in )
 {
 	ptri i = 0;
 
-	if(!in)
+	if( !in )
 	{
 		uni_die( );
 	}
@@ -42,7 +42,7 @@ ptri uni_strlencp( const char* in )
 
 char* uni_strdup( const char* in )
 {
-	if(!in)
+	if( !in )
 	{
 		uni_die( );
 	}
@@ -62,14 +62,14 @@ char* uni_strdup( const char* in )
 
 char* uni_strndup( const char* in, ptri len )
 {
-	if(!in || !len)
+	if( !in || !len )
 	{
 		uni_die( );
 	}
 
 	{
 		char* ret;
-		const ptri sz = uni_strlen( in );
+		const ptri sz  = uni_strlen( in );
 		const ptri amt = sz > len ? len : sz;
 
 		ret = uni_alloc( amt + 1 );
@@ -83,7 +83,7 @@ char* uni_strndup( const char* in, ptri len )
 
 char** uni_strdupv( char** in )
 {
-	if(!in)
+	if( !in )
 	{
 		uni_die( );
 	}
@@ -93,9 +93,9 @@ char** uni_strdupv( char** in )
 		ptri i;
 		const ptri arrsz = uni_strlenv( in );
 
-		ret = uni_alloc0( sizeof(char*) * (arrsz + 1 ) );
+		ret = uni_alloc0( sizeof( char* ) * ( arrsz + 1 ) );
 
-		for(i = 0; i < arrsz; ++i)
+		for( i = 0; i < arrsz; ++i )
 		{
 			ret[i] = uni_strdup( in[i] );
 		}
@@ -108,7 +108,7 @@ char* uni_strnfill( ptri sz, char c )
 {
 	char* ret;
 
-	if(!sz)
+	if( !sz )
 	{
 		uni_die( );
 	}
@@ -123,27 +123,27 @@ char* uni_strnfill( ptri sz, char c )
 
 char* uni_strstr( const char* nee, const char* hay )
 {
-	if(!nee || !hay)
+	if( !nee || !hay )
 	{
 		uni_die( );
 	}
 
 	{
 		ptri i;
-		const ptri nee_sz = uni_strlen( nee );
-		const ptri hay_sz = uni_strlen( hay );
+		const ptri nee_sz    = uni_strlen( nee );
+		const ptri hay_sz    = uni_strlen( hay );
 		const ptri hay_limit = hay_sz - nee_sz;
 
-		for(i = 0; i < hay_limit; ++i)
+		for( i = 0; i < hay_limit; ++i )
 		{
 			ptri j;
 			int match;
 
 			match = 1;
 
-			for(j = 0; j < nee_sz; ++j)
+			for( j = 0; j < nee_sz; ++j )
 			{
-				if(hay[i + j] != nee[j])
+				if( hay[i + j] != nee[j] )
 				{
 					match = 0;
 
@@ -151,9 +151,9 @@ char* uni_strstr( const char* nee, const char* hay )
 				}
 			}
 
-			if(match)
+			if( match )
 			{
-				return (char*)(hay + i);
+				return (char*)( hay + i );
 			}
 		}
 
@@ -163,28 +163,28 @@ char* uni_strstr( const char* nee, const char* hay )
 
 char* uni_strrstr( const char* nee, const char* hay )
 {
-	if(!nee || !hay)
+	if( !nee || !hay )
 	{
 		uni_die( );
 	}
 
 	{
 		ptri i;
-		const ptri nee_sz = uni_strlen( nee );
-		const ptri hay_sz = uni_strlen( hay );
+		const ptri nee_sz    = uni_strlen( nee );
+		const ptri hay_sz    = uni_strlen( hay );
 		const ptri hay_limit = hay_sz - nee_sz;
 		char* ret;
 
-		for(i = 0; i < hay_limit; ++i)
+		for( i = 0; i < hay_limit; ++i )
 		{
 			ptri j;
 			int match;
 
 			match = 1;
 
-			for(j = 0; j < nee_sz; ++j)
+			for( j = 0; j < nee_sz; ++j )
 			{
-				if(hay[i + j] != nee[j])
+				if( hay[i + j] != nee[j] )
 				{
 					match = 0;
 
@@ -192,9 +192,9 @@ char* uni_strrstr( const char* nee, const char* hay )
 				}
 			}
 
-			if(match)
+			if( match )
 			{
-				ret = (char*)(hay + i);
+				ret = (char*)( hay + i );
 			}
 		}
 
@@ -204,7 +204,7 @@ char* uni_strrstr( const char* nee, const char* hay )
 
 int uni_strequ( const char* a, const char* b )
 {
-	if(!a || !b)
+	if( !a || !b )
 	{
 		uni_die( );
 	}
@@ -214,14 +214,14 @@ int uni_strequ( const char* a, const char* b )
 		const ptri a_sz = uni_strlen( a );
 		const ptri b_sz = uni_strlen( b );
 
-		if(b_sz != a_sz)
+		if( b_sz != a_sz )
 		{
 			return 0;
 		}
 
-		for(i = 0; i < b_sz; ++i)
+		for( i = 0; i < b_sz; ++i )
 		{
-			if(a[i] != b[i])
+			if( a[i] != b[i] )
 			{
 				return 0;
 			}
@@ -233,7 +233,7 @@ int uni_strequ( const char* a, const char* b )
 
 int uni_strpre( const char* a, const char* b )
 {
-	if(!a || !b)
+	if( !a || !b )
 	{
 		uni_die( );
 	}
@@ -243,14 +243,14 @@ int uni_strpre( const char* a, const char* b )
 		const ptri a_sz = uni_strlen( a );
 		const ptri b_sz = uni_strlen( b );
 
-		if(b_sz > a_sz)
+		if( b_sz > a_sz )
 		{
 			return 0;
 		}
 
-		for(i = 0; i < b_sz; ++i)
+		for( i = 0; i < b_sz; ++i )
 		{
-			if(a[i] != b[i])
+			if( a[i] != b[i] )
 			{
 				return 0;
 			}
@@ -262,7 +262,7 @@ int uni_strpre( const char* a, const char* b )
 
 int uni_strsuf( const char* a, const char* b )
 {
-	if(!a || !b)
+	if( !a || !b )
 	{
 		uni_die( );
 	}
@@ -272,14 +272,14 @@ int uni_strsuf( const char* a, const char* b )
 		const ptri a_sz = uni_strlen( a );
 		const ptri b_sz = uni_strlen( b );
 
-		if(b_sz > a_sz)
+		if( b_sz > a_sz )
 		{
 			return 0;
 		}
 
-		for(i = a_sz - b_sz; i < a_sz; ++i)
+		for( i = a_sz - b_sz; i < a_sz; ++i )
 		{
-			if(a[i] != b[i])
+			if( a[i] != b[i] )
 			{
 				return 0;
 			}
@@ -291,7 +291,7 @@ int uni_strsuf( const char* a, const char* b )
 
 int uni_isascii( const char* in )
 {
-	if(!in)
+	if( !in )
 	{
 		uni_die( );
 	}
@@ -300,9 +300,9 @@ int uni_isascii( const char* in )
 		ptri i;
 		const ptri in_sz = uni_strlen( in );
 
-		for(i = 0; i < in_sz; ++i)
+		for( i = 0; i < in_sz; ++i )
 		{
-			if((u8)(in[i]) >= 0x80)
+			if( ( u8 )( in[i] ) >= 0x80 )
 			{
 				return 0;
 			}
@@ -312,64 +312,45 @@ int uni_isascii( const char* in )
 	}
 }
 
-int uni_isalnum( char c )
-{
-	return uni_isalpha( c ) || uni_isdigit( c );
-}
+int uni_isalnum( char c ) { return uni_isalpha( c ) || uni_isdigit( c ); }
 
-int uni_isalpha( char c )
-{
-	return uni_isupper( c ) || uni_islower( c );
-}
+int uni_isalpha( char c ) { return uni_isupper( c ) || uni_islower( c ); }
 
-int uni_isdigit( char c )
-{
-	return (u8)c >= 0x30 && (u8)c <= 0x39;
-}
+int uni_isdigit( char c ) { return (u8)c >= 0x30 && (u8)c <= 0x39; }
 
 int uni_isxdigit( char c )
 {
-	return ((u8)c >= 0x30 && (u8)c <= 0x39) || \
-		((u8)c >= 0x41 && (u8)c <= 0x46) || \
-		((u8)c >= 0x61 && (u8)c <= 0x66);
+	return ( (u8)c >= 0x30 && (u8)c <= 0x39 ) ||
+	   ( (u8)c >= 0x41 && (u8)c <= 0x46 ) || ( (u8)c >= 0x61 && (u8)c <= 0x66 );
 }
 
 int uni_iscntrl( char c )
 {
-	return ((u8)c >= 0x01 && (u8)c <= 0x1F) || (u8)c == 0x7F;
+	return ( (u8)c >= 0x01 && (u8)c <= 0x1F ) || (u8)c == 0x7F;
 }
 
-int uni_isprint( char c )
-{
-	return (u8)c >= 0x20 && (u8)c <= 0x7E;
-}
+int uni_isprint( char c ) { return (u8)c >= 0x20 && (u8)c <= 0x7E; }
 
 int uni_ispunct( char c )
 {
 	const u8 ch = (u8)c;
 
-	return (ch >= 0x21 && ch <= 0x2F) || (ch >= 0x3A && ch <= 0x40) || \
-		(ch >= 0x5B && ch <= 0x60) || (ch >= 0x7B && ch <= 0x7E);
+	return ( ch >= 0x21 && ch <= 0x2F ) || ( ch >= 0x3A && ch <= 0x40 ) ||
+	   ( ch >= 0x5B && ch <= 0x60 ) || ( ch >= 0x7B && ch <= 0x7E );
 }
 
 int uni_isspace( char c )
 {
-	return (u8)c == 0x20 || ((u8)c >= 0x09 && (u8)c <= 0x0D);
+	return (u8)c == 0x20 || ( (u8)c >= 0x09 && (u8)c <= 0x0D );
 }
 
-int uni_isupper( char c )
-{
-	return (u8)c >= 0x41 && (u8)c <= 0x5A;
-}
+int uni_isupper( char c ) { return (u8)c >= 0x41 && (u8)c <= 0x5A; }
 
-int uni_islower( char c )
-{
-	return (u8)c >= 0x61 && (u8)c <= 0x7A;
-}
+int uni_islower( char c ) { return (u8)c >= 0x61 && (u8)c <= 0x7A; }
 
 int uni_digitval( char c )
 {
-	if((u8)c < 0x30)
+	if( (u8)c < 0x30 )
 	{
 		return 0;
 	}
@@ -380,12 +361,12 @@ int uni_digitval( char c )
 int uni_xdigitval( char c )
 {
 	/* decimal digit, or out of bounds. digitval will handle it */
-	if((u8)c <= 0x39)
+	if( (u8)c <= 0x39 )
 	{
 		return uni_digitval( c );
 	}
 	/* lowercase alpha */
-	else if((u8)c >= 0x61)
+	else if( (u8)c >= 0x61 )
 	{
 		return (u8)c - 0x57;
 	}
@@ -396,7 +377,7 @@ int uni_xdigitval( char c )
 
 char* uni_strchomp( char* in, char c )
 {
-	if(!in || !c)
+	if( !in || !c )
 	{
 		uni_die( );
 	}
@@ -406,9 +387,9 @@ char* uni_strchomp( char* in, char c )
 		ptri i, offs;
 		const ptri in_sz = uni_strlen( in );
 
-		for(i = 0; i < in_sz; ++i)
+		for( i = 0; i < in_sz; ++i )
 		{
-			if(in[i] != c)
+			if( in[i] != c )
 			{
 				break;
 			}
@@ -416,7 +397,7 @@ char* uni_strchomp( char* in, char c )
 
 		offs = i;
 
-		for(i = offs; i < in_sz; ++i)
+		for( i = offs; i < in_sz; ++i )
 		{
 			in[i - offs] = in[i];
 		}
@@ -429,7 +410,7 @@ char* uni_strchomp( char* in, char c )
 
 char* uni_strchug( char* in, char c )
 {
-	if(!in || !c)
+	if( !in || !c )
 	{
 		uni_die( );
 	}
@@ -438,9 +419,9 @@ char* uni_strchug( char* in, char c )
 		ptri i, offs;
 		const ptri in_sz = uni_strlen( in );
 
-		for(i = in_sz - 1, offs = 0; i >= 0; --i, ++offs)
+		for( i = in_sz - 1, offs = 0; i >= 0; --i, ++offs )
 		{
-			if(in[i] != c)
+			if( in[i] != c )
 			{
 				break;
 			}
@@ -454,7 +435,7 @@ char* uni_strchug( char* in, char c )
 
 char** uni_strsplit( const char* in, const char* delim, int max )
 {
-	if(!in || !delim)
+	if( !in || !delim )
 	{
 		uni_die( );
 	}
@@ -462,59 +443,60 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 	{
 		char** ret;
 		ptri i, last_i, sz, ret_i, ret_sz;
-		const ptri in_sz = uni_strlen( in );
+		const ptri in_sz    = uni_strlen( in );
 		const ptri delim_sz = uni_strlen( delim );
 
-		if(delim_sz > in_sz)
+		if( delim_sz > in_sz )
 		{
-			return uni_alloc0( sizeof(char*) );
+			return uni_alloc0( sizeof( char* ) );
 		}
 
-		if(max < 1)
+		if( max < 1 )
 		{
-			max = S32_MAX;
+			max    = S32_MAX;
 			ret_sz = 0;
-			ret = NULL;
+			ret    = NULL;
 		}
 		else
 		{
 			ret_sz = max + 1;
-			ret = uni_alloc( sizeof(char*) * ret_sz );
+			ret    = uni_alloc( sizeof( char* ) * ret_sz );
 		}
 
-		ret_i = 0;
+		ret_i  = 0;
 		last_i = 0;
 
-		for(i = 0; i < in_sz - delim_sz + 1; ++i)
+		for( i = 0; i < in_sz - delim_sz + 1; ++i )
 		{
-			if(uni_memcmp( in + i, delim, delim_sz ) )
+			if( uni_memcmp( in + i, delim, delim_sz ) )
 			{
 				/* we hit a delimiter. allocate it off */
-				if(ret_sz == 0)
+				if( ret_sz == 0 )
 				{
-					ret = uni_alloc( sizeof(char*) * 2 );
+					ret    = uni_alloc( sizeof( char* ) * 2 );
 					ret_sz = 2;
 				}
-				else while(ret_i >= ret_sz)
-				{
-					ret = uni_realloc( ret, sizeof(char*) * (ret_sz * 2 ) );
-					ret_sz <<= 1; /* *= 2 */
-				}
+				else
+					while( ret_i >= ret_sz )
+					{
+						ret = uni_realloc( ret, sizeof( char* ) * ( ret_sz * 2 ) );
+						ret_sz <<= 1; /* *= 2 */
+					}
 
-				sz = i - last_i;
-				ret[ret_i] = uni_alloc( sizeof(char) * (sz + 1) );
+				sz         = i - last_i;
+				ret[ret_i] = uni_alloc( sizeof( char ) * ( sz + 1 ) );
 				i += delim_sz - 1;
 
-				if(sz > 0)
+				if( sz > 0 )
 				{
 					uni_memcpy( ret[ret_i], in + last_i, sz );
 				}
 
-				last_i = i + 1;
+				last_i         = i + 1;
 				ret[ret_i][sz] = '\0';
 				ret_i++;
 
-				if(ret_i >= max - 1)
+				if( ret_i >= max - 1 )
 				{
 					/* set counter to the end so remainder gets scooped up */
 					i = in_sz - delim_sz + 1;
@@ -524,16 +506,16 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 			}
 		}
 
-		while(ret_i >= ret_sz)
+		while( ret_i >= ret_sz )
 		{
-			ret = uni_realloc( ret, sizeof(char*) * (ret_sz << 1) );
-				ret_sz <<= 1; /* *= 2 */
+			ret = uni_realloc( ret, sizeof( char* ) * ( ret_sz << 1 ) );
+			ret_sz <<= 1; /* *= 2 */
 		}
 
-		sz = i - last_i + delim_sz;
-		ret[ret_i] = uni_alloc( sizeof(char) * (sz + 1) );
+		sz         = i - last_i + delim_sz;
+		ret[ret_i] = uni_alloc( sizeof( char ) * ( sz + 1 ) );
 
-		if(sz > 0)
+		if( sz > 0 )
 		{
 			uni_memcpy( ret[ret_i], in + last_i, sz );
 		}
@@ -550,7 +532,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 
 ptri uni_strlenv( char** arr )
 {
-	if(!arr)
+	if( !arr )
 	{
 		uni_die( );
 	}
@@ -558,7 +540,8 @@ ptri uni_strlenv( char** arr )
 	{
 		ptri i;
 
-		for(i = 0; arr[i] != NULL; ++i);
+		for( i = 0; arr[i] != NULL; ++i )
+			;
 
 		return i;
 	}
@@ -566,7 +549,7 @@ ptri uni_strlenv( char** arr )
 
 void uni_strfreev( char** arr )
 {
-	if(!arr)
+	if( !arr )
 	{
 		uni_die( );
 	}
@@ -574,7 +557,7 @@ void uni_strfreev( char** arr )
 	{
 		ptri i;
 
-		for(i = 0; arr[i] != NULL; ++i)
+		for( i = 0; arr[i] != NULL; ++i )
 		{
 			uni_free( arr[i] );
 		}
@@ -585,7 +568,7 @@ void uni_strfreev( char** arr )
 
 int uni_strequv( char** arr_a, char** arr_b )
 {
-	if(!arr_a || !arr_b)
+	if( !arr_a || !arr_b )
 	{
 		uni_die( );
 	}
@@ -595,14 +578,14 @@ int uni_strequv( char** arr_a, char** arr_b )
 		const ptri arr_a_sz = uni_strlenv( arr_a );
 		const ptri arr_b_sz = uni_strlenv( arr_b );
 
-		if(arr_a_sz != arr_b_sz)
+		if( arr_a_sz != arr_b_sz )
 		{
 			return 0;
 		}
 
-		for(i = 0; i < arr_a_sz; ++i)
+		for( i = 0; i < arr_a_sz; ++i )
 		{
-			if(!uni_strequ( arr_a[i], arr_b[i] ))
+			if( !uni_strequ( arr_a[i], arr_b[i] ) )
 			{
 				return 0;
 			}
@@ -614,7 +597,7 @@ int uni_strequv( char** arr_a, char** arr_b )
 
 char* uni_strjoin( const char* delim, ... )
 {
-	if(!delim)
+	if( !delim )
 	{
 		uni_die( );
 	}
@@ -630,7 +613,7 @@ char* uni_strjoin( const char* delim, ... )
 
 		s = va_arg( args, char* );
 
-		if(!s)
+		if( !s )
 		{
 			ret = uni_strdup( "" );
 			va_end( args );
@@ -652,11 +635,11 @@ char* uni_strjoin( const char* delim, ... )
 		va_end( args );
 
 		/* build the newly joined string */
-		ret = uni_alloc( sizeof(char) * (sz + 1) );
+		ret = uni_alloc( sizeof( char ) * ( sz + 1 ) );
 
 		va_start( args, delim );
 
-		s = va_arg( args, char* );
+		s   = va_arg( args, char* );
 		sz2 = uni_strlen( s );
 		uni_memcpy( ret, s, sz2 );
 		i = sz2;
@@ -681,7 +664,7 @@ char* uni_strjoin( const char* delim, ... )
 
 char* uni_strjoinv( const char* delim, char** arr )
 {
-	if(!delim || !arr)
+	if( !delim || !arr )
 	{
 		uni_die( );
 	}
@@ -690,20 +673,20 @@ char* uni_strjoinv( const char* delim, char** arr )
 		ptri i, j, sz;
 		char* ret;
 		const ptri delim_sz = uni_strlen( delim );
-		const ptri arr_sz = uni_strlenv( arr );
+		const ptri arr_sz   = uni_strlenv( arr );
 
-		for(i = 0, sz = 0; i < arr_sz; ++i)
+		for( i = 0, sz = 0; i < arr_sz; ++i )
 		{
-			sz += uni_strlen( arr[i] ) + (i > 0 ? delim_sz : 0);
+			sz += uni_strlen( arr[i] ) + ( i > 0 ? delim_sz : 0 );
 		}
 
-		ret = uni_alloc( sizeof(char) * (sz + 1) );
+		ret = uni_alloc( sizeof( char ) * ( sz + 1 ) );
 
-		for(i = 0, j = 0; i < arr_sz; ++i)
+		for( i = 0, j = 0; i < arr_sz; ++i )
 		{
 			const ptri str_sz = uni_strlen( arr[i] );
 
-			if(i)
+			if( i )
 			{
 				uni_memcpy( ret + j, delim, delim_sz );
 				j += delim_sz;

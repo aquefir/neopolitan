@@ -9,10 +9,7 @@
 #include <uni/types/int.h>
 #include "utf8.h"
 
-int uni_validu8( const char* in )
-{
-	return _uni_validcountu8( in, NULL );
-}
+int uni_validu8( const char* in ) { return _uni_validcountu8( in, NULL ); }
 
 int _uni_validcountu8( const char* in, ptri* szout )
 {
@@ -72,7 +69,7 @@ int _uni_validcountu8( const char* in, ptri* szout )
 		}
 	}
 
-	if(szout != NULL)
+	if( szout != NULL )
 	{
 		*szout = q;
 	}
