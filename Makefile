@@ -69,6 +69,7 @@ HPPFILES :=
 
 # test suite sources
 TES_CFILES   := \
+	src/arr.tes.c \
 	src/str.tes.c \
 	src/utf8.tes.c
 TES_HFILES   :=

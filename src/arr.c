@@ -87,19 +87,28 @@ void uni_arr_fini( struct uni_arr* arr )
 struct uni_arr* uni_arr_dup( struct uni_arr* arr )
 {
 	struct uni_arr* ret;
-	ptri sz;
 
 	if( !arr )
 	{
 		uni_die( );
 	}
 
-	sz        = arr->elemsz * arr->sz;
-	ret       = uni_alloc( sizeof( struct uni_arr ) );
-	ret->data = uni_alloc( sz );
-	uni_memcpy( ret->data, arr->data, sz );
-	ret->sz     = arr->sz;
-	ret->cap    = arr->sz;
+	ret = uni_alloc( sizeof( struct uni_arr ) );
+
+	if( arr->sz > 0 )
+	{
+		ret->data = uni_alloc( arr->elemsz * arr->sz );
+		uni_memcpy( ret->data, arr->data, arr->elemsz * arr->sz );
+		ret->sz  = arr->sz;
+		ret->cap = arr->sz;
+	}
+	else
+	{
+		ret->data = NULL;
+		ret->sz   = 0;
+		ret->cap  = 0;
+	}
+
 	ret->elemsz = arr->elemsz;
 
 	return ret;
@@ -113,6 +122,16 @@ ptri uni_arr_getsz( struct uni_arr* arr )
 	}
 
 	return arr->sz;
+}
+
+u32 uni_arr_getelemsz( struct uni_arr* arr )
+{
+	if( !arr )
+	{
+		uni_die( );
+	}
+
+	return arr->elemsz;
 }
 
 void* uni_arr_make( struct uni_arr* arr )
@@ -170,11 +189,17 @@ int uni_arr_app( struct uni_arr* arr, void* data )
 		uni_die( );
 	}
 
-	while( arr->sz >= arr->cap )
+	if( !arr->sz || !arr->data )
 	{
-		arr->data = uni_realloc( arr->data, arr->cap << 1 );
-		arr->cap <<= 1; /* *= 2 */
+		arr->data = uni_alloc( arr->elemsz * 16 );
+		arr->cap  = 16;
 	}
+	else
+		while( arr->sz >= arr->cap )
+		{
+			arr->data = uni_realloc( arr->data, arr->cap << 1 );
+			arr->cap <<= 1; /* *= 2 */
+		}
 
 	uni_memcpy( arr->data + ( arr->sz * arr->elemsz ), data, arr->elemsz );
 	arr->sz++;
@@ -214,6 +239,8 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 		uni_memcpy( arr->data, data, arr->elemsz );
 	}
 
+	arr->sz++;
+
 	return 0;
 }
 
@@ -224,11 +251,17 @@ int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
 		uni_die( );
 	}
 
-	while( arr->sz >= arr->cap )
+	if( !arr->sz || !arr->data )
 	{
-		arr->data = uni_realloc( arr->data, arr->cap << 1 );
-		arr->cap <<= 1; /* *= 2 */
+		arr->data = uni_alloc( arr->elemsz * 16 );
+		arr->cap  = 16;
 	}
+	else
+		while( arr->sz >= arr->cap )
+		{
+			arr->data = uni_realloc( arr->data, arr->cap << 1 );
+			arr->cap <<= 1; /* *= 2 */
+		}
 
 	if( ind < arr->sz )
 	{
@@ -247,6 +280,8 @@ int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
 	{
 		uni_memcpy( arr->data + ( arr->elemsz * arr->sz ), data, arr->elemsz );
 	}
+
+	arr->sz++;
 
 	return 0;
 }
@@ -278,16 +313,17 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 		va_start( args, arr );
 
 		cur    = va_arg( args, struct uni_arr* );
-		elemsz = 0;
+		elemsz = arr->elemsz;
 		newsz  = 0;
 
 		while( cur )
 		{
 			newsz += cur->sz;
-			elemsz = elemsz == 0 ? cur->elemsz : elemsz;
 
 			if( cur->elemsz != elemsz )
 			{
+				va_end( args );
+
 				return NULL;
 			}
 
@@ -295,6 +331,9 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 		}
 
 		va_end( args );
+
+		/* add back the first elem’s sz since we’re done indexing by it */
+		newsz += arr->sz;
 
 		ret = uni_arr_initsz( elemsz, newsz );
 
@@ -310,7 +349,7 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 			   ( ret->elemsz * cur->sz ) );
 			i += cur->sz;
 
-			va_arg( args, struct uni_arr* );
+			cur = va_arg( args, struct uni_arr* );
 		}
 
 		return ret;
