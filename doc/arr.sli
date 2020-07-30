@@ -1,0 +1,65 @@
+uni/arr/uni_arr.struct
+	Forward declaration the main incomplete type, for use in public API
+	functions.
+uni/arr/uni_arr_init.sub
+	[nothrow][threadsafe][new]
+	Allocate and initialise a new instance of array.
+uni/arr/uni_arr_init.sub:$1
+	Size of a single element of the array, in bytes.
+uni/arr/uni_arr_init.sub:$1*
+	Must be > 0.
+uni/arr/uni_arr_init.sub:#
+	A newly allocated array if successful, or a NULL pointer upon out-of-memory
+	failure.
+uni/arr/uni_arr_initsz.sub
+	[nothrow][threadsafe][new]
+	Allocate and initialise a new array instance, zero-filling a specified
+	number of elements.
+uni/arr/uni_arr_initsz.sub:$1
+	Size of a single element of the array, in bytes.
+uni/arr/uni_arr_initsz.sub:$1*
+	Must be > 0.
+uni/arr/uni_arr_initsz.sub:$2
+	Number of elements to preallocate and zero-fill.
+uni/arr/uni_arr_initsz.sub:#
+	A newly allocated array if successful, or a NULL pointer upon
+	out-of-memory failure.
+uni/arr/uni_arr_dup.sub
+	[nothrow][threadsafe][new]
+	Allocate a copy of an existing array.
+uni/arr/uni_arr_dup.sub:$1
+	The array instance to duplicate.
+uni/arr/uni_arr_dup.sub:$1*
+	Must be a valid array object allocated with a uni_arr_* function.
+uni/arr/uni_arr_dup.sub:#
+	A newly allocated array if successful, or a NULL pointer upon out-of-memory
+	failure.
+uni/arr/uni_arr_make.sub
+	Allocate a primitive instance of the array data and. This is useful for
+	functions that need more intimacy with the data than the API functions can
+	provide. No length sentinel is inserted as the array is contiguous and
+	flat, so the length can be retrieved using uni_arr_getsz().
+uni/arr/uni_arr_make.sub:$1
+	The array instance to make.
+uni/arr/uni_arr_make.sub:$1*
+	Must be a valid array object allocated with a uni_arr_* function.
+uni/arr/uni_arr_make.sub:#
+	A pointer to a newly allocated block of memory, the size of which is at
+	least element_size * number_of_elements large, if successful, or NULL upon
+	out-of-memory failure.
+uni/arr/uni_arr_mkslice.sub
+	Allocate a primitive instance of a slice of the array data. Works the same
+	as uni_arr_make(), but with an additional range argument to specify a slice
+	of the array to make.
+uni/arr/uni_arr_mkslice.sub:$1
+	The array instance to make.
+uni/arr/uni_arr_mkslice.sub:$1*
+	Must be a valid array object allocated with a uni_arr_* function.
+uni/arr/uni_arr_mkslice.sub:$2
+	A range specifying the portion of the array to make, in elements.
+uni/arr/uni_arr_mkslice.sub:$2*
+	The upper bound must be <= the array’s size.
+uni/arr/uni_arr_mkslice.sub:#
+	A pointer to a newly allocated block of memory, the size of which is at
+	least element_size * size_of_slice large, if successful, or NULL upon
+	out-of-memory failure.
