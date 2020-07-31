@@ -62,7 +62,8 @@ int _uni_validcountu8( const char* in, ptri* szout )
 
 		for( j = 0; j < n && i < sz; ++j )
 		{
-			if( ( ++i == sz ) || ( ( u8 )( in[i] ) & 0xC0 ) != 0x80 )
+			if( ( ++i == sz ) ||
+			   ( ( u8 )( in[i] ) & 0xC0 ) != 0x80 )
 			{
 				return 0;
 			}
@@ -75,4 +76,128 @@ int _uni_validcountu8( const char* in, ptri* szout )
 	}
 
 	return 1;
+}
+
+int uni_u8dec( char* in, char32* out )
+{
+	char32 o;
+
+	if( !uni_validu8( in ) )
+	{
+		return 1;
+	}
+
+	if( !( in[0] & 0x80 ) )
+	{
+		o = (char32)in[0];
+	}
+	else if( ( in[0] & 0xFE ) == 0xFC )
+	{
+		o = in[5] & 0x3F;
+		o |= ( in[4] & 0x3F ) << 6;
+		o |= ( in[3] & 0x3F ) << 12;
+		o |= ( in[2] & 0x3F ) << 18;
+		o |= ( in[1] & 0x3F ) << 24;
+		o |= ( in[0] & 0x1 ) << 30;
+	}
+	else if( ( in[0] & 0xFC ) == 0xF8 )
+	{
+		o = in[4] & 0x3F;
+		o |= ( in[3] & 0x3F ) << 6;
+		o |= ( in[2] & 0x3F ) << 12;
+		o |= ( in[1] & 0x3F ) << 18;
+		o |= ( in[0] & 0x3 ) << 24;
+	}
+	else if( ( in[0] & 0xF8 ) == 0xF0 )
+	{
+		o = in[3] & 0x3F;
+		o |= ( in[2] & 0x3F ) << 6;
+		o |= ( in[1] & 0x3F ) << 12;
+		o |= ( in[0] & 0x7 ) << 18;
+	}
+	else if( ( in[0] & 0xF0 ) == 0xE0 )
+	{
+		o = in[2] & 0x3F;
+		o |= ( in[1] & 0x3F ) << 6;
+		o |= ( in[0] & 0xF ) << 12;
+	}
+	else if( in[0] & 0xC0 )
+	{
+		o = in[1] & 0x3F;
+		o |= ( in[0] & 0x1F ) << 6;
+	}
+
+	*out = o;
+
+	return 0;
+}
+
+u32 uni_u8decsz( char* in )
+{
+	return ( in[0] & 0xFE ) == 0xFC
+	   ? 6
+	   : ( in[0] & 0xFC ) == 0xF8 ? 5
+	                              : ( in[0] & 0xF8 ) == 0xF0
+	         ? 4
+	         : ( in[0] & 0xF0 ) == 0xE0 ? 3
+	                                    : ( in[0] & 0xE0 ) == 0xC0 ? 2 : 1;
+}
+
+int uni_u8enc( char32 in, char* out )
+{
+	if( in >= 0x10FFFF )
+	{
+		return 1;
+	}
+
+	if( in >= 0x8000000 )
+	{
+		out[0] = 0xFC | ( ( in >> 30 ) & 0x1 );
+		out[1] = 0x80 | ( ( in >> 24 ) & 0x3F );
+		out[2] = 0x80 | ( ( in >> 18 ) & 0x3F );
+		out[3] = 0x80 | ( ( in >> 12 ) & 0x3F );
+		out[4] = 0x80 | ( ( in >> 6 ) & 0x3F );
+		out[5] = 0x80 | ( in & 0x3F );
+	}
+	else if( in >= 0x200000 )
+	{
+		out[0] = 0xF8 | ( ( in >> 24 ) & 0x3 );
+		out[1] = 0x80 | ( ( in >> 18 ) & 0x3F );
+		out[2] = 0x80 | ( ( in >> 12 ) & 0x3F );
+		out[3] = 0x80 | ( ( in >> 6 ) & 0x3F );
+		out[4] = 0x80 | ( in & 0x3F );
+	}
+	else if( in >= 0x10000 )
+	{
+		out[0] = 0xF0 | ( ( in >> 18 ) & 0x7 );
+		out[1] = 0x80 | ( ( in >> 12 ) & 0x3F );
+		out[2] = 0x80 | ( ( in >> 6 ) & 0x3F );
+		out[3] = 0x80 | ( in & 0x3F );
+	}
+	else if( in >= 0x800 )
+	{
+		out[0] = 0xE0 | ( ( in >> 12 ) & 0xF );
+		out[1] = 0x80 | ( ( in >> 6 ) & 0x3F );
+		out[2] = 0x80 | ( in & 0x3F );
+	}
+	else if( in >= 0x80 )
+	{
+		out[0] = 0xC0 | ( in & 0x1F );
+		out[1] = 0x80 | ( ( in >> 5 ) & 0x3F );
+	}
+	else
+	{
+		/* ASCII */
+		out[0] = (char)( in & 0x7F );
+	}
+
+	return 0;
+}
+
+u32 uni_u8encsz( char32 c )
+{
+	return c >= 0x8000000 ? 6
+	                      : c >= 0x200000
+	      ? 5
+	      : c >= 0x10000 ? 4 : c >= 0x800 ? 3 : c >= 0x80 ? 2 : 1;
 }
