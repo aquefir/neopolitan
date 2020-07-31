@@ -321,7 +321,8 @@ int uni_isdigit( char c ) { return (u8)c >= 0x30 && (u8)c <= 0x39; }
 int uni_isxdigit( char c )
 {
 	return ( (u8)c >= 0x30 && (u8)c <= 0x39 ) ||
-	   ( (u8)c >= 0x41 && (u8)c <= 0x46 ) || ( (u8)c >= 0x61 && (u8)c <= 0x66 );
+	   ( (u8)c >= 0x41 && (u8)c <= 0x46 ) ||
+	   ( (u8)c >= 0x61 && (u8)c <= 0x66 );
 }
 
 int uni_iscntrl( char c )
@@ -473,23 +474,27 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 				/* we hit a delimiter. allocate it off */
 				if( ret_sz == 0 )
 				{
-					ret    = uni_alloc( sizeof( char* ) * 2 );
+					ret = uni_alloc( sizeof( char* ) * 2 );
 					ret_sz = 2;
 				}
 				else
 					while( ret_i >= ret_sz )
 					{
-						ret = uni_realloc( ret, sizeof( char* ) * ( ret_sz * 2 ) );
+						ret = uni_realloc( ret,
+						   sizeof( char* ) *
+						      ( ret_sz * 2 ) );
 						ret_sz <<= 1; /* *= 2 */
 					}
 
-				sz         = i - last_i;
-				ret[ret_i] = uni_alloc( sizeof( char ) * ( sz + 1 ) );
+				sz = i - last_i;
+				ret[ret_i] =
+				   uni_alloc( sizeof( char ) * ( sz + 1 ) );
 				i += delim_sz - 1;
 
 				if( sz > 0 )
 				{
-					uni_memcpy( ret[ret_i], in + last_i, sz );
+					uni_memcpy(
+					   ret[ret_i], in + last_i, sz );
 				}
 
 				last_i         = i + 1;
@@ -498,7 +503,8 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 
 				if( ret_i >= max - 1 )
 				{
-					/* set counter to the end so remainder gets scooped up */
+					/* set counter to the end so remainder
+					 * gets scooped up */
 					i = in_sz - delim_sz + 1;
 
 					break;
@@ -508,7 +514,8 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 
 		while( ret_i >= ret_sz )
 		{
-			ret = uni_realloc( ret, sizeof( char* ) * ( ret_sz << 1 ) );
+			ret = uni_realloc(
+			   ret, sizeof( char* ) * ( ret_sz << 1 ) );
 			ret_sz <<= 1; /* *= 2 */
 		}
 
@@ -736,10 +743,11 @@ struct uni_str* uni_str_dup( struct uni_str* str )
 	{
 		struct uni_str* ret;
 
-		ret       = uni_alloc( sizeof( struct uni_str ) );
-		ret->data = str->data ? uni_alloc( sizeof( char ) * str->sz ) : NULL;
-		ret->sz   = str->sz;
-		ret->cap  = str->sz;
+		ret = uni_alloc( sizeof( struct uni_str ) );
+		ret->data =
+		   str->data ? uni_alloc( sizeof( char ) * str->sz ) : NULL;
+		ret->sz  = str->sz;
+		ret->cap = str->sz;
 
 		return ret;
 	}

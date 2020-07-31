@@ -36,8 +36,9 @@ enum /* err */
 		} \
 		else \
 		{ \
-			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
-			            "function \"%s\".\nExpression: %s", \
+			uni_perror( \
+			   "Assertion failed in file \"%s\" on line \"%u\", in " \
+			   "function \"%s\".\nExpression: %s", \
 			   __FILE__, \
 			   __LINE__, \
 			   __func__, \
@@ -53,8 +54,9 @@ enum /* err */
 		} \
 		else \
 		{ \
-			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
-			            "function \"%s\".\nExpression: %s", \
+			uni_perror( \
+			   "Assertion failed in file \"%s\" on line \"%u\", in " \
+			   "function \"%s\".\nExpression: %s", \
 			   __FILE__, \
 			   __LINE__, \
 			   __func__, \
@@ -70,8 +72,9 @@ enum /* err */
 		} \
 		else \
 		{ \
-			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
-			            "function \"%s\".\nExpression: %s", \
+			uni_perror( \
+			   "Assertion failed in file \"%s\" on line \"%u\", in " \
+			   "function \"%s\".\nExpression: %s", \
 			   __FILE__, \
 			   __LINE__, \
 			   __func__, \
@@ -87,8 +90,9 @@ enum /* err */
 		} \
 		else \
 		{ \
-			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
-			            "function \"%s\".\nExpression: %s", \
+			uni_perror( \
+			   "Assertion failed in file \"%s\" on line \"%u\", in " \
+			   "function \"%s\".\nExpression: %s", \
 			   __FILE__, \
 			   __LINE__, \
 			   __func__, \
@@ -104,8 +108,9 @@ enum /* err */
 		} \
 		else \
 		{ \
-			uni_perror( "Assertion failed in file \"%s\" on line \"%u\", in " \
-			            "function \"%s\".\nExpression: %s", \
+			uni_perror( \
+			   "Assertion failed in file \"%s\" on line \"%u\", in " \
+			   "function \"%s\".\nExpression: %s", \
 			   __FILE__, \
 			   __LINE__, \
 			   __func__, \
@@ -122,8 +127,11 @@ enum /* err */
 		} \
 		else \
 		{ \
-			fprintf( \
-			   stderr, "!!! Assert failed @ %s L%u: %s\n", file, line, #x ); \
+			fprintf( stderr, \
+			   "!!! Assert failed @ %s L%u: %s\n", \
+			   file, \
+			   line, \
+			   #x ); \
 			o.is = 0; \
 			return ( o ); \
 		} \

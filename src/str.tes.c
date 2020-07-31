@@ -23,7 +23,8 @@ TES_OPEN( );
 	TES_ASSERT_EQ( uni_strlencp( "hello world" ), 11 );
 	TES_ASSERT_EQ( uni_strlencp( "ol\303\241 mundo" ), 9 );
 	TES_ASSERT_EQ(
-	   uni_strlencp( "\344\275\240\345\245\275\344\270\226\347\225\214" ), 4 );
+	   uni_strlencp( "\344\275\240\345\245\275\344\270\226\347\225\214" ),
+	   4 );
 	TES_ASSERT_EQ( uni_strlencp( "\240\241" ), 0 );
 	TES_ASSERT_EQ( uni_strlencp( "" ), 0 );
 
@@ -55,7 +56,8 @@ TES_OPEN( );
 	uni_strfreev( tmpsv );
 
 	TES_ASSERT_STR_EQ( uni_strjoinv( ";;", tmp2 ), "aaa;;bc;;xzx;;134" );
-	TES_ASSERT_STR_EQ( uni_strjoin( ";;", "aaa", "bc", "xzx", "134", NULL ),
+	TES_ASSERT_STR_EQ(
+	   uni_strjoin( ";;", "aaa", "bc", "xzx", "134", NULL ),
 	   "aaa;;bc;;xzx;;134" );
 }
 
