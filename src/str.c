@@ -701,3 +701,93 @@ char* uni_strjoinv( const char* delim, char** arr )
 		return ret;
 	}
 }
+
+struct uni_str* uni_str_init( const char* init )
+{
+	struct uni_str* ret;
+
+	ret       = uni_alloc( sizeof( struct uni_str ) );
+	ret->data = init ? uni_strdup( init ) : NULL;
+	ret->sz   = init ? uni_strlen( init ) + 1 : 0;
+	ret->cap  = ret->sz;
+
+	return ret;
+}
+
+struct uni_str* uni_str_initsz( ptri size )
+{
+	struct uni_str* ret;
+
+	ret       = uni_alloc( sizeof( struct uni_str ) );
+	ret->data = size ? uni_alloc0( sizeof( char ) * ( size + 1 ) ) : NULL;
+	ret->sz   = size + 1;
+	ret->cap  = ret->sz;
+
+	return ret;
+}
+
+struct uni_str* uni_str_dup( struct uni_str* str )
+{
+	if( !str )
+	{
+		uni_die( );
+	}
+
+	{
+		struct uni_str* ret;
+
+		ret       = uni_alloc( sizeof( struct uni_str ) );
+		ret->data = str->data ? uni_alloc( sizeof( char ) * str->sz ) : NULL;
+		ret->sz   = str->sz;
+		ret->cap  = str->sz;
+
+		return ret;
+	}
+}
+
+ptri uni_str_getsz( struct uni_str* str )
+{
+	if( !str )
+	{
+		uni_die( );
+	}
+
+	return str->sz - 1;
+}
+
+char* uni_str_make( struct uni_str* str )
+{
+	if( !str )
+	{
+		uni_die( );
+	}
+
+	{
+		char* ret;
+
+		ret = uni_alloc( sizeof( char ) * str->sz );
+		uni_memcpy( ret, str->data, str->sz - 1 );
+		ret[str->sz - 1] = '\0';
+
+		return ret;
+	}
+}
+
+char* uni_str_mkslice( struct uni_str* str, struct rangep r )
+{
+	if( !str || r.hi <= r.lo || r.hi > str->sz )
+	{
+		uni_die( );
+	}
+
+	{
+		char* ret;
+		const ptri sz = r.hi - r.lo;
+
+		ret = uni_alloc( sizeof( char ) * ( sz + 1 ) );
+		uni_memcpy( ret, str->data + r.lo, sz );
+		ret[sz] = '\0';
+
+		return ret;
+	}
+}

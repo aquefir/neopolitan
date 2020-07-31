@@ -10,4 +10,10 @@
 
 #include <uni/str.h>
 
+struct uni_str
+{
+	char* data;
+	ptri sz, cap;
+};
+
 #endif /* INC__UNI_STR_H */
