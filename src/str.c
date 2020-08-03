@@ -530,6 +530,13 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		ret[ret_i][sz] = '\0';
 		ret_i++;
 
+		while( ret_i >= ret_sz )
+		{
+			ret = uni_realloc(
+			   ret, sizeof( char* ) * ( ret_sz << 1 ) );
+			ret_sz <<= 1; /* *= 2 */
+		}
+
 		ret[ret_i] = NULL;
 		ret_i++;
 
