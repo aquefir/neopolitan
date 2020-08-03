@@ -11,9 +11,17 @@
 
 #include <stdio.h>
 
-int uni_validu8( const char* in ) { return !_uni_scanu8( in, NULL, NULL, 0, 0, 0 ); }
+int uni_validu8( const char* in )
+{
+	return !_uni_scanu8( in, NULL, NULL, 0, 0, 0 );
+}
 
-int _uni_scanu8( const char* in, ptri* byct, ptri* cpct, int stop, ptri stop_i, int stop_i_bytes )
+int _uni_scanu8( const char* in,
+   ptri* byct,
+   ptri* cpct,
+   int stop,
+   ptri stop_i,
+   int stop_i_bytes )
 {
 	if( !in )
 	{
@@ -31,18 +39,18 @@ int _uni_scanu8( const char* in, ptri* byct, ptri* cpct, int stop, ptri stop_i, 
 			const s32 n = uni_u8decsz( ch );
 			int done = 0, miderr = 0;
 
-			if(stop && stop_i_bytes && by_i >= stop_i)
+			if( stop && stop_i_bytes && by_i >= stop_i )
 			{
-				if(byct)
+				if( byct )
 				{
 					*byct = by_i;
 				}
 
-				if(cpct)
+				if( cpct )
 				{
 					*cpct = cp_i;
 
-					if(by_i > stop_i)
+					if( by_i > stop_i )
 					{
 						*cpct -= 1;
 
@@ -52,14 +60,14 @@ int _uni_scanu8( const char* in, ptri* byct, ptri* cpct, int stop, ptri stop_i, 
 
 				done = 1;
 			}
-			else if(stop && !stop_i_bytes && cp_i >= stop_i)
+			else if( stop && !stop_i_bytes && cp_i >= stop_i )
 			{
-				if(byct)
+				if( byct )
 				{
 					*byct = by_i;
 				}
 
-				if(cpct)
+				if( cpct )
 				{
 					*cpct = cp_i;
 				}
@@ -67,7 +75,7 @@ int _uni_scanu8( const char* in, ptri* byct, ptri* cpct, int stop, ptri stop_i, 
 				done = 1;
 			}
 
-			if(n < 0)
+			if( n < 0 )
 			{
 				return 1;
 			}
@@ -81,7 +89,7 @@ int _uni_scanu8( const char* in, ptri* byct, ptri* cpct, int stop, ptri stop_i, 
 				}
 			}
 
-			if(done)
+			if( done )
 			{
 				return miderr;
 			}
@@ -242,7 +250,7 @@ int uni_u8enc( char32 in, char* out )
 u32 uni_u8encsz( char32 ch )
 {
 	return ch >= 0x8000000 ? 6
-	                      : ch >= 0x200000
+	                       : ch >= 0x200000
 	      ? 5
 	      : ch >= 0x10000 ? 4 : ch >= 0x800 ? 3 : ch >= 0x80 ? 2 : 1;
 }

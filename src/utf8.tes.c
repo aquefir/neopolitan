@@ -35,14 +35,16 @@ TES_OPEN( );
 	TES_ASSERT_FALSE( uni_u8enc( 0x3000, tempch ) );
 	TES_ASSERT_STR_EQ( "\343\200\200", tempch );
 
-	TES_ASSERT_EQ( uni_u8cp2by(
-		"\344\275\240\345\245\275\344\270\226\347\225\214", 1 ), 3 );
-	u8pos = uni_u8by2cp( "\344\275\240\345\245\275\344\270\226\347\225\214",
-		3 );
+	TES_ASSERT_EQ(
+	   uni_u8cp2by(
+	      "\344\275\240\345\245\275\344\270\226\347\225\214", 1 ),
+	   3 );
+	u8pos = uni_u8by2cp(
+	   "\344\275\240\345\245\275\344\270\226\347\225\214", 3 );
 	TES_ASSERT_EQ( u8pos.pos, 1 );
 	TES_ASSERT_FALSE( u8pos.mid );
-	u8pos = uni_u8by2cp( "\344\275\240\345\245\275\344\270\226\347\225\214",
-		2 );
+	u8pos = uni_u8by2cp(
+	   "\344\275\240\345\245\275\344\270\226\347\225\214", 2 );
 	TES_ASSERT_EQ( u8pos.pos, 0 );
 	TES_ASSERT_TRUE( u8pos.mid );
 }

@@ -65,9 +65,7 @@ TES_OPEN( );
 	TES_ASSERT_STR_EQ( tmp, "aaa;;bc;;xzx;;134" );
 	uni_free( tmp );
 	tmp = uni_strjoin( ";;", "aaa", "bc", "xzx", "134", NULL );
-	TES_ASSERT_STR_EQ(
-	   tmp,
-	   "aaa;;bc;;xzx;;134" );
+	TES_ASSERT_STR_EQ( tmp, "aaa;;bc;;xzx;;134" );
 	uni_free( tmp );
 }
 
