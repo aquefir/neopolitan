@@ -15,6 +15,9 @@
 #define UNI_ENDIANNESS UNI_LILENDIAN
 #elif defined( CFG_BIGENDIAN )
 #define UNI_ENDIANNESS UNI_BIGENDIAN
+#else
+#pragma message("WARNING: No endianness defined by synthconfig. Defaulting to little endian; this may not be desired!")
+#define UNI_ENDIANNESS UNI_LILENDIAN
 #endif
 
 #define UNI_SWAPENDIAN16( _val ) \
