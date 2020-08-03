@@ -35,6 +35,18 @@ int uni_str_ovr( struct uni_str*, ptri, const char* );
 int uni_str_ovrch( struct uni_str*, ptri, char );
 int uni_str_ovru8( struct uni_str*, ptri, char32 );
 
+char32 uni_str_getchar( struct uni_str*, ptri );
+
+ptri uni_str_len( struct uni_str* );
+ptri uni_str_lencp( struct uni_str* );
+
+int uni_str_equ( struct uni_str*, struct uni_str* );
+int uni_str_pre( struct uni_str*, struct uni_str* );
+int uni_str_suf( struct uni_str*, struct uni_str* );
+int uni_str_isascii( struct uni_str* );
+void uni_str_chomp( struct uni_str*, char32 );
+void uni_str_chug( struct uni_str*, char32 );
+
 ptri uni_strlen( const char* );
 ptri uni_strlencp( const char* );
 char* uni_strdup( const char* );

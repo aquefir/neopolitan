@@ -13,7 +13,7 @@
 struct uni_str
 {
 	char* data;
-	ptri sz, cap;
+	ptri sz, cap, cpct;
 };
 
 #endif /* INC__UNI_STR_H */
