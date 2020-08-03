@@ -384,7 +384,6 @@ char* uni_strchomp( char* in, char c )
 	}
 
 	{
-		char* ret;
 		ptri i, offs;
 		const ptri in_sz = uni_strlen( in );
 

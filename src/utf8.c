@@ -6,6 +6,7 @@
 \****************************************************************************/
 
 #include "str.h"
+#include <uni/err.h>
 #include <uni/types/int.h>
 #include "utf8.h"
 
@@ -156,6 +157,10 @@ int uni_u8dec( char* in, char32* out )
 	{
 		o = in[1] & 0x3F;
 		o |= ( in[0] & 0x1F ) << 6;
+	}
+	else
+	{
+		return 1;
 	}
 
 	*out = o;
