@@ -37,7 +37,7 @@ ptri uni_strlencp( const char* in )
 		uni_die( );
 	}
 
-	return _uni_scanu8( in, NULL, &i, 0, 0, 0 ) ? i : 0;
+	return !_uni_scanu8( in, NULL, &i, 0, 0, 0 ) ? i : 0;
 }
 
 char* uni_strdup( const char* in )
