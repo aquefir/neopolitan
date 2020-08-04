@@ -29,6 +29,8 @@ TES_OPEN( );
 	   4 );
 	TES_ASSERT_EQ( uni_strlencp( "\240\241" ), 0 );
 	TES_ASSERT_EQ( uni_strlencp( "" ), 0 );
+	TES_ASSERT_TRUE( uni_strpre( "hello world", "hel" ) );
+	TES_ASSERT_TRUE( uni_strsuf( "hello world", "orld" ) );
 
 	tmpsv = uni_strsplit( "red blahh  cccc do", " ", -1 );
 	TES_ASSERT_EQ( uni_strlenv( tmpsv ), 5 );
