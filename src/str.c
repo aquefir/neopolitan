@@ -277,9 +277,9 @@ int uni_strsuf( const char* a, const char* b )
 			return 0;
 		}
 
-		for( i = a_sz - b_sz; i < a_sz; ++i )
+		for( i = 0; i < b_sz; ++i )
 		{
-			if( a[i] != b[i] )
+			if( a[a_sz - b_sz + i] != b[i] )
 			{
 				return 0;
 			}
@@ -739,6 +739,19 @@ struct uni_str* uni_str_initsz( ptri size )
 	return ret;
 }
 
+void uni_str_fini( struct uni_str* str )
+{
+	if(str)
+	{
+		if(str->data)
+		{
+			uni_free(str->data);
+		}
+
+		uni_free( str );
+	}
+}
+
 struct uni_str* uni_str_dup( struct uni_str* str )
 {
 	if( !str )
@@ -803,5 +816,29 @@ char* uni_str_mkslice( struct uni_str* str, struct rangep r )
 		ret[sz] = '\0';
 
 		return ret;
+	}
+}
+
+int uni_str_app( struct uni_str* str, const char* in )
+{
+	if(!str || !in)
+	{
+		uni_die( );
+	}
+
+	{
+		const ptri in_sz = uni_strlen( in );
+
+		while( str->sz + in_sz + 1 >= str->cap )
+		{
+			str->data = uni_realloc(
+				str->data, sizeof( char ) * ( str->cap << 1 ) );
+			str->cap <<= 1; /* *= 2 */
+		}
+
+		uni_memcpy( (u8*)(str->data) + str->sz, in, in_sz );
+		str->data[str->sz + in_sz] = '\0';
+
+		return 0;
 	}
 }
