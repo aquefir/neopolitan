@@ -12,8 +12,8 @@
 
 #define UNI_SIZEOF_RANGE( R ) \
 	( ( ( ( R ).lo > ( R ).hi ) ? ( ( R ).lo - ( ( R ).hi - 1 ) ) \
-	                            : ( ( ( R ).hi - 1 ) - ( R ).lo ) ) + \
-	   1 )
+				    : ( ( ( R ).hi - 1 ) - ( R ).lo ) ) + \
+		1 )
 
 struct point2
 {

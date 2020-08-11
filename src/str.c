@@ -321,8 +321,8 @@ int uni_isdigit( char c ) { return (u8)c >= 0x30 && (u8)c <= 0x39; }
 int uni_isxdigit( char c )
 {
 	return ( (u8)c >= 0x30 && (u8)c <= 0x39 ) ||
-	   ( (u8)c >= 0x41 && (u8)c <= 0x46 ) ||
-	   ( (u8)c >= 0x61 && (u8)c <= 0x66 );
+		( (u8)c >= 0x41 && (u8)c <= 0x46 ) ||
+		( (u8)c >= 0x61 && (u8)c <= 0x66 );
 }
 
 int uni_iscntrl( char c )
@@ -337,7 +337,7 @@ int uni_ispunct( char c )
 	const u8 ch = (u8)c;
 
 	return ( ch >= 0x21 && ch <= 0x2F ) || ( ch >= 0x3A && ch <= 0x40 ) ||
-	   ( ch >= 0x5B && ch <= 0x60 ) || ( ch >= 0x7B && ch <= 0x7E );
+		( ch >= 0x5B && ch <= 0x60 ) || ( ch >= 0x7B && ch <= 0x7E );
 }
 
 int uni_isspace( char c )
@@ -480,20 +480,21 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 					while( ret_i >= ret_sz )
 					{
 						ret = uni_realloc( ret,
-						   sizeof( char* ) *
-						      ( ret_sz * 2 ) );
+							sizeof( char* ) *
+								( ret_sz *
+									2 ) );
 						ret_sz <<= 1; /* *= 2 */
 					}
 
-				sz = i - last_i;
-				ret[ret_i] =
-				   uni_alloc( sizeof( char ) * ( sz + 1 ) );
+				sz         = i - last_i;
+				ret[ret_i] = uni_alloc(
+					sizeof( char ) * ( sz + 1 ) );
 				i += delim_sz - 1;
 
 				if( sz > 0 )
 				{
 					uni_memcpy(
-					   ret[ret_i], in + last_i, sz );
+						ret[ret_i], in + last_i, sz );
 				}
 
 				last_i         = i + 1;
@@ -514,7 +515,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		while( ret_i >= ret_sz )
 		{
 			ret = uni_realloc(
-			   ret, sizeof( char* ) * ( ret_sz << 1 ) );
+				ret, sizeof( char* ) * ( ret_sz << 1 ) );
 			ret_sz <<= 1; /* *= 2 */
 		}
 
@@ -532,7 +533,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		while( ret_i >= ret_sz )
 		{
 			ret = uni_realloc(
-			   ret, sizeof( char* ) * ( ret_sz << 1 ) );
+				ret, sizeof( char* ) * ( ret_sz << 1 ) );
 			ret_sz <<= 1; /* *= 2 */
 		}
 
@@ -741,11 +742,11 @@ struct uni_str* uni_str_initsz( ptri size )
 
 void uni_str_fini( struct uni_str* str )
 {
-	if(str)
+	if( str )
 	{
-		if(str->data)
+		if( str->data )
 		{
-			uni_free(str->data);
+			uni_free( str->data );
 		}
 
 		uni_free( str );
@@ -762,9 +763,9 @@ struct uni_str* uni_str_dup( struct uni_str* str )
 	{
 		struct uni_str* ret;
 
-		ret = uni_alloc( sizeof( struct uni_str ) );
-		ret->data =
-		   str->data ? uni_alloc( sizeof( char ) * str->sz ) : NULL;
+		ret       = uni_alloc( sizeof( struct uni_str ) );
+		ret->data = str->data ? uni_alloc( sizeof( char ) * str->sz )
+				      : NULL;
 		ret->sz  = str->sz;
 		ret->cap = str->sz;
 
@@ -821,7 +822,7 @@ char* uni_str_mkslice( struct uni_str* str, struct rangep r )
 
 int uni_str_app( struct uni_str* str, const char* in )
 {
-	if(!str || !in)
+	if( !str || !in )
 	{
 		uni_die( );
 	}
@@ -831,12 +832,12 @@ int uni_str_app( struct uni_str* str, const char* in )
 
 		while( str->sz + in_sz + 1 >= str->cap )
 		{
-			str->data = uni_realloc(
-				str->data, sizeof( char ) * ( str->cap << 1 ) );
+			str->data = uni_realloc( str->data,
+				sizeof( char ) * ( str->cap << 1 ) );
 			str->cap <<= 1; /* *= 2 */
 		}
 
-		uni_memcpy( (u8*)(str->data) + str->sz, in, in_sz );
+		uni_memcpy( (u8*)( str->data ) + str->sz, in, in_sz );
 		str->data[str->sz + in_sz] = '\0';
 
 		return 0;

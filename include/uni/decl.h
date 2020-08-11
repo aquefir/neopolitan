@@ -21,7 +21,7 @@
 #define UNI_DEPRECATED __declspec( deprecated )
 #else
 #pragma message( \
-   "WARNING: You need to implement UNI_DEPRECATED for this compiler" )
+	"WARNING: You need to implement UNI_DEPRECATED for this compiler" )
 #define UNI_DEPRECATED
 #endif
 #else

@@ -9,7 +9,7 @@
 #define INC_API__UNI_OPTION_H
 
 #pragma message( \
-   "DEPRECATED: Please #include <uni/types/opt.h>. <uni/option.h> is deprecated" )
+	"DEPRECATED: Please #include <uni/types/opt.h>. <uni/option.h> is deprecated" )
 
 #include "types/opt.h"
 

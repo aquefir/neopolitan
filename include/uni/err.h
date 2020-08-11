@@ -25,7 +25,7 @@ enum /* err */
 #else /* !defined(NDEBUG) */
 #define ASSERT( cnd ) \
 	( ( cnd ) ? (void)0 \
-	          : uni_assert_fail( #cnd, __FILE__, __LINE__, __func__ ) )
+		  : uni_assert_fail( #cnd, __FILE__, __LINE__, __func__ ) )
 #endif /* defined(NDEBUG) */
 
 #define ASSERT_RET( cnd ) \
@@ -37,12 +37,12 @@ enum /* err */
 		else \
 		{ \
 			uni_perror( \
-			   "Assertion failed in file \"%s\" on line \"%u\", in " \
-			   "function \"%s\".\nExpression: %s", \
-			   __FILE__, \
-			   __LINE__, \
-			   __func__, \
-			   #cnd ); \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#cnd ); \
 			return; \
 		} \
 	} while( 0 )
@@ -55,12 +55,12 @@ enum /* err */
 		else \
 		{ \
 			uni_perror( \
-			   "Assertion failed in file \"%s\" on line \"%u\", in " \
-			   "function \"%s\".\nExpression: %s", \
-			   __FILE__, \
-			   __LINE__, \
-			   __func__, \
-			   #cnd ); \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#cnd ); \
 			return -1; \
 		} \
 	} while( 0 )
@@ -73,12 +73,12 @@ enum /* err */
 		else \
 		{ \
 			uni_perror( \
-			   "Assertion failed in file \"%s\" on line \"%u\", in " \
-			   "function \"%s\".\nExpression: %s", \
-			   __FILE__, \
-			   __LINE__, \
-			   __func__, \
-			   #r ); \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#r ); \
 			return ( r ); \
 		} \
 	} while( 0 )
@@ -91,12 +91,12 @@ enum /* err */
 		else \
 		{ \
 			uni_perror( \
-			   "Assertion failed in file \"%s\" on line \"%u\", in " \
-			   "function \"%s\".\nExpression: %s", \
-			   __FILE__, \
-			   __LINE__, \
-			   __func__, \
-			   #cnd ); \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#cnd ); \
 			return NULL; \
 		} \
 	} while( 0 )
@@ -109,12 +109,12 @@ enum /* err */
 		else \
 		{ \
 			uni_perror( \
-			   "Assertion failed in file \"%s\" on line \"%u\", in " \
-			   "function \"%s\".\nExpression: %s", \
-			   __FILE__, \
-			   __LINE__, \
-			   __func__, \
-			   #cnd ); \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#cnd ); \
 			return val; \
 		} \
 	} while( 0 )
@@ -128,10 +128,10 @@ enum /* err */
 		else \
 		{ \
 			fprintf( stderr, \
-			   "!!! Assert failed @ %s L%u: %s\n", \
-			   file, \
-			   line, \
-			   #x ); \
+				"!!! Assert failed @ %s L%u: %s\n", \
+				file, \
+				line, \
+				#x ); \
 			o.is = 0; \
 			return ( o ); \
 		} \

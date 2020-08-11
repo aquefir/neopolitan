@@ -220,8 +220,9 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 
 		newdata = uni_alloc( arr->elemsz * arr->cap << 1 );
 		arr->cap <<= 1;
-		uni_memcpy(
-		   newdata + arr->elemsz, arr->data, arr->elemsz * arr->sz );
+		uni_memcpy( newdata + arr->elemsz,
+			arr->data,
+			arr->elemsz * arr->sz );
 		uni_memcpy( newdata, data, arr->elemsz );
 		uni_free( arr->data );
 		arr->data = newdata;
@@ -233,8 +234,8 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 		for( i = arr->sz; i > 0; --i )
 		{
 			uni_memcpy( arr->data + ( arr->elemsz * i ),
-			   arr->data + ( arr->elemsz * ( i - 1 ) ),
-			   arr->elemsz );
+				arr->data + ( arr->elemsz * ( i - 1 ) ),
+				arr->elemsz );
 		}
 
 		uni_memcpy( arr->data, data, arr->elemsz );
@@ -271,17 +272,18 @@ int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
 		for( i = arr->sz - 1; i >= ind; --i )
 		{
 			uni_memcpy( arr->data + ( arr->elemsz * ( i + 1 ) ),
-			   arr->data + ( arr->elemsz * i ),
-			   arr->elemsz );
+				arr->data + ( arr->elemsz * i ),
+				arr->elemsz );
 		}
 
 		uni_memcpy(
-		   arr->data + ( arr->elemsz * ind ), data, arr->elemsz );
+			arr->data + ( arr->elemsz * ind ), data, arr->elemsz );
 	}
 	else
 	{
-		uni_memcpy(
-		   arr->data + ( arr->elemsz * arr->sz ), data, arr->elemsz );
+		uni_memcpy( arr->data + ( arr->elemsz * arr->sz ),
+			data,
+			arr->elemsz );
 	}
 
 	arr->sz++;
@@ -349,8 +351,8 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 		while( cur )
 		{
 			uni_memcpy( ret->data + ( ret->elemsz * i ),
-			   cur->data,
-			   ( ret->elemsz * cur->sz ) );
+				cur->data,
+				( ret->elemsz * cur->sz ) );
 			i += cur->sz;
 
 			cur = va_arg( args, struct uni_arr* );
@@ -388,8 +390,8 @@ struct uni_arr* uni_arr_concv( struct uni_arr** arr )
 		for( i = 0; arr[i] != NULL; ++i )
 		{
 			uni_memcpy( ret->data + ( ret->elemsz * i ),
-			   arr[i]->data,
-			   ret->elemsz * arr[i]->sz );
+				arr[i]->data,
+				ret->elemsz * arr[i]->sz );
 		}
 
 		return ret;
@@ -410,8 +412,8 @@ struct uni_arr* uni_arr_slice( struct uni_arr* arr, struct rangep r )
 		ret = uni_arr_initsz( arr->elemsz, sz );
 
 		uni_memcpy( ret->data,
-		   arr->data + ( arr->elemsz * r.lo ),
-		   arr->elemsz * sz );
+			arr->data + ( arr->elemsz * r.lo ),
+			arr->elemsz * sz );
 
 		return ret;
 	}

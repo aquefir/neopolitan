@@ -10,7 +10,7 @@
 
 #define UNI_MAKEVER( _maj, _min, _pat ) \
 	( ( ( (_maj)&0x3FF ) << 22 ) | ( ( (_min)&0x3FF ) << 12 ) | \
-	   ( (_pat)&0xFFF ) )
+		( (_pat)&0xFFF ) )
 
 #define UNI_GETVER_MAJOR( _ver ) ( ( ( _ver ) >> 22 ) & 0x3FF )
 #define UNI_GETVER_MINOR( _ver ) ( ( ( _ver ) >> 12 ) & 0x3FF )

@@ -18,11 +18,11 @@ int uni_validu8( const char* in )
 }
 
 int _uni_scanu8( const char* in,
-   ptri* byct,
-   ptri* cpct,
-   int stop,
-   ptri stop_i,
-   int stop_i_bytes )
+	ptri* byct,
+	ptri* cpct,
+	int stop,
+	ptri stop_i,
+	int stop_i_bytes )
 {
 	if( !in )
 	{
@@ -84,7 +84,7 @@ int _uni_scanu8( const char* in,
 			for( j = 0; j < n - 1; ++j )
 			{
 				if( ++by_i == sz ||
-				   ( ( u8 )( in[by_i] ) & 0xC0 ) != 0x80 )
+					( ( u8 )( in[by_i] ) & 0xC0 ) != 0x80 )
 				{
 					return 1;
 				}
@@ -255,9 +255,10 @@ int uni_u8enc( char32 in, char* out )
 u32 uni_u8encsz( char32 ch )
 {
 	return ch >= 0x8000000 ? 6
-	                       : ch >= 0x200000
-	      ? 5
-	      : ch >= 0x10000 ? 4 : ch >= 0x800 ? 3 : ch >= 0x80 ? 2 : 1;
+			       : ch >= 0x200000
+			? 5
+			: ch >= 0x10000 ? 4
+					: ch >= 0x800 ? 3 : ch >= 0x80 ? 2 : 1;
 }
 
 struct uni_u8pos uni_u8by2cp( const char* in, ptri by_pos )
