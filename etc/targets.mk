@@ -130,6 +130,9 @@ asan: LDFLAGS += $(LDFLAGS.ASAN)
 asan: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
 asan: DEFINE += -DTES_BUILD=1
+ifneq ($(strip $(EXEFILE)),)
+asan: $(TARGETS)
+endif
 asan: $(TESTARGETS)
 else
 asan: DEFINE += -UTES_BUILD
@@ -149,6 +152,9 @@ ubsan: LDFLAGS += $(LDFLAGS.UBSAN)
 ubsan: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
 ubsan: DEFINE += -DTES_BUILD=1
+ifneq ($(strip $(EXEFILE)),)
+ubsan: $(TARGETS)
+endif
 ubsan: $(TESTARGETS)
 else
 ubsan: DEFINE += -UTES_BUILD
@@ -180,17 +186,18 @@ TES_OFILES := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 
 # Static library builds
 $(ATARGET): $(OFILES)
+	$(REALSTRIP) -s $^
 	$(AR) $(ARFLAGS) $@ $^
 
 # Shared library builds
 $(SOTARGET): $(OFILES)
 	$(CCLD) $(LDFLAGS) -shared -o $@ $^ $(LIB)
-	$(REALSTRIP) -s $^
+	$(REALSTRIP) -s $@
 
 # Executable builds
 $(EXETARGET): $(OFILES)
 	$(CCLD) $(LDFLAGS) -o $@ $^ $(LIB)
-	$(REALSTRIP) -s $^
+	$(REALSTRIP) -s $@
 
 DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGETS))
 

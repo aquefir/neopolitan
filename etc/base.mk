@@ -40,6 +40,61 @@ UNAME := $(shell uname -s)
 # User can specify TP={Win32,Win64,GBA} at the command line
 TP ?= $(UNAME)
 
+## Toolchain
+# This must be resolved before the rest, as all the other environment
+# variables depend on its value
+
+TC.DARWIN := llvm
+TC.LINUX  := gnu
+TC.WIN32  := mingw32
+TC.WIN64  := mingw32
+TC.GBA    := dkarm
+
+## Resolve the correct host-target suffixes
+##
+
+ifeq ($(strip $(UNAME)),Darwin)
+ifeq ($(strip $(TP)),Darwin)
+suf := DARWIN
+tsuf := DARWIN
+else ifeq ($(strip $(TP)),Win32)
+suf := DARWIN.WIN32
+tsuf := WIN32
+else ifeq ($(strip $(TP)),Win64)
+suf := DARWIN.WIN64
+tsuf := WIN64
+else ifeq ($(strip $(TP)),GBA)
+suf := DARWIN.GBA
+tsuf := GBA
+else ifeq ($(strip $(TP)),Linux)
+$(error Cross-compilation to Linux is not supported on macOS)
+else
+$(error Unknown target platform "$(TP)")
+endif # $(TP)
+else ifeq ($(strip $(UNAME)),Linux)
+ifeq ($(strip $(TP)),Linux)
+suf := LINUX
+tsuf := LINUX
+else ifeq ($(strip $(TP)),Win32)
+suf := LINUX.WIN32
+tsuf := WIN32
+else ifeq ($(strip $(TP)),Win64)
+suf := LINUX.WIN64
+tsuf := WIN64
+else ifeq ($(strip $(TP)),GBA)
+suf := DARWIN.GBA
+tsuf := GBA
+else ifeq ($(strip $(TP)),Darwin)
+$(error Cross-compilation to macOS is not supported on Linux)
+else
+$(error Unknown target platform "$(TP)")
+endif # $(TP)
+else
+$(error Unsupported host platform "$(UNAME)")
+endif # $(UNAME)
+
+TC ?= $(TC.$(tsuf))
+
 ## Specify the default host variables
 ## form: <var>.<host>[.<target>]
 ##
@@ -193,55 +248,6 @@ CDEFS.WIN32  := WINDOWS WIN32 LILENDIAN IA32
 CDEFS.WIN64  := WINDOWS WIN64 LILENDIAN AMD64
 CDEFS.GBA    := GBA ARMV4T LILENDIAN
 
-TC.DARWIN := llvm
-TC.LINUX  := gnu
-TC.WIN32  := mingw32
-TC.WIN64  := mingw32
-TC.GBA    := dkarm
-
-## Resolve the correct host-target suffixes
-##
-
-ifeq ($(strip $(UNAME)),Darwin)
-ifeq ($(strip $(TP)),Darwin)
-suf := DARWIN
-tsuf := DARWIN
-else ifeq ($(strip $(TP)),Win32)
-suf := DARWIN.WIN32
-tsuf := WIN32
-else ifeq ($(strip $(TP)),Win64)
-suf := DARWIN.WIN64
-tsuf := WIN64
-else ifeq ($(strip $(TP)),GBA)
-suf := DARWIN.GBA
-tsuf := GBA
-else ifeq ($(strip $(TP)),Linux)
-$(error Cross-compilation to Linux is not supported on macOS)
-else
-$(error Unknown target platform "$(TP)")
-endif # $(TP)
-else ifeq ($(strip $(UNAME)),Linux)
-ifeq ($(strip $(TP)),Linux)
-suf := LINUX
-tsuf := LINUX
-else ifeq ($(strip $(TP)),Win32)
-suf := LINUX.WIN32
-tsuf := WIN32
-else ifeq ($(strip $(TP)),Win64)
-suf := LINUX.WIN64
-tsuf := WIN64
-else ifeq ($(strip $(TP)),GBA)
-suf := DARWIN.GBA
-tsuf := GBA
-else ifeq ($(strip $(TP)),Darwin)
-$(error Cross-compilation to macOS is not supported on Linux)
-else
-$(error Unknown target platform "$(TP)")
-endif # $(TP)
-else
-$(error Unsupported host platform "$(UNAME)")
-endif # $(UNAME)
-
 ifeq ($(strip $(TP)),Win32)
 EXE := .exe
 else ifeq ($(strip $(TP)),Win64)
@@ -254,7 +260,6 @@ endif # $(TP)
 ##
 
 SO := $(SO.$(tsuf))
-TC ?= $(TC.$(tsuf))
 
 CC.DEFAULT    := $(CC.$(suf))
 CC.CUSTOM     := $(CC)
