@@ -1,6 +1,7 @@
-@ -*- coding: utf-8 -*-
 
 .ifdef CFG_GBA
+
+@ -*- coding: utf-8 -*-
 
 .file "src/gbabios.s"
 .ident "AS: (devkitARM release 46) 2.27"
@@ -384,5 +385,3 @@ _bios_multi_boot:
 @    BX      LR
 
 .endif
-
-@ EOF

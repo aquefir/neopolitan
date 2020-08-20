@@ -43,8 +43,13 @@ UNI_OPTION( ptri ) uni_filesz( const char* fname )
 
 	sz = ftell( f );
 	/* LONG_MAX may be returned, meaning it failed */
+#ifdef CFG_WINDOWS
+	ret.is  = sz == S32_MAX ? 0 : 1;
+	ret.val = sz == S32_MAX ? 0 : (ptri)sz;
+#else
 	ret.is  = sz == S64_MAX ? 0 : 1;
 	ret.val = sz == S64_MAX ? 0 : (ptri)sz;
+#endif
 
 	fclose( f );
 #endif

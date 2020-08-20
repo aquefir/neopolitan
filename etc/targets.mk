@@ -53,7 +53,9 @@ ifeq ($(strip $(EXEFILE)),1)
 TARGETS += $(GBATARGET)
 endif
 else
+ifeq ($(strip $(EXEFILE)),1)
 TARGETS += $(EXETARGET)
+endif
 ifeq ($(strip $(SOFILE)),1)
 TARGETS += $(SOTARGET)
 endif
