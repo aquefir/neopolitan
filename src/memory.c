@@ -5,12 +5,17 @@
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
+#include <uni/err.h>
 #include <uni/memory.h>
+#include <uni/types/int.h>
 
+#ifdef CFG_GBA
+#include <uni/gbabios.h>
+#include "gbahimem.h"
+#else
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef CFG_GBA
+#endif
 
 void* uni_alloc( ptri sz )
 {
@@ -18,14 +23,14 @@ void* uni_alloc( ptri sz )
 
 	if( sz == 0 )
 	{
-		abort( );
+		uni_die( );
 	}
 
 	ret = malloc( sz );
 
 	if( ret == NULL )
 	{
-		abort( );
+		uni_die( );
 	}
 
 	return ret;
@@ -48,15 +53,24 @@ void* uni_realloc( void* p, ptri sz )
 
 	if( p == NULL || sz == 0 )
 	{
-		abort( );
+		uni_die( );
 	}
 
+#ifndef CFG_GBA
 	ret = realloc( p, sz );
+#else
+	ret = malloc( sz );
+#endif
 
 	if( ret == NULL )
 	{
-		abort( );
+		uni_die( );
 	}
+
+#ifdef CFG_GBA
+	memcpy( ret, p, _memsize( p ) );
+	free( p );
+#endif
 
 	return ret;
 }
@@ -89,7 +103,23 @@ void* uni_tryrealloc( void* p, ptri sz )
 		return NULL;
 	}
 
+#ifndef CFG_GBA
 	return realloc( p, sz );
+#else
+	{
+		void* ret = malloc( sz );
+
+		if(!ret)
+		{
+			return ret;
+		}
+
+		memcpy( ret, p, _memsize( p ) );
+		free( p );
+
+		return ret;
+	}
+#endif
 }
 
 void uni_free( void* p )
@@ -137,5 +167,3 @@ int uni_memcmp( const void* a, const void* b, ptri sz )
 
 	return 0;
 }
-
-#endif /* CFG_GBA */

@@ -10,8 +10,6 @@
 #include <uni/types/int.h>
 #include "utf8.h"
 
-#include <stdio.h>
-
 int uni_validu8( const char* in )
 {
 	return !_uni_scanu8( in, NULL, NULL, 0, 0, 0 );

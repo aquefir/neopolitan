@@ -856,6 +856,29 @@ int uni_str_app( struct uni_str* str, const char* in )
 	}
 }
 
+int uni_str_appch( struct uni_str* str, char in )
+{
+	if(!str)
+	{
+		uni_die( );
+	}
+
+	{
+		while( str->sz + 2 >= str->cap )
+		{
+			str->cap <<= 1; /* *= 2 */
+		}
+
+		str->data = uni_realloc( str->data, sizeof(char) * str->cap );
+
+		str->data[str->sz] = in;
+		str->sz++;
+		str->data[str->sz] = '\0';
+
+		return 0;
+	}
+}
+
 int uni_str_prep( struct uni_str* str, const char* in )
 {
 	if( !str || !in )

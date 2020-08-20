@@ -8,6 +8,7 @@
 #include <uni/log.h>
 
 #include <stdarg.h>
+#ifndef CFG_GBA
 #include <stdio.h>
 
 #include <uni/err.h>
@@ -53,3 +54,5 @@ int uni_perror( const char* fmt, ... )
 
 	return 0;
 }
+
+#endif

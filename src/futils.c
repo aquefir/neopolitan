@@ -7,10 +7,13 @@
 
 #include <uni/futils.h>
 
+#ifndef CFG_GBA
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#endif
 #include <uni/err.h>
+#include <uni/memory.h>
 #include <uni/types/options.h>
 #include <uni/types/int.h>
 
@@ -18,12 +21,11 @@
 /* PURE FUNCTION */
 UNI_OPTION( ptri ) uni_filesz( const char* fname )
 {
-	FILE* f;
-	UNI_OPTION( ptri ) ret;
-	long sz;
+	UNI_OPTION( ptri ) ret = { 0, 0 };
 
-	ret.val = 0;
-	ret.is  = 0;
+#ifndef CFG_GBA
+	FILE* f;
+	long sz;
 
 	f = fopen( fname, "rb" );
 
@@ -45,12 +47,14 @@ UNI_OPTION( ptri ) uni_filesz( const char* fname )
 	ret.val = sz == S64_MAX ? 0 : (ptri)sz;
 
 	fclose( f );
+#endif
 
 	return ret;
 }
 
 int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 {
+#ifndef CFG_GBA
 	FILE* f;
 	ptri readsz;
 
@@ -67,30 +71,73 @@ int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 	fclose( f );
 
 	return readsz != ret_sz ? 1 : 0;
+#else
+	return 1;
+#endif
 }
+
+#define BUFFER_SZ 1024
 
 int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 {
-	UNI_OPTION( ptri ) sz;
+#ifndef CFG_GBA
+	u8 buffer[BUFFER_SZ];
+	u8* data;
+	ptri data_sz;
+	FILE* f;
 
-	ASSERT( fname != NULL );
 	ASSERT( ret != NULL );
 	ASSERT( ret_sz != NULL );
 
-	sz = uni_filesz( fname );
+	f = fname == NULL ? stdin : fopen( fname, "rb" );
 
-	if( !sz.is )
+	if(!f)
 	{
 		return 1;
 	}
 
-	*ret_sz = sz.val;
-	*ret    = malloc( *ret_sz );
-
-	if( *ret == NULL && *ret_sz > 0 )
+	if(!fname)
 	{
-		return 1;
+		f = freopen( NULL, "rb", stdin );
 	}
 
-	return uni_buffile( fname, *ret, *ret_sz );
+	data = NULL;
+	data_sz = 0;
+
+	for(;;)
+	{
+		ptri r = fread( buffer, sizeof( u8 ), BUFFER_SZ, f );
+
+		data = !data ? uni_alloc( sizeof(u8) * r )
+			: uni_realloc( data, sizeof(u8) * (data_sz + r) );
+
+		uni_memcpy( data + data_sz, buffer, sizeof(u8) * r );
+
+		data_sz += r;
+
+		if(r < BUFFER_SZ)
+		{
+			if(ferror( f ))
+			{
+				uni_perror( "Error occured in reading file. Exiting..." );
+
+				return 1;
+			}
+
+			break;
+		}
+	}
+
+	if(!fname)
+	{
+		f = freopen( NULL, "r", stdin );
+	}
+
+	*ret = data;
+	*ret_sz = data_sz;
+
+	return 0;
+#else
+	return 1;
+#endif
 }
