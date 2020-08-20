@@ -117,9 +117,9 @@ CC.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
 CC.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
 
 ifeq ($(strip $(TC)),llvm)
-AS.DARWIN       := /usr/local/opt/llvm/bin/llvm-as # brew LLVM
+AS.DARWIN       := sh -c 'cat' # dummy
 else
-AS.DARWIN       := /usr/bin/as # Xcode
+AS.DARWIN       := sh -c 'cat'
 endif
 AS.LINUX        := /usr/bin/as
 AS.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-as

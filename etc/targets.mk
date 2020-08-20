@@ -169,7 +169,10 @@ ubsan: $(TARGETS)
 endif # $(NO_TES)
 
 # Define object files
-OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o) $(SFILES:.s=.s.o)
+OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
+ifneq ($(strip $(TP)),Darwin)
+OFILES += $(SFILES:.s=.s.o)
+endif
 TES_OFILES := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 
 # Object file builds
