@@ -10,10 +10,10 @@
 ## This works with both C and C++ code, and is continuously tested on macOS
 ## Mojave and Arch Linux.
 ## this file expects the following variables to be defined:
-## CFILES, CPPFILES, HFILES, HPPFILES, CFLAGS, CXXFLAGS, LDFLAGS, CC, CXX, AR,
-## FMT, INCLUDES, INCLUDEL, DEFINES, UNDEFINES, LIBDIRS, LIBS, FWORKS,
-## PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR, SO, EXE, UNAME, TP, TC,
-## TES_CFILES, TES_CPPFILES, TES_HFILES, TES_HPPFILES
+## CFILES, CPPFILES, HFILES, HPPFILES, SFILES, CFLAGS, CXXFLAGS, LDFLAGS, CC,
+## CXX, AR, FMT, INCLUDES, INCLUDEL, DEFINES, UNDEFINES, LIBDIRS, LIBS,
+## FWORKS, PROJECT, EXEFILE, AFILE, SOFILE, 3PLIBS, 3PLIBDIR, SO, EXE, UNAME,
+## TP, TC,  TES_CFILES, TES_CPPFILES, TES_HFILES, TES_HPPFILES
 
 # Incorporate 3rdparty dependencies
 INCLUDES += $(patsubst %,$(3PLIBDIR)/%lib/include,$(3PLIBS))
@@ -28,24 +28,35 @@ else
 INCLUDE := $(patsubst %,-isystem %,$(INCLUDES)) \
 	$(patsubst %,-iquote %,$(INCLUDEL))
 endif
-DEFINE := $(patsubst %,-D%,$(DEFINES)) $(patsubst %,-U%,$(UNDEFINES))
-FWORK := $(patsubst %,-framework %,$(FWORKS))
+DEFINE    := $(patsubst %,-D%,$(DEFINES)) $(patsubst %,-U%,$(UNDEFINES))
+FWORK     := $(patsubst %,-framework %,$(FWORKS))
+ASINCLUDE := $(patsubst %,-I %,$(INCLUDES)) $(patsubst %,-I %,$(INCLUDEL))
+ASDEFINE  := $(patsubst %,--defsym %=1,$(DEFINES))
 
 # Populated below
 TARGETS :=
 
+ifeq ($(strip $(TP)),GBA)
+TESTARGETS :=
+else
 TESTARGETS := $(TES_CFILES:.tes.c=.c.tes) $(TES_CPPFILES:.tes.cpp=.cpp.tes)
+endif
 
 # specify all target filenames
+GBATARGET := $(PROJECT).gba
 EXETARGET := $(PROJECT)$(EXE)
 SOTARGET  := lib$(PROJECT).$(SO)
 ATARGET   := lib$(PROJECT).a
 
+ifeq ($(strip $(TP)),GBA)
 ifeq ($(strip $(EXEFILE)),1)
-TARGETS += $(EXETARGET)
+TARGETS += $(GBATARGET)
 endif
+else
+TARGETS += $(EXETARGET)
 ifeq ($(strip $(SOFILE)),1)
 TARGETS += $(SOTARGET)
+endif
 endif
 ifeq ($(strip $(AFILE)),1)
 TARGETS += $(ATARGET)
@@ -65,11 +76,10 @@ endif
 ## useful for: normal testing, valgrind, LLDB
 ##
 debug: DEFINE += -UNDEBUG
-debug: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-debug: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.DEBUG)
+debug: CFLAGS += $(CFLAGS.GCOMMON.DEBUG)
 endif # tcc
-debug: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.DEBUG)
+debug: CXXFLAGS += $(CXXFLAGS.COMMON.DEBUG)
 debug: REALSTRIP := ':' ; # : is a no-op
 debug: $(TARGETS)
 
@@ -77,11 +87,10 @@ debug: $(TARGETS)
 ## useful for: deployment
 ##
 release: DEFINE += -DNDEBUG=1
-release: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-release: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.RELEASE)
+release: CFLAGS += $(CFLAGS.GCOMMON.RELEASE)
 endif # tcc
-release: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.RELEASE)
+release: CXXFLAGS += $(CXXFLAGS.COMMON.RELEASE)
 release: REALSTRIP := $(STRIP)
 release: $(TARGETS)
 
@@ -89,11 +98,10 @@ release: $(TARGETS)
 ## useful for: pre-tool bug squashing
 ##
 check: DEFINE += -UNDEBUG
-check: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-check: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.CHECK)
+check: CFLAGS += $(CFLAGS.GCOMMON.CHECK)
 endif # tcc
-check: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.CHECK)
+check: CXXFLAGS += $(CXXFLAGS.COMMON.CHECK)
 check: REALSTRIP := ':' ; # : is a no-op
 check: $(TARGETS)
 
@@ -101,11 +109,10 @@ check: $(TARGETS)
 ## useful for: checking coverage of test suite
 ##
 cov: DEFINE += -UNDEBUG -D_CODECOV
-cov: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-cov: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.COV)
+cov: CFLAGS += $(CFLAGS.GCOMMON.COV)
 endif # tcc
-cov: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.COV)
+cov: CXXFLAGS += $(CXXFLAGS.COMMON.COV)
 cov: LDFLAGS += $(LDFLAGS.COV)
 cov: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
@@ -120,11 +127,10 @@ endif # $(NO_TES)
 ## useful for: squashing memory issues
 ##
 asan: DEFINE += -UNDEBUG -D_ASAN
-asan: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-asan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.ASAN)
+asan: CFLAGS += $(CFLAGS.GCOMMON.ASAN)
 endif # tcc
-asan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.ASAN)
+asan: CXXFLAGS += $(CXXFLAGS.COMMON.ASAN)
 asan: LDFLAGS += $(LDFLAGS.ASAN)
 
 asan: REALSTRIP := ':' ; # : is a no-op
@@ -143,11 +149,10 @@ endif # $(NO_TES)
 ## useful for: squashing UB :-)
 ##
 ubsan: DEFINE += -UNDEBUG -D_UBSAN
-ubsan: CFLAGS += $(CFLAGS.COMMON)
 ifneq ($(CC),tcc)
-ubsan: CFLAGS += $(CFLAGS.GCOMMON) $(CFLAGS.GCOMMON.UBSAN)
+ubsan: CFLAGS += $(CFLAGS.GCOMMON.UBSAN)
 endif # tcc
-ubsan: CXXFLAGS += $(CXXFLAGS.COMMON) $(CXXFLAGS.COMMON.UBSAN)
+ubsan: CXXFLAGS += $(CXXFLAGS.COMMON.UBSAN)
 ubsan: LDFLAGS += $(LDFLAGS.UBSAN)
 ubsan: REALSTRIP := ':' ; # : is a no-op
 ifeq ($(strip $(NO_TES)),)
@@ -162,15 +167,18 @@ ubsan: $(TARGETS)
 endif # $(NO_TES)
 
 # Define object files
-OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o)
+OFILES     := $(CFILES:.c=.c.o) $(CPPFILES:.cpp=.cpp.o) $(SFILES:.s=.s.o)
 TES_OFILES := $(TES_CFILES:.c=.c.o) $(TES_CPPFILES:.cpp=.cpp.o)
 
 # Object file builds
 %.cpp.o: %.cpp
-	$(CXX) -c -o $@ $(CXXFLAGS) $(INCLUDE) $<
+	$(CXX) -c -o $@ $(CXXFLAGS) $(DEFINE) $(INCLUDE) $<
 
 %.c.o: %.c
-	$(CC) -c -o $@ $(CFLAGS) $(INCLUDE) $<
+	$(CC) -c -o $@ $(CFLAGS) $(DEFINE) $(INCLUDE) $<
+
+%.s.o: %.s
+	$(AS) -o $@ $(ASFLAGS) $(ASDEFINE) $(ASINCLUDE) $<
 
 %.tes.cpp.o: %.tes.cpp
 	$(CXX) -c -o $@ $(CXXFLAGS) $(INCLUDE) $<
@@ -198,6 +206,10 @@ $(SOTARGET): $(OFILES)
 $(EXETARGET): $(OFILES)
 	$(CCLD) $(LDFLAGS) -o $@ $^ $(LIB)
 	$(REALSTRIP) -s $@
+
+$(GBATARGET): $(EXETARGET)
+	$(OCPY) -O binary $< $@
+	$(FIX) $@ $(FIXFLAGS)
 
 DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGETS))
 

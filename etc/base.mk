@@ -117,6 +117,19 @@ CC.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
 CC.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-gcc
 
 ifeq ($(strip $(TC)),llvm)
+AS.DARWIN       := /usr/local/opt/llvm/bin/llvm-as # brew LLVM
+else
+AS.DARWIN       := /usr/bin/as # Xcode
+endif
+AS.LINUX        := /usr/bin/as
+AS.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-as
+AS.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-as
+AS.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-as
+AS.LINUX.WIN64  := /usr/bin/i686-w64-mingw32-as
+AS.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-as
+AS.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-as
+
+ifeq ($(strip $(TC)),llvm)
 CXX.DARWIN       := /usr/local/opt/llvm/bin/clang++ # brew LLVM
 else
 CXX.DARWIN       := /usr/bin/clang++ # Xcode
@@ -145,6 +158,19 @@ AR.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-ar
 AR.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-ar
 AR.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-ar
 AR.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-ar
+
+ifeq ($(strip $(TC)),llvm)
+OCPY.DARWIN       := /usr/local/opt/llvm/bin/llvm-objcopy # brew LLVM
+else
+OCPY.DARWIN       := /usr/bin/objcopy # Xcode
+endif
+OCPY.LINUX        := /usr/bin/objcopy
+OCPY.DARWIN.WIN32 := /usr/local/bin/i686-w64-mingw32-objcopy
+OCPY.LINUX.WIN32  := /usr/bin/i686-w64-mingw32-objcopy
+OCPY.DARWIN.WIN64 := /usr/local/bin/x86_64-w64-mingw32-objcopy
+OCPY.LINUX.WIN64  := /usr/bin/x86_64-w64-mingw32-objcopy
+OCPY.DARWIN.GBA   := /opt/devkitpro/devkitARM/bin/arm-none-eabi-objcopy
+OCPY.LINUX.GBA    := /opt/devkitpro/devkitARM/bin/arm-none-eabi-objcopy
 
 ifeq ($(strip $(TC)),llvm)
 STRIP.DARWIN       := /usr/local/opt/llvm/bin/llvm-strip # brew LLVM
@@ -189,7 +215,15 @@ CFLAGS.DARWIN := -march=ivybridge -mtune=skylake
 CFLAGS.LINUX  := -march=sandybridge -mtune=skylake
 CFLAGS.WIN32  := -march=sandybridge -mtune=skylake
 CFLAGS.WIN64  := -march=sandybridge -mtune=skylake
-CFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork
+CFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork \
+	-Wno-builtin-declaration-mismatch
+
+ASFLAGS.COMMON :=
+ASFLAGS.DARWIN :=
+ASFLAGS.LINUX  :=
+ASFLAGS.WIN32  :=
+ASFLAGS.WIN64  :=
+ASFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork -EL
 
 CXXFLAGS.COMMON := -pipe -fPIC -std=c++11 -x c++ -frandom-seed=69420
 CXXFLAGS.COMMON.DEBUG   := -O0 -g3 -Wall -Wpedantic
@@ -210,7 +244,8 @@ CXXFLAGS.DARWIN := -march=ivybridge -mtune=skylake
 CXXFLAGS.LINUX  := -march=sandybridge -mtune=skylake
 CXXFLAGS.WIN32  := -march=sandybridge -mtune=skylake
 CXXFLAGS.WIN64  := -march=sandybridge -mtune=skylake
-CXXFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork
+CXXFLAGS.GBA    := -march=armv4t -mcpu=arm7tdmi -mthumb-interwork \
+	-Wno-builtin-declaration-mismatch
 
 LDFLAGS       := -fPIE
 LDFLAGS.COV   :=
@@ -252,6 +287,8 @@ ifeq ($(strip $(TP)),Win32)
 EXE := .exe
 else ifeq ($(strip $(TP)),Win64)
 EXE := .exe
+else ifeq ($(strip $(TP)),GBA)
+EXE := .elf
 else
 EXE :=
 endif # $(TP)
@@ -263,10 +300,14 @@ SO := $(SO.$(tsuf))
 
 CC.DEFAULT    := $(CC.$(suf))
 CC.CUSTOM     := $(CC)
+AS.DEFAULT    := $(AS.$(suf))
+AS.CUSTOM     := $(AS)
 CXX.DEFAULT   := $(CXX.$(suf))
 CXX.CUSTOM    := $(CXX)
 AR.DEFAULT    := $(AR.$(suf))
 AR.CUSTOM     := $(AR)
+OCPY.DEFAULT    := $(OCPY.$(suf))
+OCPY.CUSTOM     := $(OCPY)
 STRIP.DEFAULT := $(STRIP.$(suf))
 STRIP.CUSTOM  := $(STRIP)
 
@@ -275,6 +316,7 @@ CFLAGS   := $(CFLAGS.COMMON) -std=c89
 else
 CFLAGS   := $(CFLAGS.GCOMMON) $(CFLAGS.$(tsuf))
 endif # $(CC.CUSTOM)
+ASFLAGS  := $(ASFLAGS.COMMON) $(ASFLAGS.$(tsuf))
 CXXFLAGS := $(CXXFLAGS.COMMON) $(CXXFLAGS.$(tsuf))
 #LDFLAGS
 ARFLAGS  := -rcs
@@ -304,6 +346,15 @@ else
 CC := $(CC.CUSTOM)
 endif # $(origin CC)
 
+ifeq ($(origin AS),undefined)
+AS := $(AS.DEFAULT)
+else ifeq ($(origin AS),default)
+AS := $(AS.DEFAULT)
+else
+# environment [override], file, command line, override, automatic
+AS := $(AS.CUSTOM)
+endif # $(origin AS)
+
 ifeq ($(origin CXX),undefined)
 CXX := $(CXX.DEFAULT)
 else ifeq ($(origin CXX),default)
@@ -322,6 +373,15 @@ else
 AR := $(AR.CUSTOM)
 endif # $(origin AR)
 
+ifeq ($(origin OCPY),undefined)
+OCPY := $(OCPY.DEFAULT)
+else ifeq ($(origin OCPY),default)
+OCPY := $(OCPY.DEFAULT)
+else
+# environment [override], file, command line, override, automatic
+OCPY := $(OCPY.CUSTOM)
+endif # $(origin OCPY)
+
 ifeq ($(origin STRIP),undefined)
 STRIP := $(STRIP.DEFAULT)
 else ifeq ($(origin STRIP),default)
@@ -330,6 +390,8 @@ else
 # environment [override], file, command line, override, automatic
 STRIP := $(STRIP.CUSTOM)
 endif # $(origin STRIP)
+
+FIX := gbafix
 
 # Deterministic build flags, for both clang and GCC
 SOURCE_DATE_EPOCH := 0
@@ -371,8 +433,10 @@ export TC
 export SO
 export EXE
 export CC
+export AS
 export CXX
 export AR
+export OCPY
 export STRIP
 export CFLAGS
 export CFLAGS.COMMON
@@ -383,6 +447,8 @@ export CFLAGS.GCOMMON.CHECK
 export CFLAGS.GCOMMON.COV
 export CFLAGS.GCOMMON.ASAN
 export CFLAGS.GCOMMON.UBSAN
+export ASFLAGS
+export ASFLAGS.COMMON
 export CXXFLAGS
 export CXXFLAGS.COMMON
 export CXXFLAGS.COMMON.DEBUG
