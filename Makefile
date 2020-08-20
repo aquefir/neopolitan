@@ -33,6 +33,10 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
+SFILES   := \
+	src/gbabios.s \
+	src/memcpy.s \
+	src/memset.s
 CFILES   := \
 	src/arr.c \
 	src/err.c \
