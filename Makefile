@@ -20,8 +20,8 @@ INCLUDES := include
 INCLUDEL := src
 
 # space-separated library name list
-LIBS      :=
-LIBDIRS   :=
+LIBS    :=
+LIBDIRS :=
 
 # frameworks (macOS target only)
 FWORKS :=
