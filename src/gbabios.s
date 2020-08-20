@@ -1,5 +1,7 @@
 @ -*- coding: utf-8 -*-
 
+.ifdef CFG_GBA
+
 .file "src/gbabios.s"
 .ident "AS: (devkitARM release 46) 2.27"
 
@@ -380,5 +382,7 @@ _bios_multi_boot:
 @_bios_sound_driver_vsync_on:
 @    SWI     0x29
 @    BX      LR
+
+.endif
 
 @ EOF

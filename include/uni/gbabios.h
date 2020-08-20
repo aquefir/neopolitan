@@ -7,7 +7,9 @@
 
 #ifndef INC_API__UNI_GBABIOS_H
 #define INC_API__UNI_GBABIOS_H
-#ifndef CFG_GBA
+
+#ifdef CFG_GBA
+
 #include "types/int.h"
 
 void _bios_soft_reset( void );
@@ -39,4 +41,5 @@ u32 _bios_midi_key_to_freq( void*, u8, u8 );
 s32 _bios_multi_boot( void*, u32 );
 
 #endif
+
 #endif /* INC_API__UNI_GBABIOS_H */
