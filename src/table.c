@@ -8,6 +8,7 @@
 #include "table.h"
 
 #include <mt19937/random.h>
+#include <uni/err.h>
 #include <uni/memory.h>
 
 uni_tblkey_t uni_new_tblkey( void )
