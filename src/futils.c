@@ -96,35 +96,37 @@ int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 
 	f = fname == NULL ? stdin : fopen( fname, "rb" );
 
-	if(!f)
+	if( !f )
 	{
 		return 1;
 	}
 
-	if(!fname)
+	if( !fname )
 	{
 		f = freopen( NULL, "rb", stdin );
 	}
 
-	data = NULL;
+	data    = NULL;
 	data_sz = 0;
 
-	for(;;)
+	for( ;; )
 	{
 		ptri r = fread( buffer, sizeof( u8 ), BUFFER_SZ, f );
 
-		data = !data ? uni_alloc( sizeof(u8) * r )
-			: uni_realloc( data, sizeof(u8) * (data_sz + r) );
+		data = !data
+			? uni_alloc( sizeof( u8 ) * r )
+			: uni_realloc( data, sizeof( u8 ) * ( data_sz + r ) );
 
-		uni_memcpy( data + data_sz, buffer, sizeof(u8) * r );
+		uni_memcpy( data + data_sz, buffer, sizeof( u8 ) * r );
 
 		data_sz += r;
 
-		if(r < BUFFER_SZ)
+		if( r < BUFFER_SZ )
 		{
-			if(ferror( f ))
+			if( ferror( f ) )
 			{
-				uni_perror( "Error occured in reading file. Exiting..." );
+				uni_perror(
+					"Error occured in reading file. Exiting..." );
 
 				return 1;
 			}
@@ -133,12 +135,12 @@ int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
 		}
 	}
 
-	if(!fname)
+	if( !fname )
 	{
 		f = freopen( NULL, "r", stdin );
 	}
 
-	*ret = data;
+	*ret    = data;
 	*ret_sz = data_sz;
 
 	return 0;

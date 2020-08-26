@@ -109,7 +109,7 @@ void* uni_tryrealloc( void* p, ptri sz )
 	{
 		void* ret = malloc( sz );
 
-		if(!ret)
+		if( !ret )
 		{
 			return ret;
 		}
