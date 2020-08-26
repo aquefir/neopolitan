@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/src",
+                "${workspaceFolder}/3rdparty/mt19937lib/include",
                 "${workspaceFolder}/3rdparty/teslib/include"
             ],
             "defines": [

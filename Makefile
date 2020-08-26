@@ -30,7 +30,7 @@ FWORKS :=
 # 3PLIBDIR is the base directory
 # 3PLIBS is the folder names in the base directory for each library
 3PLIBDIR := 3rdparty
-3PLIBS   := tes
+3PLIBS   := mt19937 tes
 
 # sources
 SFILES   := \
