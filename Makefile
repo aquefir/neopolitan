@@ -44,6 +44,7 @@ CFILES   := \
 	src/log.c \
 	src/memory.c \
 	src/str.c \
+	src/table.c \
 	src/utf8.c
 HFILES   := \
 	include/uni/types/float.h \
@@ -63,10 +64,12 @@ HFILES   := \
 	include/uni/memory.h \
 	include/uni/option.h \
 	include/uni/str.h \
+	include/uni/table.h \
 	include/uni/utf8.h \
 	include/uni/ver.h \
 	src/arr.h \
 	src/str.h \
+	src/table.h \
 	src/utf8.h
 CPPFILES :=
 HPPFILES :=
