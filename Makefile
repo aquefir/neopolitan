@@ -1,5 +1,5 @@
 ##############################################################################
-##                           Aquefir One Library™                           ##
+##                                  unilib                                  ##
 ##                                                                          ##
 ##                      Copyright © 2019-2020 Aquefir                       ##
 ##                       Released under BSD-2-Clause.                       ##
