@@ -28,4 +28,8 @@
 #define UNI_DEPRECATED
 #endif
 
+#define UNI_PACKED __attribute__( ( packed ) )
+
+#define UNI_ALIGN( _x ) __attribute__( ( aligned( _x ) ) )
+
 #endif /* INC_API__UNI_DECL_H */
