@@ -220,6 +220,7 @@ DSYMS := $(patsubst %,%.dSYM,$(TARGETS)) $(patsubst %,%.dSYM,$(TESTARGETS))
 
 clean:
 	$(RM) $(TARGETS)
+	$(RM) lib$(PROJECT).dll
 	$(RM) $(TESTARGETS)
 	$(RM) -r $(DSYMS)
 	$(RM) $(OFILES)
