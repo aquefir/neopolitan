@@ -12,6 +12,13 @@ Written by Alexander Nicholi
 §2. BUILD COMMAND
 ------------------
 
+As of October 2020, unilib has been restructured as a collection of smaller,
+modular subfolders in this monorepo. Whenever calling ‘make’, use the -C flag
+to tell it to change directories into the desired module’s folder. Note that
+each module has a new DEPENDS file in its etc/ directory listing what other
+modules it depends on at link time. Makefiles in unilib only build static
+libraries.
+
 Use a POSIX-compliant shell, and run ‘make’ to build the default target
 (debug). The ‘-j’ option is fully supported for job control, and can be given
 an argument for the number of parallel jobs with the form ‘-j$(nproc)’ (on
