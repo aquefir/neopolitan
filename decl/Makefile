@@ -37,9 +37,10 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
-SFILES   :=
-CFILES   :=
-HFILES   := \
+SFILES    :=
+CFILES    :=
+CPPFILES  :=
+PUBHFILES := \
 	include/uni/types/float.h \
 	include/uni/types/geo.h \
 	include/uni/types/int.h \
@@ -49,14 +50,13 @@ HFILES   := \
 	include/uni/types/vec.h \
 	include/uni/decl.h \
 	include/uni/ver.h
-CPPFILES :=
-HPPFILES :=
+PRVHFILES :=
 
 # test suite sources
-TES_CFILES   :=
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CFILES    :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk

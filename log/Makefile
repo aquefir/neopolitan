@@ -37,19 +37,19 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
-SFILES   :=
-CFILES   := \
+SFILES    :=
+CFILES    := \
 	src/log.c
-HFILES   := \
+CPPFILES  :=
+PUBHFILES := \
 	include/uni/log.h
-CPPFILES :=
-HPPFILES :=
+PRVHFILES :=
 
 # test suite sources
-TES_CFILES   :=
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CFILES    :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk

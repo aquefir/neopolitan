@@ -37,25 +37,25 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
-SFILES   :=
-CFILES   := \
+SFILES    :=
+CFILES    := \
 	src/str.c \
 	src/utf8.c
-HFILES   := \
+CPPFILES  :=
+PUBHFILES := \
 	include/uni/str.h \
-	include/uni/utf8.h \
+	include/uni/utf8.h
+PRVHFILES := \
 	src/str.h \
 	src/utf8.h
-CPPFILES :=
-HPPFILES :=
 
 # test suite sources
-TES_CFILES   := \
+TES_CFILES    := \
 	src/str.tes.c \
 	src/utf8.tes.c
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk

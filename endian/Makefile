@@ -34,21 +34,21 @@ FWORKS :=
 # 3PLIBDIR is the base directory
 # 3PLIBS is the folder names in the base directory for each library
 3PLIBDIR := 3rdparty
-3PLIBS   := tes
+3PLIBS   :=
 
 # sources
-SFILES   :=
-CFILES   :=
-HFILES   := \
+SFILES    :=
+CFILES    :=
+CPPFILES  :=
+PUBHFILES := \
 	include/uni/endian.h
-CPPFILES :=
-HPPFILES :=
+PRVHFILES :=
 
 # test suite sources
-TES_CFILES   :=
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CFILES    :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk

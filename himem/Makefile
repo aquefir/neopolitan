@@ -37,25 +37,25 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
-SFILES   := \
+SFILES    := \
 	src/gbabios.s \
 	src/memcpy.s \
 	src/memset.s
-CFILES   := \
+CFILES    := \
 	src/gbahimem.c \
 	src/memory.c
-HFILES   := \
+CPPFILES  :=
+PUBHFILES := \
 	include/uni/memory.h
+PRVHFILES := \
 	src/gbabios.h \
 	src/gbahimem.h
-CPPFILES :=
-HPPFILES :=
 
 # test suite sources
-TES_CFILES   :=
-TES_HFILES   :=
-TES_CPPFILES :=
-TES_HPPFILES :=
+TES_CFILES    :=
+TES_CPPFILES  :=
+TES_PUBHFILES :=
+TES_PRVHFILES :=
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk
