@@ -2,3 +2,4 @@ github.com/aquefir/unilib/decl
 github.com/aquefir/unilib/err
 github.com/aquefir/unilib/himem
 github.com/aquefir/unilib/log
+github.com/aquefir/unilib/mt19937

@@ -15,6 +15,8 @@
 				"${workspaceFolder}/himem/src",
 				"${workspaceFolder}/log/include",
 				"${workspaceFolder}/log/src",
+				"${workspaceFolder}/mt19937/include",
+				"${workspaceFolder}/mt19937/src",
 				"${workspaceFolder}/str/include",
 				"${workspaceFolder}/str/src",
 				"${workspaceFolder}/table/include",
