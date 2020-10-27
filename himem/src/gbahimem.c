@@ -7,6 +7,8 @@
 
 #include "gbabios.h"
 
+#ifdef CFG_GBA
+
 #include <uni/types/int.h>
 
 enum
@@ -203,3 +205,9 @@ void free( void* ptr )
 		}
 	}
 }
+
+#else
+
+int dummy;
+
+#endif /* CFG_GBA */
