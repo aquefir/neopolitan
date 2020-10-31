@@ -136,6 +136,63 @@ void uni_tbl_ins( struct uni_tbl* tbl, uni_tblkey_t key, const void* data )
 	}
 }
 
+uni_tblkey_t* uni_tbl_getkeys( struct uni_tbl* tbl, const void* data )
+{
+	uni_tblkey_t* ret;
+	ptri ret_cap = 4;
+	ptri ret_sz, i;
+
+	ret = uni_alloc( sizeof(uni_tblkey_t) * ret_cap );
+
+	for( i = 0, ret_sz = 0; i < tbl->rowct; ++i )
+	{
+		if(ret_sz >= ret_cap)
+		{
+			ret_cap <<= 1; /* *= 2 */
+			ret = uni_realloc( ret, ret_cap );
+		}
+
+		if( uni_memcmp( (u8*)(tbl->data) + (tbl->elemsz * i), data, tbl->elemsz))
+		{
+			ret[ret_sz] = tbl->keys[i];
+			ret_sz++;
+		}
+	}
+
+	if(ret_sz >= ret_cap)
+	{
+		ret_cap += 1;
+		ret = uni_realloc( ret, ret_cap );
+	}
+
+	/* terminate the list */
+	ret[ret_sz] = UNI_TBLKEY_INVALID;
+
+	return ret;
+}
+
+uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl* tbl, const void* data )
+{
+	if( !tbl || !data )
+	{
+		uni_die( );
+	}
+
+	{
+		ptri i;
+
+		for( i = 0; i < tbl->rowct; ++i )
+		{
+			if( uni_memcmp( (u8*)(tbl->data) + (tbl->elemsz * i), data, tbl->elemsz ))
+			{
+				return tbl->keys[i];
+			}
+		}
+	}
+
+	return 0;
+}
+
 void* uni_tbl_get( struct uni_tbl* tbl, uni_tblkey_t key )
 {
 	if( !tbl || !key )

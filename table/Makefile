@@ -19,14 +19,16 @@ AFILE  := 1
 
 # space-separated path list for #includes
 # <system> includes
-INCLUDES := include ../decl/include ../err/include ../himem/include \
-	../log/include ../mt19937/include
+INCLUDES := include
+ifeq ($(TP),Darwin)
+INCLUDES += /usr/local/include
+endif
 # "local" includes
 INCLUDEL := src
 
 # space-separated library name list
-LIBS    :=
-LIBDIRS :=
+LIBS    := tes uni_err uni_himem uni_log mt19937
+LIBDIRS := /usr/local/lib
 
 # frameworks (macOS target only)
 FWORKS :=
@@ -35,7 +37,7 @@ FWORKS :=
 # 3PLIBDIR is the base directory
 # 3PLIBS is the folder names in the base directory for each library
 3PLIBDIR := 3rdparty
-3PLIBS   := tes
+3PLIBS   :=
 
 # sources
 SFILES    :=
@@ -48,7 +50,8 @@ PRVHFILES := \
 	src/table.h
 
 # test suite sources
-TES_CFILES    :=
+TES_CFILES    := \
+	src/table.tes.c
 TES_CPPFILES  :=
 TES_PUBHFILES :=
 TES_PRVHFILES :=

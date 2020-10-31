@@ -8,6 +8,8 @@
 *.tes
 *.o
 *.obj
+*.gcno
+*.gcda
 *.a
 *.so
 *.dylib
