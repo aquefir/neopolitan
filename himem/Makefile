@@ -37,12 +37,13 @@ FWORKS :=
 3PLIBS   := tes
 
 # sources
-SFILES    := \
+SFILES.GBA := \
 	src/gbabios.s \
 	src/memcpy.s \
 	src/memset.s
-CFILES    := \
-	src/gbahimem.c \
+CFILES.GBA := \
+	src/gbahimem.c
+CFILES := \
 	src/memory.c
 CPPFILES  :=
 PUBHFILES := \
