@@ -20,15 +20,12 @@ AFILE  := 1
 # space-separated path list for #includes
 # <system> includes
 INCLUDES := include
-ifeq ($(TP),Darwin)
-INCLUDES += /usr/local/include
-endif
 # "local" includes
 INCLUDEL := src
 
 # space-separated library name list
 LIBS    := tes uni_err uni_himem uni_log mt19937
-LIBDIRS := /usr/local/lib
+LIBDIRS :=
 
 # frameworks (macOS target only)
 FWORKS :=
