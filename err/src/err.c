@@ -26,6 +26,9 @@ void uni_die( void )
 void uni_assert_fail(
 	const char* expr, const char* file, unsigned line, const char* func )
 {
+#ifdef CFG_GBA
+	_bios_halt( );
+#else
 	uni_perror(
 		"Assertion failed in file \"%s\" on line \"%u\", in function"
 		" \"%s\".\nExpression: %s",
@@ -33,10 +36,6 @@ void uni_assert_fail(
 		line,
 		func,
 		expr );
-
-#ifdef CFG_GBA
-	_bios_halt( );
-#else
 	abort( );
 #endif
 }
