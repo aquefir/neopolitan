@@ -1,5 +1,3 @@
-.ifdef CFG_GBA
-
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@                               unilib himem                               @@
 @@                                                                          @@
@@ -387,5 +385,3 @@ _bios_multi_boot:
 @_bios_sound_driver_vsync_on:
 @    SWI     0x29
 @    BX      LR
-
-.endif
