@@ -14,7 +14,8 @@
 #define UNI_C_API
 #endif
 
-#ifndef UNI_NODEPREC
+#if !defined( UNI_DEPRECATED )
+#if !defined( UNI_NODEPREC )
 #if defined( __GNUC__ ) || defined( __clang__ )
 #define UNI_DEPRECATED __attribute__( ( deprecated ) )
 #elif defined( _MSC_VER )
@@ -26,7 +27,8 @@
 #endif
 #else
 #define UNI_DEPRECATED
-#endif
+#endif /* !defined( UNI_NODEPREC ) */
+#endif /* !defined( UNI_DEPRECATED ) */
 
 #define UNI_PACKED __attribute__( ( packed ) )
 

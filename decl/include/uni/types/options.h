@@ -27,7 +27,7 @@ UNI_DECL_OPT( ptri );
 UNI_DECL_OPT( f16 );
 UNI_DECL_OPT( f32 );
 UNI_DECL_OPT( f64 );
-UNI_DECL_OPT( fmax );
+UNI_DECL_OPT( fbig );
 
 UNI_DECL_OPT_S( point2 );
 UNI_DECL_OPT_S( point2l );
