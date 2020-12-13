@@ -25,12 +25,46 @@
 			"defines": [
 				"CFG_LINUX",
 				"CFG_AMD64",
-				"CFG_LILENDIAN"
+				"CFG_LILENDIAN",
+				"__VSCODE_INTELLISENSE__"
 			],
 			"compilerPath": "/usr/bin/gcc",
 			"cStandard": "c89",
 			"cppStandard": "c++11",
 			"intelliSenseMode": "gcc-x64"
+		}, {
+			"name": "Mac",
+			"includePath": [
+				"${workspaceFolder}/arr/include",
+				"${workspaceFolder}/arr/src",
+				"${workspaceFolder}/chkmath/include",
+				"${workspaceFolder}/decl/include",
+				"${workspaceFolder}/endian/include",
+				"${workspaceFolder}/err/include",
+				"${workspaceFolder}/err/src",
+				"${workspaceFolder}/futils/include",
+				"${workspaceFolder}/futils/src",
+				"${workspaceFolder}/himem/include",
+				"${workspaceFolder}/himem/src",
+				"${workspaceFolder}/log/include",
+				"${workspaceFolder}/log/src",
+				"${workspaceFolder}/mt19937/include",
+				"${workspaceFolder}/mt19937/src",
+				"${workspaceFolder}/str/include",
+				"${workspaceFolder}/str/src",
+				"${workspaceFolder}/table/include",
+				"${workspaceFolder}/table/src"
+			],
+			"defines": [
+				"CFG_DARWIN",
+				"CFG_AMD64",
+				"CFG_LILENDIAN",
+				"__VSCODE_INTELLISENSE__"
+			],
+			"compilerPath": "/usr/bin/clang",
+			"cStandard": "c89",
+			"cppStandard": "c++11",
+			"intelliSenseMode": "clang-x64"
 		}
 	],
 	"version": 4
