@@ -13,7 +13,7 @@
 
 #include "utf8.h"
 
-ptri uni_strlen( const char* in )
+ptri uni_strlen( const char * in )
 {
 	ptri i;
 
@@ -28,7 +28,7 @@ ptri uni_strlen( const char* in )
 	return i;
 }
 
-ptri uni_strlencp( const char* in )
+ptri uni_strlencp( const char * in )
 {
 	ptri i = 0;
 
@@ -40,7 +40,7 @@ ptri uni_strlencp( const char* in )
 	return !_uni_scanu8( in, NULL, &i, 0, 0, 0 ) ? i : 0;
 }
 
-char* uni_strdup( const char* in )
+char * uni_strdup( const char * in )
 {
 	if( !in )
 	{
@@ -48,7 +48,7 @@ char* uni_strdup( const char* in )
 	}
 
 	{
-		char* ret;
+		char * ret;
 		const ptri sz = uni_strlen( in );
 
 		ret = uni_alloc( sz + 1 );
@@ -60,7 +60,7 @@ char* uni_strdup( const char* in )
 	}
 }
 
-char* uni_strndup( const char* in, ptri len )
+char * uni_strndup( const char * in, ptri len )
 {
 	if( !in || !len )
 	{
@@ -68,7 +68,7 @@ char* uni_strndup( const char* in, ptri len )
 	}
 
 	{
-		char* ret;
+		char * ret;
 		const ptri sz  = uni_strlen( in );
 		const ptri amt = sz > len ? len : sz;
 
@@ -81,7 +81,7 @@ char* uni_strndup( const char* in, ptri len )
 	}
 }
 
-char** uni_strdupv( char** in )
+char ** uni_strdupv( char ** in )
 {
 	if( !in )
 	{
@@ -89,11 +89,11 @@ char** uni_strdupv( char** in )
 	}
 
 	{
-		char** ret;
+		char ** ret;
 		ptri i;
 		const ptri arrsz = uni_strlenv( in );
 
-		ret = uni_alloc0( sizeof( char* ) * ( arrsz + 1 ) );
+		ret = uni_alloc0( sizeof( char * ) * ( arrsz + 1 ) );
 
 		for( i = 0; i < arrsz; ++i )
 		{
@@ -104,9 +104,9 @@ char** uni_strdupv( char** in )
 	}
 }
 
-char* uni_strnfill( ptri sz, char c )
+char * uni_strnfill( ptri sz, char c )
 {
-	char* ret;
+	char * ret;
 
 	if( !sz )
 	{
@@ -121,7 +121,7 @@ char* uni_strnfill( ptri sz, char c )
 	return ret;
 }
 
-char* uni_strstr( const char* nee, const char* hay )
+char * uni_strstr( const char * nee, const char * hay )
 {
 	if( !nee || !hay )
 	{
@@ -153,7 +153,7 @@ char* uni_strstr( const char* nee, const char* hay )
 
 			if( match )
 			{
-				return (char*)( hay + i );
+				return (char *)( hay + i );
 			}
 		}
 
@@ -161,7 +161,7 @@ char* uni_strstr( const char* nee, const char* hay )
 	}
 }
 
-char* uni_strrstr( const char* nee, const char* hay )
+char * uni_strrstr( const char * nee, const char * hay )
 {
 	if( !nee || !hay )
 	{
@@ -173,7 +173,7 @@ char* uni_strrstr( const char* nee, const char* hay )
 		const ptri nee_sz    = uni_strlen( nee );
 		const ptri hay_sz    = uni_strlen( hay );
 		const ptri hay_limit = hay_sz - nee_sz;
-		char* ret;
+		char * ret;
 
 		for( i = 0; i < hay_limit; ++i )
 		{
@@ -194,7 +194,7 @@ char* uni_strrstr( const char* nee, const char* hay )
 
 			if( match )
 			{
-				ret = (char*)( hay + i );
+				ret = (char *)( hay + i );
 			}
 		}
 
@@ -202,7 +202,7 @@ char* uni_strrstr( const char* nee, const char* hay )
 	}
 }
 
-int uni_strequ( const char* a, const char* b )
+int uni_strequ( const char * a, const char * b )
 {
 	if( !a || !b )
 	{
@@ -231,7 +231,7 @@ int uni_strequ( const char* a, const char* b )
 	}
 }
 
-int uni_strpre( const char* a, const char* b )
+int uni_strpre( const char * a, const char * b )
 {
 	if( !a || !b )
 	{
@@ -260,7 +260,7 @@ int uni_strpre( const char* a, const char* b )
 	}
 }
 
-int uni_strsuf( const char* a, const char* b )
+int uni_strsuf( const char * a, const char * b )
 {
 	if( !a || !b )
 	{
@@ -289,7 +289,7 @@ int uni_strsuf( const char* a, const char* b )
 	}
 }
 
-int uni_isascii( const char* in )
+int uni_isascii( const char * in )
 {
 	if( !in )
 	{
@@ -376,7 +376,7 @@ int uni_xdigitval( char c )
 	return (u8)c - 0x37;
 }
 
-char* uni_strchomp( char* in, char c )
+char * uni_strchomp( char * in, char c )
 {
 	if( !in || !c )
 	{
@@ -408,7 +408,7 @@ char* uni_strchomp( char* in, char c )
 	}
 }
 
-char* uni_strchug( char* in, char c )
+char * uni_strchug( char * in, char c )
 {
 	if( !in || !c )
 	{
@@ -433,7 +433,7 @@ char* uni_strchug( char* in, char c )
 	}
 }
 
-char** uni_strsplit( const char* in, const char* delim, int max )
+char ** uni_strsplit( const char * in, const char * delim, int max )
 {
 	if( !in || !delim )
 	{
@@ -441,14 +441,14 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 	}
 
 	{
-		char** ret;
+		char ** ret;
 		ptri i, last_i, sz, ret_i, ret_sz;
 		const ptri in_sz    = uni_strlen( in );
 		const ptri delim_sz = uni_strlen( delim );
 
 		if( delim_sz > in_sz )
 		{
-			return uni_alloc0( sizeof( char* ) );
+			return uni_alloc0( sizeof( char * ) );
 		}
 
 		if( max < 1 )
@@ -460,7 +460,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		else
 		{
 			ret_sz = max + 1;
-			ret    = uni_alloc( sizeof( char* ) * ret_sz );
+			ret    = uni_alloc( sizeof( char * ) * ret_sz );
 		}
 
 		ret_i  = 0;
@@ -473,14 +473,15 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 				/* we hit a delimiter. allocate it off */
 				if( ret_sz == 0 )
 				{
-					ret = uni_alloc( sizeof( char* ) * 2 );
+					ret = uni_alloc(
+						sizeof( char * ) * 2 );
 					ret_sz = 2;
 				}
 				else
 					while( ret_i >= ret_sz )
 					{
 						ret = uni_realloc( ret,
-							sizeof( char* ) *
+							sizeof( char * ) *
 								( ret_sz *
 									2 ) );
 						ret_sz <<= 1; /* *= 2 */
@@ -514,7 +515,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 
 		if( !ret_i && !ret_sz )
 		{
-			ret    = uni_alloc( sizeof( char* ) * 2 );
+			ret    = uni_alloc( sizeof( char * ) * 2 );
 			ret[0] = uni_strdup( in );
 			ret[1] = NULL;
 
@@ -524,7 +525,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		while( ret_i >= ret_sz )
 		{
 			ret = uni_realloc(
-				ret, sizeof( char* ) * ( ret_sz << 1 ) );
+				ret, sizeof( char * ) * ( ret_sz << 1 ) );
 			ret_sz <<= 1; /* *= 2 */
 		}
 
@@ -542,7 +543,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 		while( ret_i >= ret_sz )
 		{
 			ret = uni_realloc(
-				ret, sizeof( char* ) * ( ret_sz << 1 ) );
+				ret, sizeof( char * ) * ( ret_sz << 1 ) );
 			ret_sz <<= 1; /* *= 2 */
 		}
 
@@ -553,7 +554,7 @@ char** uni_strsplit( const char* in, const char* delim, int max )
 	}
 }
 
-ptri uni_strlenv( char** arr )
+ptri uni_strlenv( char ** arr )
 {
 	if( !arr )
 	{
@@ -570,7 +571,7 @@ ptri uni_strlenv( char** arr )
 	}
 }
 
-void uni_strfreev( char** arr )
+void uni_strfreev( char ** arr )
 {
 	if( !arr )
 	{
@@ -589,7 +590,7 @@ void uni_strfreev( char** arr )
 	}
 }
 
-int uni_strequv( char** arr_a, char** arr_b )
+int uni_strequv( char ** arr_a, char ** arr_b )
 {
 	if( !arr_a || !arr_b )
 	{
@@ -618,7 +619,7 @@ int uni_strequv( char** arr_a, char** arr_b )
 	}
 }
 
-char* uni_strjoin( const char* delim, ... )
+char * uni_strjoin( const char * delim, ... )
 {
 	if( !delim )
 	{
@@ -627,14 +628,14 @@ char* uni_strjoin( const char* delim, ... )
 
 	{
 		va_list args;
-		char* s;
-		char* ret;
+		char * s;
+		char * ret;
 		ptri sz, sz2, i;
 		const ptri delim_sz = uni_strlen( delim );
 
 		va_start( args, delim );
 
-		s = va_arg( args, char* );
+		s = va_arg( args, char * );
 
 		if( !s )
 		{
@@ -647,12 +648,12 @@ char* uni_strjoin( const char* delim, ... )
 		/* get the total size to allocate first */
 		sz = uni_strlen( s ) + 1;
 
-		s = va_arg( args, char* );
+		s = va_arg( args, char * );
 
 		while( s )
 		{
 			sz += delim_sz + uni_strlen( s );
-			s = va_arg( args, char* );
+			s = va_arg( args, char * );
 		}
 
 		va_end( args );
@@ -662,12 +663,12 @@ char* uni_strjoin( const char* delim, ... )
 
 		va_start( args, delim );
 
-		s   = va_arg( args, char* );
+		s   = va_arg( args, char * );
 		sz2 = uni_strlen( s );
 		uni_memcpy( ret, s, sz2 );
 		i = sz2;
 
-		s = va_arg( args, char* );
+		s = va_arg( args, char * );
 
 		while( s )
 		{
@@ -675,7 +676,7 @@ char* uni_strjoin( const char* delim, ... )
 			uni_memcpy( ret + i, delim, delim_sz );
 			uni_memcpy( ret + i + delim_sz, s, sz2 );
 			i += sz2 + delim_sz;
-			s = va_arg( args, char* );
+			s = va_arg( args, char * );
 		}
 
 		ret[i] = '\0';
@@ -685,7 +686,7 @@ char* uni_strjoin( const char* delim, ... )
 	}
 }
 
-char* uni_strjoinv( const char* delim, char** arr )
+char * uni_strjoinv( const char * delim, char ** arr )
 {
 	if( !delim || !arr )
 	{
@@ -694,7 +695,7 @@ char* uni_strjoinv( const char* delim, char** arr )
 
 	{
 		ptri i, j, sz;
-		char* ret;
+		char * ret;
 		const ptri delim_sz = uni_strlen( delim );
 		const ptri arr_sz   = uni_strlenv( arr );
 
@@ -725,9 +726,9 @@ char* uni_strjoinv( const char* delim, char** arr )
 	}
 }
 
-struct uni_str* uni_str_init( const char* init )
+struct uni_str * uni_str_init( const char * init )
 {
-	struct uni_str* ret;
+	struct uni_str * ret;
 
 	ret       = uni_alloc( sizeof( struct uni_str ) );
 	ret->data = init ? uni_strdup( init ) : NULL;
@@ -737,9 +738,9 @@ struct uni_str* uni_str_init( const char* init )
 	return ret;
 }
 
-struct uni_str* uni_str_initsz( ptri size )
+struct uni_str * uni_str_initsz( ptri size )
 {
-	struct uni_str* ret;
+	struct uni_str * ret;
 
 	ret       = uni_alloc( sizeof( struct uni_str ) );
 	ret->data = size ? uni_alloc0( sizeof( char ) * ( size + 1 ) ) : NULL;
@@ -749,7 +750,7 @@ struct uni_str* uni_str_initsz( ptri size )
 	return ret;
 }
 
-void uni_str_fini( struct uni_str* str )
+void uni_str_fini( struct uni_str * str )
 {
 	if( str )
 	{
@@ -762,7 +763,7 @@ void uni_str_fini( struct uni_str* str )
 	}
 }
 
-struct uni_str* uni_str_dup( struct uni_str* str )
+struct uni_str * uni_str_dup( struct uni_str * str )
 {
 	if( !str )
 	{
@@ -770,20 +771,20 @@ struct uni_str* uni_str_dup( struct uni_str* str )
 	}
 
 	{
-		struct uni_str* ret;
+		struct uni_str * ret;
 
 		ret       = uni_alloc( sizeof( struct uni_str ) );
 		ret->data = str->data
 			? uni_alloc( sizeof( char ) * str->sz + 1 )
 			: NULL;
-		ret->sz  = str->sz;
-		ret->cap = str->sz + 1;
+		ret->sz   = str->sz;
+		ret->cap  = str->sz + 1;
 
 		return ret;
 	}
 }
 
-ptri uni_str_getsz( struct uni_str* str )
+ptri uni_str_getsz( struct uni_str * str )
 {
 	if( !str )
 	{
@@ -793,7 +794,7 @@ ptri uni_str_getsz( struct uni_str* str )
 	return str->sz;
 }
 
-char* uni_str_make( struct uni_str* str )
+char * uni_str_make( struct uni_str * str )
 {
 	if( !str )
 	{
@@ -801,7 +802,7 @@ char* uni_str_make( struct uni_str* str )
 	}
 
 	{
-		char* ret;
+		char * ret;
 
 		ret = uni_alloc( sizeof( char ) * str->sz + 1 );
 		uni_memcpy( ret, str->data, str->sz );
@@ -811,7 +812,7 @@ char* uni_str_make( struct uni_str* str )
 	}
 }
 
-char* uni_str_mkslice( struct uni_str* str, struct rangep r )
+char * uni_str_mkslice( struct uni_str * str, struct rangep r )
 {
 	if( !str || r.hi <= r.lo || r.hi > str->sz )
 	{
@@ -819,7 +820,7 @@ char* uni_str_mkslice( struct uni_str* str, struct rangep r )
 	}
 
 	{
-		char* ret;
+		char * ret;
 		const ptri sz = r.hi - r.lo;
 
 		ret = uni_alloc( sizeof( char ) * ( sz + 1 ) );
@@ -830,7 +831,7 @@ char* uni_str_mkslice( struct uni_str* str, struct rangep r )
 	}
 }
 
-int uni_str_app( struct uni_str* str, const char* in )
+int uni_str_app( struct uni_str * str, const char * in )
 {
 	if( !str || !in )
 	{
@@ -848,7 +849,7 @@ int uni_str_app( struct uni_str* str, const char* in )
 		str->data =
 			uni_realloc( str->data, sizeof( char ) * str->cap );
 
-		uni_memcpy( (u8*)( str->data ) + str->sz, in, in_sz );
+		uni_memcpy( (u8 *)( str->data ) + str->sz, in, in_sz );
 		str->sz += in_sz;
 		str->data[str->sz] = '\0';
 
@@ -856,7 +857,7 @@ int uni_str_app( struct uni_str* str, const char* in )
 	}
 }
 
-int uni_str_appch( struct uni_str* str, char in )
+int uni_str_appch( struct uni_str * str, char in )
 {
 	if( !str )
 	{
@@ -880,7 +881,7 @@ int uni_str_appch( struct uni_str* str, char in )
 	}
 }
 
-int uni_str_prep( struct uni_str* str, const char* in )
+int uni_str_prep( struct uni_str * str, const char * in )
 {
 	if( !str || !in )
 	{
@@ -889,7 +890,7 @@ int uni_str_prep( struct uni_str* str, const char* in )
 
 	{
 		const ptri in_sz = uni_strlen( in );
-		char* tmpbuf;
+		char * tmpbuf;
 
 		while( str->sz + in_sz + 1 >= str->cap )
 		{
@@ -899,7 +900,7 @@ int uni_str_prep( struct uni_str* str, const char* in )
 		tmpbuf = uni_alloc( sizeof( char ) * str->cap );
 
 		uni_memcpy( tmpbuf, in, in_sz );
-		uni_memcpy( (u8*)( tmpbuf ) + in_sz, str->data, str->sz );
+		uni_memcpy( (u8 *)( tmpbuf ) + in_sz, str->data, str->sz );
 		str->sz += in_sz;
 		tmpbuf[str->sz] = '\0';
 

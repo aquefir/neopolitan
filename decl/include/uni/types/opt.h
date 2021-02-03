@@ -29,14 +29,14 @@
 #define UNI_DECL_OPT_P( TYPE ) \
 	UNI_OPTIONP( TYPE ) \
 	{ \
-		TYPE* val; \
+		TYPE * val; \
 		u8 is; \
 	}; \
 	struct _dummy
 #define UNI_DECL_OPT_SP( TYPE ) \
 	UNI_OPTIONP( TYPE ) \
 	{ \
-		struct TYPE* val; \
+		struct TYPE * val; \
 		u8 is; \
 	}; \
 	struct _dummy

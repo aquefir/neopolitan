@@ -11,9 +11,9 @@
 #include <uni/err.h>
 #include <uni/memory.h>
 
-struct uni_arr* uni_arr_init( u32 elemsz )
+struct uni_arr * uni_arr_init( u32 elemsz )
 {
-	struct uni_arr* ret;
+	struct uni_arr * ret;
 
 	if( !elemsz )
 	{
@@ -30,9 +30,9 @@ struct uni_arr* uni_arr_init( u32 elemsz )
 	return ret;
 }
 
-struct uni_arr* uni_arr_initsz( u32 elemsz, u32 count )
+struct uni_arr * uni_arr_initsz( u32 elemsz, u32 count )
 {
-	struct uni_arr* ret;
+	struct uni_arr * ret;
 
 	if( !elemsz )
 	{
@@ -66,7 +66,7 @@ struct uni_arr* uni_arr_initsz( u32 elemsz, u32 count )
 	return ret;
 }
 
-void uni_arr_fini( struct uni_arr* arr )
+void uni_arr_fini( struct uni_arr * arr )
 {
 	if( !arr )
 	{
@@ -84,9 +84,9 @@ void uni_arr_fini( struct uni_arr* arr )
 	uni_free( arr );
 }
 
-struct uni_arr* uni_arr_dup( struct uni_arr* arr )
+struct uni_arr * uni_arr_dup( struct uni_arr * arr )
 {
-	struct uni_arr* ret;
+	struct uni_arr * ret;
 
 	if( !arr )
 	{
@@ -114,7 +114,7 @@ struct uni_arr* uni_arr_dup( struct uni_arr* arr )
 	return ret;
 }
 
-ptri uni_arr_getsz( struct uni_arr* arr )
+ptri uni_arr_getsz( struct uni_arr * arr )
 {
 	if( !arr )
 	{
@@ -124,7 +124,7 @@ ptri uni_arr_getsz( struct uni_arr* arr )
 	return arr->sz;
 }
 
-u32 uni_arr_getelemsz( struct uni_arr* arr )
+u32 uni_arr_getelemsz( struct uni_arr * arr )
 {
 	if( !arr )
 	{
@@ -134,7 +134,7 @@ u32 uni_arr_getelemsz( struct uni_arr* arr )
 	return arr->elemsz;
 }
 
-void* uni_arr_make( struct uni_arr* arr )
+void * uni_arr_make( struct uni_arr * arr )
 {
 	if( !arr )
 	{
@@ -142,7 +142,7 @@ void* uni_arr_make( struct uni_arr* arr )
 	}
 
 	{
-		void* ret;
+		void * ret;
 		ptri sz;
 
 		if( !arr->data )
@@ -158,7 +158,7 @@ void* uni_arr_make( struct uni_arr* arr )
 	}
 }
 
-void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
+void * uni_arr_mkslice( struct uni_arr * arr, struct rangep r )
 {
 	if( !arr )
 	{
@@ -166,7 +166,7 @@ void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
 	}
 
 	{
-		void* ret;
+		void * ret;
 		ptri sz;
 
 		if( !arr->data || r.hi <= r.lo || r.hi > arr->sz )
@@ -182,7 +182,7 @@ void* uni_arr_mkslice( struct uni_arr* arr, struct rangep r )
 	}
 }
 
-int uni_arr_app( struct uni_arr* arr, void* data )
+int uni_arr_app( struct uni_arr * arr, void * data )
 {
 	if( !arr || !data )
 	{
@@ -207,7 +207,7 @@ int uni_arr_app( struct uni_arr* arr, void* data )
 	return 0;
 }
 
-int uni_arr_prep( struct uni_arr* arr, void* data )
+int uni_arr_prep( struct uni_arr * arr, void * data )
 {
 	if( !arr || !data )
 	{
@@ -216,7 +216,7 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 
 	if( arr->sz >= arr->cap )
 	{
-		u8* newdata;
+		u8 * newdata;
 
 		newdata = uni_alloc( arr->elemsz * arr->cap << 1 );
 		arr->cap <<= 1;
@@ -246,7 +246,7 @@ int uni_arr_prep( struct uni_arr* arr, void* data )
 	return 0;
 }
 
-int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
+int uni_arr_ins( struct uni_arr * arr, ptri ind, void * data )
 {
 	if( !arr || !data || ind > arr->sz )
 	{
@@ -291,7 +291,7 @@ int uni_arr_ins( struct uni_arr* arr, ptri ind, void* data )
 	return 0;
 }
 
-void uni_arr_ovr( struct uni_arr* arr, ptri ind, void* data )
+void uni_arr_ovr( struct uni_arr * arr, ptri ind, void * data )
 {
 	if( !arr || !data || ind >= arr->sz )
 	{
@@ -301,7 +301,7 @@ void uni_arr_ovr( struct uni_arr* arr, ptri ind, void* data )
 	uni_memcpy( arr->data + ( arr->elemsz * ind ), data, arr->elemsz );
 }
 
-struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
+struct uni_arr * uni_arr_conc( struct uni_arr * arr, ... )
 {
 	if( !arr )
 	{
@@ -309,15 +309,15 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 	}
 
 	{
-		struct uni_arr* ret;
-		struct uni_arr* cur;
+		struct uni_arr * ret;
+		struct uni_arr * cur;
 		ptri newsz, i;
 		u32 elemsz;
 		va_list args;
 
 		va_start( args, arr );
 
-		cur    = va_arg( args, struct uni_arr* );
+		cur    = va_arg( args, struct uni_arr * );
 		elemsz = arr->elemsz;
 		newsz  = 0;
 
@@ -332,7 +332,7 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 				return NULL;
 			}
 
-			cur = va_arg( args, struct uni_arr* );
+			cur = va_arg( args, struct uni_arr * );
 		}
 
 		va_end( args );
@@ -345,7 +345,7 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 
 		va_start( args, arr );
 
-		cur = va_arg( args, struct uni_arr* );
+		cur = va_arg( args, struct uni_arr * );
 		i   = 0;
 
 		while( cur )
@@ -355,14 +355,14 @@ struct uni_arr* uni_arr_conc( struct uni_arr* arr, ... )
 				( ret->elemsz * cur->sz ) );
 			i += cur->sz;
 
-			cur = va_arg( args, struct uni_arr* );
+			cur = va_arg( args, struct uni_arr * );
 		}
 
 		return ret;
 	}
 }
 
-struct uni_arr* uni_arr_concv( struct uni_arr** arr )
+struct uni_arr * uni_arr_concv( struct uni_arr ** arr )
 {
 	if( !arr )
 	{
@@ -370,7 +370,7 @@ struct uni_arr* uni_arr_concv( struct uni_arr** arr )
 	}
 
 	{
-		struct uni_arr* ret;
+		struct uni_arr * ret;
 		ptri newsz, i;
 		u32 elemsz;
 
@@ -398,7 +398,7 @@ struct uni_arr* uni_arr_concv( struct uni_arr** arr )
 	}
 }
 
-struct uni_arr* uni_arr_slice( struct uni_arr* arr, struct rangep r )
+struct uni_arr * uni_arr_slice( struct uni_arr * arr, struct rangep r )
 {
 	if( !arr || r.hi <= r.lo || r.hi > arr->sz )
 	{
@@ -406,7 +406,7 @@ struct uni_arr* uni_arr_slice( struct uni_arr* arr, struct rangep r )
 	}
 
 	{
-		struct uni_arr* ret;
+		struct uni_arr * ret;
 		const ptri sz = r.hi - r.lo;
 
 		ret = uni_arr_initsz( arr->elemsz, sz );

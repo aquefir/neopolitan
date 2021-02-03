@@ -12,8 +12,8 @@
 #include <uni/types/options.h>
 #include <uni/types/int.h>
 
-UNI_OPTION( ptri ) uni_filesz( const char* );
-int uni_buffile( const char*, u8*, ptri );
-int uni_loadfile( const char*, u8**, ptri* );
+UNI_OPTION( ptri ) uni_filesz( const char * );
+int uni_buffile( const char *, u8 *, ptri );
+int uni_loadfile( const char *, u8 **, ptri * );
 
 #endif /* INC_API__UNI_FUTILS_H */

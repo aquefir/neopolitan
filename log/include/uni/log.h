@@ -8,8 +8,8 @@
 #ifndef INC_API__UNI_LOG_H
 #define INC_API__UNI_LOG_H
 
-int uni_print( const char*, ... );
-int uni_pwarn( const char*, ... );
-int uni_perror( const char*, ... );
+int uni_print( const char *, ... );
+int uni_pwarn( const char *, ... );
+int uni_perror( const char *, ... );
 
 #endif /* INC_API__UNI_LOG_H */

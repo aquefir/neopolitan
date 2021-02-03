@@ -13,13 +13,13 @@
 #include <uni/types/int.h>
 
 void initheap( void );
-void* malloc( ptri );
-void free( void* );
+void * malloc( ptri );
+void free( void * );
 
-void memset( void*, u8, ptri );
-void memcpy( void*, const void*, ptri );
+void memset( void *, u8, ptri );
+void memcpy( void *, const void *, ptri );
 
-ptri _memsize( void* );
+ptri _memsize( void * );
 
 #endif
 

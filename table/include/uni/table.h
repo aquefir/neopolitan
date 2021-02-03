@@ -21,14 +21,14 @@ typedef u32 uni_tblkey_t;
 struct uni_tbl;
 
 uni_tblkey_t uni_new_tblkey( void );
-int uni_chk_tblkey( struct uni_tbl*, uni_tblkey_t );
+int uni_chk_tblkey( struct uni_tbl *, uni_tblkey_t );
 
-struct uni_tbl* uni_tbl_init( u32 );
-void uni_tbl_fini( struct uni_tbl* );
+struct uni_tbl * uni_tbl_init( u32 );
+void uni_tbl_fini( struct uni_tbl * );
 
-void uni_tbl_ins( struct uni_tbl*, uni_tblkey_t, const void* );
-void* uni_tbl_get( struct uni_tbl*, uni_tblkey_t );
-uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl*, const void* );
-void uni_tbl_del( struct uni_tbl*, uni_tblkey_t );
+void uni_tbl_ins( struct uni_tbl *, uni_tblkey_t, const void * );
+void * uni_tbl_get( struct uni_tbl *, uni_tblkey_t );
+uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl *, const void * );
+void uni_tbl_del( struct uni_tbl *, uni_tblkey_t );
 
 #endif /* INC_API__UNI_TABLE_H */

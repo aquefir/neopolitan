@@ -12,7 +12,7 @@
 
 struct uni_str
 {
-	char* data;
+	char * data;
 	ptri sz, cap, cpct;
 };
 

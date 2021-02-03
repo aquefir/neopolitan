@@ -9,7 +9,7 @@
 #define INC_API__UNI_TYPES_INT_H
 
 #if !defined( NULL )
-#define NULL ( (void*)0 )
+#define NULL ( (void *)0 )
 #endif /* !defined( NULL ) */
 
 #ifdef _MSC_VER

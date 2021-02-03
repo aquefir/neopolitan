@@ -48,7 +48,7 @@ struct alloc
 
 void initheap( void )
 {
-	struct alloc* head = (struct alloc*)EWRAM;
+	struct alloc * head = (struct alloc *)EWRAM;
 
 	/* no initialisation yet. make one big block now */
 	head->flags  = MAGICNUM;
@@ -57,16 +57,16 @@ void initheap( void )
 	head->prev   = head->next;
 }
 
-ptri _memsize( void* p )
+ptri _memsize( void * p )
 {
-	struct alloc* head = (struct alloc*)EWRAM;
-	struct alloc* cur;
+	struct alloc * head = (struct alloc *)EWRAM;
+	struct alloc * cur;
 
-	for( cur = (struct alloc*)( ( (ptri)head->next << 2 ) | EWRAM );
-		(struct alloc*)( ( cur->next << 2 ) | EWRAM ) != head;
-		cur = (struct alloc*)( ( (ptri)cur->next << 2 ) | EWRAM ) )
+	for( cur = (struct alloc *)( ( (ptri)head->next << 2 ) | EWRAM );
+		(struct alloc *)( ( cur->next << 2 ) | EWRAM ) != head;
+		cur = (struct alloc *)( ( (ptri)cur->next << 2 ) | EWRAM ) )
 	{
-		if( (u8*)cur + sizeof( struct alloc ) == p )
+		if( (u8 *)cur + sizeof( struct alloc ) == p )
 		{
 			return cur->wordsz << 2;
 		}
@@ -75,7 +75,7 @@ ptri _memsize( void* p )
 	return 0;
 }
 
-void* malloc( ptri sz )
+void * malloc( ptri sz )
 {
 	/* Align to 4 bytes */
 	if( sz & 3 )
@@ -90,8 +90,8 @@ void* malloc( ptri sz )
 	}
 
 	{
-		struct alloc* head = (struct alloc*)EWRAM;
-		struct alloc* pos  = (struct alloc*)EWRAM;
+		struct alloc * head = (struct alloc *)EWRAM;
+		struct alloc * pos  = (struct alloc *)EWRAM;
 		u32 foundsz;
 
 		for( ;; )
@@ -117,12 +117,12 @@ void* malloc( ptri sz )
 				{
 					/* block is much bigger than requested
 					 * size split off the rest */
-					struct alloc* split;
-					struct alloc* temp;
+					struct alloc * split;
+					struct alloc * temp;
 
 					foundsz -= sizeof( struct alloc ) + sz;
 
-					split = (struct alloc*)( pos +
+					split = (struct alloc *)( pos +
 						sizeof( struct alloc ) + sz );
 					pos->flags |= FLAGS_INUSE_MASK;
 					pos->wordsz = sz >> 2;
@@ -139,7 +139,8 @@ void* malloc( ptri sz )
 						( (ptri)split >> 2 ) & 0xFFFF;
 
 					temp = (struct
-						alloc*)( ( split->next << 2 ) |
+						alloc *)( ( split->next
+								  << 2 ) |
 						EWRAM );
 
 					if( temp != head )
@@ -149,23 +150,23 @@ void* malloc( ptri sz )
 							0xFFFF;
 					}
 
-					return (u8*)pos +
+					return (u8 *)pos +
 						sizeof( struct alloc );
 				}
 			}
 
-			if( (struct alloc*)( ( pos->next << 2 ) | EWRAM ) ==
+			if( (struct alloc *)( ( pos->next << 2 ) | EWRAM ) ==
 				head )
 			{
 				return NULL;
 			}
 
-			pos = (struct alloc*)( ( pos->next << 2 ) | EWRAM );
+			pos = (struct alloc *)( ( pos->next << 2 ) | EWRAM );
 		}
 	}
 }
 
-void free( void* ptr )
+void free( void * ptr )
 {
 	if( !ptr )
 	{
@@ -173,11 +174,11 @@ void free( void* ptr )
 	}
 
 	{
-		struct alloc* head = (struct alloc*)EWRAM;
-		struct alloc* blk =
-			(struct alloc*)( (u8*)ptr - sizeof( struct alloc ) );
-		struct alloc* next =
-			(struct alloc*)( ( blk->next << 2 ) | EWRAM );
+		struct alloc * head = (struct alloc *)EWRAM;
+		struct alloc * blk =
+			(struct alloc *)( (u8 *)ptr - sizeof( struct alloc ) );
+		struct alloc * next =
+			(struct alloc *)( ( blk->next << 2 ) | EWRAM );
 
 		blk->flags &= ~FLAGS_INUSE_MASK;
 
@@ -190,7 +191,7 @@ void free( void* ptr )
 				( sizeof( struct alloc ) >> 2 ) + next->wordsz;
 			next->flags &= ~FLAGS_MAGIC_MASK;
 			blk->next = ( next->next >> 2 ) & 0xFFFF;
-			next = (struct alloc*)( ( blk->next << 2 ) | EWRAM );
+			next = (struct alloc *)( ( blk->next << 2 ) | EWRAM );
 
 			if( next != head )
 			{
@@ -202,10 +203,10 @@ void free( void* ptr )
 		 * block if it is also not in use */
 		if( blk != head )
 		{
-			struct alloc* prev =
-				(struct alloc*)( ( blk->prev << 2 ) | EWRAM );
-			struct alloc* next =
-				(struct alloc*)( ( blk->next << 2 ) | EWRAM );
+			struct alloc * prev =
+				(struct alloc *)( ( blk->prev << 2 ) | EWRAM );
+			struct alloc * next =
+				(struct alloc *)( ( blk->next << 2 ) | EWRAM );
 
 			if( !( prev->flags & FLAGS_INUSE_MASK ) )
 			{

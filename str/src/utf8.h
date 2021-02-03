@@ -11,6 +11,6 @@
 #include <uni/types/int.h>
 #include <uni/utf8.h>
 
-int _uni_scanu8( const char*, ptri*, ptri*, int, ptri, int );
+int _uni_scanu8( const char *, ptri *, ptri *, int, ptri, int );
 
 #endif /* INC__UNI_UTF8_H */

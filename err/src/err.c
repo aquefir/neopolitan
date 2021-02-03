@@ -23,8 +23,10 @@ void uni_die( void )
 #endif
 }
 
-void uni_assert_fail(
-	const char* expr, const char* file, unsigned line, const char* func )
+void uni_assert_fail( const char * expr,
+	const char * file,
+	unsigned line,
+	const char * func )
 {
 #ifdef CFG_GBA
 	_bios_halt( );

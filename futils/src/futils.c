@@ -19,12 +19,12 @@
 
 /* This should be pure C compatible, so no fstat. */
 /* PURE FUNCTION */
-UNI_OPTION( ptri ) uni_filesz( const char* fname )
+UNI_OPTION( ptri ) uni_filesz( const char * fname )
 {
 	UNI_OPTION( ptri ) ret = { 0, 0 };
 
 #ifndef CFG_GBA
-	FILE* f;
+	FILE * f;
 	long sz;
 
 	f = fopen( fname, "rb" );
@@ -57,10 +57,10 @@ UNI_OPTION( ptri ) uni_filesz( const char* fname )
 	return ret;
 }
 
-int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
+int uni_buffile( const char * fname, u8 * ret, ptri ret_sz )
 {
 #ifndef CFG_GBA
-	FILE* f;
+	FILE * f;
 	ptri readsz;
 
 	ASSERT( fname != NULL );
@@ -83,13 +83,13 @@ int uni_buffile( const char* fname, u8* ret, ptri ret_sz )
 
 #define BUFFER_SZ 1024
 
-int uni_loadfile( const char* fname, u8** ret, ptri* ret_sz )
+int uni_loadfile( const char * fname, u8 ** ret, ptri * ret_sz )
 {
 #ifndef CFG_GBA
 	u8 buffer[BUFFER_SZ];
-	u8* data;
+	u8 * data;
 	ptri data_sz;
-	FILE* f;
+	FILE * f;
 
 	ASSERT( ret != NULL );
 	ASSERT( ret_sz != NULL );

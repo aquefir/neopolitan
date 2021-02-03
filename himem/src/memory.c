@@ -16,9 +16,9 @@
 #include <string.h>
 #endif
 
-void* uni_alloc( ptri sz )
+void * uni_alloc( ptri sz )
 {
-	void* ret;
+	void * ret;
 
 	if( sz == 0 )
 	{
@@ -35,9 +35,9 @@ void* uni_alloc( ptri sz )
 	return ret;
 }
 
-void* uni_alloc0( ptri sz )
+void * uni_alloc0( ptri sz )
 {
-	void* ret;
+	void * ret;
 
 	ret = uni_alloc( sz );
 
@@ -46,9 +46,9 @@ void* uni_alloc0( ptri sz )
 	return ret;
 }
 
-void* uni_realloc( void* p, ptri sz )
+void * uni_realloc( void * p, ptri sz )
 {
-	void* ret;
+	void * ret;
 
 	if( p == NULL || sz == 0 )
 	{
@@ -74,11 +74,11 @@ void* uni_realloc( void* p, ptri sz )
 	return ret;
 }
 
-void* uni_tryalloc( ptri sz ) { return malloc( sz ); }
+void * uni_tryalloc( ptri sz ) { return malloc( sz ); }
 
-void* uni_tryalloc0( ptri sz )
+void * uni_tryalloc0( ptri sz )
 {
-	void* ret;
+	void * ret;
 
 	if( sz == 0 )
 	{
@@ -95,7 +95,7 @@ void* uni_tryalloc0( ptri sz )
 	return ret;
 }
 
-void* uni_tryrealloc( void* p, ptri sz )
+void * uni_tryrealloc( void * p, ptri sz )
 {
 	if( p == NULL || sz == 0 )
 	{
@@ -106,7 +106,7 @@ void* uni_tryrealloc( void* p, ptri sz )
 	return realloc( p, sz );
 #else
 	{
-		void* ret = malloc( sz );
+		void * ret = malloc( sz );
 
 		if( !ret )
 		{
@@ -121,7 +121,7 @@ void* uni_tryrealloc( void* p, ptri sz )
 #endif
 }
 
-void uni_free( void* p )
+void uni_free( void * p )
 {
 	if( p != NULL )
 	{
@@ -129,7 +129,7 @@ void uni_free( void* p )
 	}
 }
 
-void uni_memset( void* p, u8 n, ptri sz )
+void uni_memset( void * p, u8 n, ptri sz )
 {
 	if( p != NULL && sz > 0 )
 	{
@@ -137,7 +137,7 @@ void uni_memset( void* p, u8 n, ptri sz )
 	}
 }
 
-void uni_memcpy( void* dst, const void* src, ptri sz )
+void uni_memcpy( void * dst, const void * src, ptri sz )
 {
 	if( dst != NULL && src != NULL && sz > 0 )
 	{
@@ -145,12 +145,12 @@ void uni_memcpy( void* dst, const void* src, ptri sz )
 	}
 }
 
-int uni_memcmp( const void* a, const void* b, ptri sz )
+int uni_memcmp( const void * a, const void * b, ptri sz )
 {
 	if( a && b && sz )
 	{
-		u8* aa = (u8*)a;
-		u8* bb = (u8*)b;
+		u8 * aa = (u8 *)a;
+		u8 * bb = (u8 *)b;
 		ptri i;
 
 		for( i = 0; i < sz; ++i )

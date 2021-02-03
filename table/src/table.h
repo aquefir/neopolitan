@@ -13,8 +13,8 @@
 
 struct uni_tbl
 {
-	uni_tblkey_t* keys;
-	void* data;
+	uni_tblkey_t * keys;
+	void * data;
 	ptri elemsz, rowct, rowcap;
 };
 

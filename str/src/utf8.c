@@ -10,14 +10,14 @@
 #include <uni/types/int.h>
 #include "utf8.h"
 
-int uni_validu8( const char* in )
+int uni_validu8( const char * in )
 {
 	return !_uni_scanu8( in, NULL, NULL, 0, 0, 0 );
 }
 
-int _uni_scanu8( const char* in,
-	ptri* byct,
-	ptri* cpct,
+int _uni_scanu8( const char * in,
+	ptri * byct,
+	ptri * cpct,
 	int stop,
 	ptri stop_i,
 	int stop_i_bytes )
@@ -108,7 +108,7 @@ int _uni_scanu8( const char* in,
 	}
 }
 
-int uni_u8dec( char* in, char32* out )
+int uni_u8dec( char * in, char32 * out )
 {
 	char32 o;
 
@@ -199,7 +199,7 @@ s32 uni_u8decsz( char in )
 	}
 }
 
-int uni_u8enc( char32 in, char* out )
+int uni_u8enc( char32 in, char * out )
 {
 	if( in >= 0x10FFFF )
 	{
@@ -252,14 +252,15 @@ int uni_u8enc( char32 in, char* out )
 
 u32 uni_u8encsz( char32 ch )
 {
-	return ch >= 0x8000000 ? 6
-			       : ch >= 0x200000
-			? 5
-			: ch >= 0x10000 ? 4
-					: ch >= 0x800 ? 3 : ch >= 0x80 ? 2 : 1;
+	return ch >= 0x8000000   ? 6
+		: ch >= 0x200000 ? 5
+		: ch >= 0x10000  ? 4
+		: ch >= 0x800    ? 3
+		: ch >= 0x80     ? 2
+				 : 1;
 }
 
-struct uni_u8pos uni_u8by2cp( const char* in, ptri by_pos )
+struct uni_u8pos uni_u8by2cp( const char * in, ptri by_pos )
 {
 	struct uni_u8pos ret;
 
@@ -268,7 +269,7 @@ struct uni_u8pos uni_u8by2cp( const char* in, ptri by_pos )
 	return ret;
 }
 
-ptri uni_u8cp2by( const char* in, ptri cp_pos )
+ptri uni_u8cp2by( const char * in, ptri cp_pos )
 {
 	ptri ret;
 

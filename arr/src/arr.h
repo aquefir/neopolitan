@@ -12,7 +12,7 @@
 
 struct uni_arr
 {
-	u8* data;
+	u8 * data;
 	ptri sz, cap;
 	u32 elemsz;
 };

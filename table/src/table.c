@@ -14,7 +14,7 @@
 uni_tblkey_t uni_new_tblkey( void )
 {
 	uni_tblkey_t ret;
-	struct mt_prng* prng;
+	struct mt_prng * prng;
 
 	prng = mt_prng_init( );
 	ret  = mt_range_u32( prng, 1, U32_MAX - 1 );
@@ -23,7 +23,7 @@ uni_tblkey_t uni_new_tblkey( void )
 	return ret;
 }
 
-int uni_chk_tblkey( struct uni_tbl* tbl, uni_tblkey_t key )
+int uni_chk_tblkey( struct uni_tbl * tbl, uni_tblkey_t key )
 {
 	if( !tbl || !key )
 	{
@@ -45,7 +45,7 @@ int uni_chk_tblkey( struct uni_tbl* tbl, uni_tblkey_t key )
 	return 0;
 }
 
-struct uni_tbl* uni_tbl_init( u32 elemsz )
+struct uni_tbl * uni_tbl_init( u32 elemsz )
 {
 	if( !elemsz )
 	{
@@ -53,7 +53,7 @@ struct uni_tbl* uni_tbl_init( u32 elemsz )
 	}
 
 	{
-		struct uni_tbl* ret;
+		struct uni_tbl * ret;
 
 		ret = uni_alloc( sizeof( struct uni_tbl ) );
 
@@ -67,7 +67,7 @@ struct uni_tbl* uni_tbl_init( u32 elemsz )
 	}
 }
 
-void uni_tbl_fini( struct uni_tbl* tbl )
+void uni_tbl_fini( struct uni_tbl * tbl )
 {
 	if( !tbl )
 	{
@@ -89,7 +89,7 @@ void uni_tbl_fini( struct uni_tbl* tbl )
 	uni_free( tbl );
 }
 
-void uni_tbl_ins( struct uni_tbl* tbl, uni_tblkey_t key, const void* data )
+void uni_tbl_ins( struct uni_tbl * tbl, uni_tblkey_t key, const void * data )
 {
 	if( !tbl || !key || !data )
 	{
@@ -129,37 +129,39 @@ void uni_tbl_ins( struct uni_tbl* tbl, uni_tblkey_t key, const void* data )
 		}
 
 		tbl->keys[tbl->rowct] = key;
-		uni_memcpy( (u8*)( tbl->data ) + ( tbl->rowct * tbl->elemsz ),
+		uni_memcpy( (u8 *)( tbl->data ) + ( tbl->rowct * tbl->elemsz ),
 			data,
 			tbl->elemsz );
 		tbl->rowct++;
 	}
 }
 
-uni_tblkey_t* uni_tbl_getkeys( struct uni_tbl* tbl, const void* data )
+uni_tblkey_t * uni_tbl_getkeys( struct uni_tbl * tbl, const void * data )
 {
-	uni_tblkey_t* ret;
+	uni_tblkey_t * ret;
 	ptri ret_cap = 4;
 	ptri ret_sz, i;
 
-	ret = uni_alloc( sizeof(uni_tblkey_t) * ret_cap );
+	ret = uni_alloc( sizeof( uni_tblkey_t ) * ret_cap );
 
 	for( i = 0, ret_sz = 0; i < tbl->rowct; ++i )
 	{
-		if(ret_sz >= ret_cap)
+		if( ret_sz >= ret_cap )
 		{
 			ret_cap <<= 1; /* *= 2 */
 			ret = uni_realloc( ret, ret_cap );
 		}
 
-		if( uni_memcmp( (u8*)(tbl->data) + (tbl->elemsz * i), data, tbl->elemsz))
+		if( uni_memcmp( (u8 *)( tbl->data ) + ( tbl->elemsz * i ),
+			    data,
+			    tbl->elemsz ) )
 		{
 			ret[ret_sz] = tbl->keys[i];
 			ret_sz++;
 		}
 	}
 
-	if(ret_sz >= ret_cap)
+	if( ret_sz >= ret_cap )
 	{
 		ret_cap += 1;
 		ret = uni_realloc( ret, ret_cap );
@@ -171,7 +173,7 @@ uni_tblkey_t* uni_tbl_getkeys( struct uni_tbl* tbl, const void* data )
 	return ret;
 }
 
-uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl* tbl, const void* data )
+uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl * tbl, const void * data )
 {
 	if( !tbl || !data )
 	{
@@ -183,7 +185,10 @@ uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl* tbl, const void* data )
 
 		for( i = 0; i < tbl->rowct; ++i )
 		{
-			if( uni_memcmp( (u8*)(tbl->data) + (tbl->elemsz * i), data, tbl->elemsz ))
+			if( uni_memcmp(
+				    (u8 *)( tbl->data ) + ( tbl->elemsz * i ),
+				    data,
+				    tbl->elemsz ) )
 			{
 				return tbl->keys[i];
 			}
@@ -193,7 +198,7 @@ uni_tblkey_t uni_tbl_getfirstkey( struct uni_tbl* tbl, const void* data )
 	return 0;
 }
 
-void* uni_tbl_get( struct uni_tbl* tbl, uni_tblkey_t key )
+void * uni_tbl_get( struct uni_tbl * tbl, uni_tblkey_t key )
 {
 	if( !tbl || !key )
 	{
@@ -207,7 +212,7 @@ void* uni_tbl_get( struct uni_tbl* tbl, uni_tblkey_t key )
 		{
 			if( tbl->keys[i] == key )
 			{
-				return (void*)( (u8*)tbl->data +
+				return (void *)( (u8 *)tbl->data +
 					( tbl->elemsz * i ) );
 			}
 		}
@@ -216,7 +221,7 @@ void* uni_tbl_get( struct uni_tbl* tbl, uni_tblkey_t key )
 	}
 }
 
-void uni_tbl_del( struct uni_tbl* tbl, uni_tblkey_t key )
+void uni_tbl_del( struct uni_tbl * tbl, uni_tblkey_t key )
 {
 	if( !tbl || !key )
 	{
@@ -241,9 +246,9 @@ void uni_tbl_del( struct uni_tbl* tbl, uni_tblkey_t key )
 		{
 			for( i += 1; i < tbl->rowct; ++i )
 			{
-				uni_memcpy( (u8*)tbl->data +
+				uni_memcpy( (u8 *)tbl->data +
 						( tbl->elemsz * ( i - 1 ) ),
-					(u8*)tbl->data + ( tbl->elemsz * i ),
+					(u8 *)tbl->data + ( tbl->elemsz * i ),
 					tbl->elemsz );
 				tbl->keys[i - 1] = tbl->keys[i];
 			}

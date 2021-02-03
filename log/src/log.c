@@ -13,7 +13,7 @@
 
 #include <uni/err.h>
 
-int uni_print( const char* fmt, ... )
+int uni_print( const char * fmt, ... )
 {
 	va_list args;
 
@@ -27,7 +27,7 @@ int uni_print( const char* fmt, ... )
 	return 0;
 }
 
-int uni_pwarn( const char* fmt, ... )
+int uni_pwarn( const char * fmt, ... )
 {
 	va_list args;
 
@@ -41,7 +41,7 @@ int uni_pwarn( const char* fmt, ... )
 	return 0;
 }
 
-int uni_perror( const char* fmt, ... )
+int uni_perror( const char * fmt, ... )
 {
 	va_list args;
 
