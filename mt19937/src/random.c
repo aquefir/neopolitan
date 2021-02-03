@@ -73,10 +73,10 @@ struct mt_prng * mt_prng_init( void )
 	struct mt_prng * ret;
 	u32 seed[4];
 
-#if !defined( CFG_WINDOWS )
-	ret = uni_alloc0( sizeof( struct mt_prng ) );
-#else
+#if defined( CFG_WINDOWS )
 	return NULL;
+#else
+	ret = uni_alloc0( sizeof( struct mt_prng ) );
 #endif
 
 #if defined( CFG_LINUX ) || defined( CFG_DARWIN )
@@ -298,7 +298,7 @@ u64 mt_random_u64( struct mt_prng * prng )
 
 s32 mt_range_s32( struct mt_prng * prng, s32 begin, s32 end )
 {
-	if( begin < end || !prng )
+	if( begin > end || !prng )
 	{
 		uni_die( );
 	}
@@ -308,21 +308,12 @@ s32 mt_range_s32( struct mt_prng * prng, s32 begin, s32 end )
 		return begin;
 	}
 
-	{
-		s32 ret;
-
-		do
-		{
-			ret = mt_random_s32( prng );
-		} while( ret < begin || ret > end );
-
-		return ret;
-	}
+	return ( mt_random_s32( prng ) % ( end - begin ) ) + begin;
 }
 
 u32 mt_range_u32( struct mt_prng * prng, u32 begin, u32 end )
 {
-	if( begin < end || !prng )
+	if( begin > end || !prng )
 	{
 		uni_die( );
 	}
@@ -332,21 +323,12 @@ u32 mt_range_u32( struct mt_prng * prng, u32 begin, u32 end )
 		return begin;
 	}
 
-	{
-		u32 ret;
-
-		do
-		{
-			ret = mt_random_u32( prng );
-		} while( ret < begin || ret > end );
-
-		return ret;
-	}
+	return ( mt_random_u32( prng ) % ( end - begin ) ) + begin;
 }
 
 s64 mt_range_s64( struct mt_prng * prng, s64 begin, s64 end )
 {
-	if( begin < end || !prng )
+	if( begin > end || !prng )
 	{
 		uni_die( );
 	}
@@ -356,21 +338,12 @@ s64 mt_range_s64( struct mt_prng * prng, s64 begin, s64 end )
 		return begin;
 	}
 
-	{
-		s64 ret;
-
-		do
-		{
-			ret = mt_random_s64( prng );
-		} while( ret < begin || ret > end );
-
-		return ret;
-	}
+	return ( mt_random_s64( prng ) % ( end - begin ) ) + begin;
 }
 
 u64 mt_range_u64( struct mt_prng * prng, u64 begin, u64 end )
 {
-	if( begin < end || !prng )
+	if( begin > end || !prng )
 	{
 		uni_die( );
 	}
@@ -380,14 +353,5 @@ u64 mt_range_u64( struct mt_prng * prng, u64 begin, u64 end )
 		return begin;
 	}
 
-	{
-		u64 ret;
-
-		do
-		{
-			ret = mt_random_u64( prng );
-		} while( ret < begin || ret > end );
-
-		return ret;
-	}
+	return ( mt_random_u64( prng ) % ( end - begin ) ) + begin;
 }
