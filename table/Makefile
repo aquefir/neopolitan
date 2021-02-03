@@ -19,7 +19,8 @@ AFILE  := 1
 
 # space-separated path list for #includes
 # <system> includes
-INCLUDES := include
+INCLUDES := include ../decl/include ../err/include ../log/include \
+	../himem/include ../mt19937/include
 # "local" includes
 INCLUDEL := src
 
