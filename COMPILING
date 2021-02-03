@@ -97,8 +97,8 @@ development builds. Set ‘CC=tcc’ in the make invocation to try it out.
 
 Windows may be targeted for cross-compilation from either macOS or Linux.
 MinGW-W64 is used to achieve this (provided by the system’s package manager),
-and runtime testing is done in WINE. 32-bit Windows builds are not supported.
-For now, this target is still very much a work-in-progress.
+and runtime testing is done in WINE. For now, this target is still very much a
+work-in-progress.
 
 §3.4. ANDROID (AOSP)
 ---------------------
