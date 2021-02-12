@@ -1,0 +1,47 @@
+uni/clarg/uni_clarg_tmpl_flags.enum
+	Argument template flags. Currently there are two flags: one to note that an
+	argument takes a value parameter, and another to note if a value parameter
+	is required. Whether or not a parameter is required is not evaluated by
+	this library.
+uni/clarg/uni_clarg_tmpl_masks.enum
+	Bitmasks for the uni_clarg_tmpl_flags enum. These are the constants to be
+	used usually in function calls to the library.
+uni/clarg/uni_clarg_tmpl.struct
+	Forward declaration of the command-line arg template. The user adds to this
+	with the provided functions all the options their program supports, then
+	finalises it into a uni_clarg_out struct.
+uni/clarg/uni_clarg_out.struct
+	Forward declaration of the command-line arg final structure. The user
+	provides argc, argv and an instance of a uni_clarg_tmpl struct, and the
+	argv is validated against the template and output values are stored.
+uni/clarg/uni_clarg_tmpl_init.sub
+	Initialise a uni_clarg_tmpl object.
+uni/clarg/uni_clarg_tmpl_init.sub:$1
+	The program title. Usually the same as its command invocation name.
+uni/clarg/uni_clarg_tmpl_init.sub:$1*
+	Must either be NULL or a valid pointer to a NUL-terminated UTF-8 char
+	array. If it is NULL, $2 is not used either.
+uni/clarg/uni_clarg_tmpl_init.sub:$2
+	Brief description of the program. Describe its purpose, ideally in less
+	than 72 characters.
+uni/clarg/uni_clarg_tmpl_init.sub:$2*
+	Must either be NULL or a valid pointer to a NUL-terminated UTF-8 char
+	array.
+uni/clarg/uni_clarg_tmpl_init.sub:$3
+	A less-than-brief description of the program. This is not the same as the
+	flags description, which is procedurally generated.
+uni/clarg/uni_clarg_tmpl_init.sub:$3*
+	Must either be NULL or a valid pointer to a NUL-terminated UTF-8 char
+	array.
+uni/clarg/uni_clarg_tmpl_init.sub:$4
+	A range of years in which publication copyright is claimed to apply.
+uni/clarg/uni_clarg_tmpl_init.sub:$5
+	A name under which publication copyright is claimed to apply.
+uni/clarg/uni_clarg_tmpl_init.sub:$5*
+	Must either be NULL or a valid pointer to a NUL-terminated UTF-8 char
+	array. If it is NULL, $4 is not used either.
+uni/clarg/uni_clarg_tmpl_init.sub:#
+	A newly-allocated uni_clarg_tmpl object.
+uni/clarg/uni_clarg_tmpl_fini.sub
+	Finalise and deallocate the memory of a uni_clarg_tmpl object.
+uni/clarg/uni_clarg_tmpl_fini.sub:$1
