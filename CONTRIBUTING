@@ -1,4 +1,4 @@
-Unilib Contributor’s Guide
+Neopolitan Contributor’s Guide
 
 Written by Alexander Nicholi
 
@@ -28,9 +28,9 @@ order of abstraction:
 §2. APPLICATION OF MODULARITY
 ------------------------------
 
-1. Modules are in play with unilib, using Brian Will’s distinction of ‘state
-modules’ and ‘logic modules’. This status is affixed onto every interface
-(header file) when possible, for coordination.
+1. Modules are in play with Neopolitan, using Brian Will’s distinction of
+‘state modules’ and ‘logic modules’. This status is affixed onto every
+interface (header file) when possible, for coordination.
 
 2. Summary of Will’s video:
  a. ‘state modules’: internally and externally stateful

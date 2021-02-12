@@ -1,4 +1,8 @@
-unilib
+Neopolitan C
+“A new city of code on a cosmopolitan foundation.”
+
+<https://aquefir.co/neopolitan>
+<https://github.com/aquefir/neopolitan>
 
 Created by Alexander Nicholi
 Copyright © 2019-2021 Aquefir
@@ -7,24 +11,59 @@ Released under BSD-2-Clause.
 §1. WHAT IS THIS?
 ------------------
 
-Unilib is one of the most heavily developed projects under the Aquefir
-namesake. Its purpose is simple: provide primitive support functionality
+Some time in 2019, I began work on a scratch-built libc surrogate that, for
+lack of a better name, I called “unilib”. It was put under the Aquefir name,
+and I took great care of its structure and quality. unilib was similar in
+purpose to GLib, but with better attention paid to handling very old
+platforms, chiefly the IBM PC and the Nintendo Game Boy Advance. It is also a
+strictly ANSI C library, adhering to the standard as laid out by the ANSI
+committee in 1989. Call me old-fashioned, but I love the language as it
+originally was. Most of the “rough edges” I find quite beneficial from a
+hygiene standpoint. Later features have shown to be superfluous at best, one
+way or another.
+
+Around the beginning of 2021, I discovered Justine Tunney’s work on her APE
+format and libc implementation supporting it, and I recognised it for the
+incredible research work on ABIs that it is. It has been awkward for me to
+apply, given that it is strongly tied to the x86 ISA and I have actively cared
+for targeting ARM. Despite that, I knew that the one big feature API that
+Cosmopolitan was lacking was a good way to handle graphics. Neopolitan C is a
+step on the path to making that happen.
+
+For years I have had in pre-planning a graphics innovation called OAM, and
+have not created it yet as I need to work out what exactly it depends on
+first. Cosmopolitan C provides a wonderful generalisation of all the great x86
+operating systems, and this generalisation is needed to avoid spending so much
+more time targeting those as separate platforms. However, Cosmopolitan
+provides the well-established C libraries most of these platforms can share -
+it does not try to give any sort of new interface with better design. This is
+where unilib comes in to play. Neopolitan is simply unilib-on-cosmopolitan.
+With that in hand, the complexities of OAM can be worked through much more
+quickly and effectively. Yeah, I think the library is really that much better
+- there’s hardly a point otherwise! 
+
+Neopolitan is written in ANSI C, and always will be. The project uses the
+Slick Makefiles for tooling out the development process, and SLI for
+documentation.
+
+§1.1. WHAT IS UNILIB?
+----------------------
+
+Unilib was one of the most heavily developed projects under the Aquefir
+namesake. Its purpose was simple: provide primitive support functionality
 for programs on a variety of platforms. These features are similar in nature
 to the standard C library, and unilib does work without libc where it is
-unavailable. The growing list of platforms it supports includes Microsoft
-Windows (via Win32 APIs), Apple macOS, GNU/Linux, and the Nintendo Game Boy
-Advance. Support for DOS systems on the IBM-PC is in planning too.
-
-Unilib is written in ANSI C, and always will be. The project uses Slick
-Makefiles for tooling out the development process.
+unavailable. After much development, Cosmopolitan libc was discovered, and
+unilib was migrated to target that platform with its APE format exclusively.
+This is what is now known as Neopolitan.
 
 §2. WHAT’S INSIDE THE BOX
 --------------------------
 
-Unilib provides shorthands for all kinds of primitive data types. These are
-a good deal cleaner and quicker to type than those of <stdint.h>:
+Neopolitan provides shorthands for all kinds of primitive data types. These
+are a good deal cleaner and quicker to type than those of <stdint.h>:
 
-unilib:
+neopolitan:
 	u32, s16, u8, u64, ...
 
 stdint:
@@ -34,15 +73,15 @@ There is also another shorthand called ptri (pronounced like ‘petri’). It is
 an integer the same size as a pointer, and is used in place of size_t and the
 like. There are also shorthands for exact-size floating point primitives.
 
-Unilib provides math primitive structs for basic geometry in the 2D and 3D
+Neopolitan provides math primitive structs for basic geometry in the 2D and 3D
 contexts. It also includes structs for ranges (signed) and bounds (unsigned).
 Additionally, there are also primitives for ‘vector types’; these use SIMD
 intrinsics provided by the compiler where available, and transparently fall
 back to plain array semantics otherwise.
 
 Checked math macros are available to ensure against integer overflow. There
-are also macros for endianness conversion operations. Unilib also provides a
-portable uni_die() function that aborts the program, which is ideal for
+are also macros for endianness conversion operations. Neopolitan also provides
+a portable uni_die() function that aborts the program, which is ideal for
 dealing with programmer errors.
 
 UTF-8 validation, conversion, and inspection routines are also available.
@@ -55,10 +94,10 @@ which either wrap or implement logging and malloc where necessary.
 §3. FOOTNOTES
 --------------
 
-Unilib is released under the BSD-2-Clause licence. See the COPYING file for
-full terms.
+Neopolitan is released under the BSD-2-Clause licence. See the COPYING file
+for full terms.
 
-Unilib adheres to ADP 1 for its repository layout, and ADP 2 for its
+Neopolitan adheres to ADP 1 for its repository layout, and ADP 2 for its
 documentation.
 
 §4. REFERENCES & ADDITIONAL READING
@@ -67,11 +106,17 @@ documentation.
 ISO/IEC 9899:1990. Programming Languages – C.
 	<https://www.iso.org/standard/17782.html>
 
-Nicholi, Alexander. Slick.
-	<https://github.com/aquefir/slick>
+Nicholi, Alexander. Slick Makefiles.
+	<https://github.com/adp4>
 
 Nicholi, Alexander. Project repository filesystem schema.
 	<https://aquefir.co/adp1>
 
 Nicholi, Alexander. Slick documentation format.
 	<https://aquefir.co/adp2>
+
+Tunney, Justine. Cosmopolitan libc.
+	<https://justine.lol/cosmopolitan/index.html>
+
+Tunney, Justine. Actually Portable Executable.
+	<https://justine.lol/ape.html>

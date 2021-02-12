@@ -3,16 +3,16 @@ This file contains the project’s copypastable boilerplate comment headers.
 Boilerplate for C-like languages:
 
 /****************************************************************************\
- *                            neopolitan logging                            *
+ *                 Mersenne-Twister Algorithm 19937, 32-bit                 *
  *                                                                          *
- *                      Copyright © 2019-2021 Aquefir                       *
+ *                      Copyright © 2019-2021 Aquefir.                      *
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
 Hash-based boilerplate (Python, POSIX shell, Makefile):
 
 ##############################################################################
-##                            neopolitan logging                            ##
+##                 Mersenne-Twister Algorithm 19937, 32-bit                 ##
 ##                                                                          ##
 ##                      Copyright © 2019-2021 Aquefir                       ##
 ##                       Released under BSD-2-Clause.                       ##
