@@ -21,13 +21,14 @@ enum /* err */
 };
 
 #if defined( NDEBUG )
-#define ASSERT( cnd ) ( (void)0 )
+#define UNI_ASSERT( cnd ) ( (void)0 )
 #else /* !defined(NDEBUG) */
-#define ASSERT( cnd ) \
+#define UNI_ASSERT( cnd ) \
 	( ( cnd ) ? (void)0 \
 		  : uni_assert_fail( #cnd, __FILE__, __LINE__, __func__ ) )
 #endif /* defined(NDEBUG) */
 
+#if 0
 #define ASSERT_RET( cnd ) \
 	do \
 	{ \
@@ -138,6 +139,7 @@ enum /* err */
 	} while( 0 )
 
 #define ASSERT_NOP( x, o ) IMPL_ASSERT_NOP( ( x ), ( o ), __FILE__, __LINE__ )
+#endif /* 0 */
 
 extern void uni_die( void );
 extern void uni_assert_fail(

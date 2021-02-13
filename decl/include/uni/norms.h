@@ -1,26 +1,14 @@
 /****************************************************************************\
- *                             neopolitan himem                             *
+ *                       neopolitan base declarations                       *
  *                                                                          *
  *                      Copyright © 2019-2021 Aquefir                       *
  *                       Released under BSD-2-Clause.                       *
 \****************************************************************************/
 
-#ifndef INC__UNI_GBAHIMEM_H
-#define INC__UNI_GBAHIMEM_H
+#ifndef INC_API__UNI_NORMS_H
+#define INC_API__UNI_NORMS_H
 
-#ifdef CFG_GBA
+#define UNI_UNREACHABLE() do{}while(1)
+#define UNI_ASSUME(X) do{if(X){}else{UNI_UNREACHABLE();}}while(0)
 
-#include <uni/types/int.h>
-
-void initheap( void );
-void * malloc( ptri );
-void free( void * );
-
-void memset( void *, u8, ptri );
-void memcpy( void *, const void *, ptri );
-
-ptri _memsize( void * );
-
-#endif
-
-#endif /* INC__UNI_GBAHIMEM_H */
+#endif /* INC_API__UNI_NORMS_H */

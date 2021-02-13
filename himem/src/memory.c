@@ -9,12 +9,10 @@
 #include <uni/memory.h>
 #include <uni/types/int.h>
 
-#ifdef CFG_GBA
-#include "gbahimem.h"
-#else
-#include <stdlib.h>
-#include <string.h>
-#endif
+void *memset(void *, u32, ptri);
+void *memcpy(void *, const void *, ptri);
+void *malloc(ptri);
+void *realloc(void *, ptri);
 
 void * uni_alloc( ptri sz )
 {
