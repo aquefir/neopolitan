@@ -65,7 +65,7 @@ else
 fi
 
 echo -n 'Extracting the binaries... ' >/dev/stderr;
-unzip -qu common/build/cosmo.zip -x cosmopolitan.h -d common/build/cosmo;
+unzip -qu common/build/cosmo.zip -d common/build/cosmo;
 _x=$?;
 
 if [ "$_x" = '0' ]; then
