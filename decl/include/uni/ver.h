@@ -17,6 +17,6 @@
 #define UNI_GETVER_PATCH( _ver ) ( (_ver)&0xFFF )
 
 /* NOTE: patch version should always be set to 0 */
-#define UNI_API_VER UNI_MAKEVER( 1, 1, 0 )
+#define UNI_API_VER UNI_MAKEVER( 1, 4, 0 )
 
 #endif /* INC_API__UNI_VER_H */
