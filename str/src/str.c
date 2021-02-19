@@ -7,11 +7,100 @@
 
 #include "str.h"
 
-#include <stdarg.h>
 #include <uni/err.h>
 #include <uni/memory.h>
 
 #include "utf8.h"
+
+#if defined( __STDC_HOSTED__ ) && defined( __SSE2__ )
+#define p_strlen( STR ) \
+	( __builtin_constant_p( STR ) ? __builtin_strlen( STR ) : ( { \
+		size_t LeN; \
+		const char * StR = ( STR ); \
+		asm( "call\tstrlen" \
+			: "=a"( LeN ) \
+			: "D"( StR ), "m"( *(char( * )[0x7fffffff])StR ) \
+			: "rcx", "rdx", "xmm3", "xmm4", "cc" ); \
+		LeN; \
+	} ) )
+
+#define p_memmove( DEST, SRC, SIZE ) \
+	p_memcpy( "MemMove", ( DEST ), ( SRC ), ( SIZE ) )
+
+#define p_memcpy( FN, DEST, SRC, SIZE ) \
+	( { \
+		void * DeSt      = ( DEST ); \
+		const void * SrC = ( SRC ); \
+		size_t SiZe      = ( SIZE ); \
+		asm( "call\t" FN \
+			: "=m"( *( char( * )[SiZe] )( DeSt ) ) \
+			: "D"( DeSt ), \
+			"S"( SrC ), \
+			"d"( SiZe ), \
+			"m"( *( const char( * )[SiZe] )( SrC ) ) \
+			: "xmm3", "xmm4", "rcx", "cc" ); \
+		DeSt; \
+	} )
+#define p_memset( DEST, BYTE, SIZE ) \
+	( { \
+		void * DeSt = ( DEST ); \
+		size_t SiZe = ( SIZE ); \
+		asm( "call\tMemSet" \
+			: "=m"( *( char( * )[SiZe] )( DeSt ) ) \
+			: "D"( DeSt ), "S"( BYTE ), "d"( SiZe ) \
+			: "xmm3", "xmm4", "rcx", "cc" ); \
+		DeSt; \
+	} )
+
+#else
+
+#define p_strlen( STR ) \
+	do \
+	{ \
+		ptri i; \
+		if( in == NULL ) \
+		{ \
+			uni_die( ); \
+		} \
+		for( i = 0; in[i] != '\0'; ++i ) \
+			; \
+		return i; \
+	} while( 0 )
+
+#define p_memcpy( FN, DEST, SRC, SIZE ) \
+	( { \
+		void *Rdi, *Dest      = ( DEST ); \
+		const void *Rsi, *Src = ( SRC ); \
+		size_t SiZe = ( SIZE ); \
+		size_t Rcx; \
+		asm( "rep movsb" \
+			: "=D"( Rdi ), \
+			"=S"( Rsi ), \
+			"=c"( Rcx ), \
+			"=m"( *( char( * )[SiZe] )( Dest ) ) \
+			: "0"( Dest ), \
+			"1"( Src ), \
+			"2"( SiZe ), \
+			"m"( *( const char( * )[SiZe] )( Src ) ) \
+			: "cc" ); \
+		Dest; \
+	} )
+
+#define p_memset( DEST, BYTE, SIZE ) \
+	( { \
+		void *Rdi, *Dest = ( DEST ); \
+		size_t SiZe = ( SIZE ); \
+		size_t Rcx; \
+		asm( "rep stosb" \
+			: "=D"( Rdi ), \
+			"=c"( Rcx ), \
+			"=m"( *( char( * )[SiZe] )( Dest ) ) \
+			: "0"( Dest ), "1"( SiZe ), "a"( BYTE ) \
+			: "cc" ); \
+		Dest; \
+	} )
+
+#endif /* defined(__STDC_HOSTED__) && defined(__SSE2__) */
 
 ptri uni_strlen( const char * in )
 {

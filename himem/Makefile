@@ -9,6 +9,9 @@ ifeq ($(strip $(AQ)),)
 $(error "AQ was not found in your environment. You need to install the Slick Makefiles from github.com/aquefir/slick to continue.")
 endif
 
+# Target APE only
+TP := APE
+
 include $(AQ)/lib/slick/base.mk
 
 PROJECT := uni_himem
@@ -38,25 +41,27 @@ FWORKS :=
 
 # sources
 SFILES.GBA := \
-	src/gbabios.s \
 	src/memcpy.s \
 	src/memset.s
-CFILES.GBA := \
-	src/gbahimem.c
+CFILES.GBA :=
 CFILES := \
 	src/memory.c
 CPPFILES  :=
 PUBHFILES := \
 	include/uni/memory.h
-PRVHFILES := \
-	src/gbabios.h \
-	src/gbahimem.h
+PRVHFILES :=
 
 # test suite sources
 TES_CFILES    :=
 TES_CPPFILES  :=
 TES_PUBHFILES :=
 TES_PRVHFILES :=
+
+APE_LDSCR := ../common/build/cosmo/ape.lds
+APE_AFILE := ../common/build/cosmo/cosmopolitan.a
+APE_HFILE := ../common/build/cosmo/cosmopolitan.h
+APE_APEO  := ../common/build/cosmo/ape.o
+APE_CRTO  := ../common/build/cosmo/crt.o
 
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk

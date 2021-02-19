@@ -28,6 +28,10 @@ enum /* err */
 		  : uni_assert_fail( #cnd, __FILE__, __LINE__, __func__ ) )
 #endif /* defined(NDEBUG) */
 
+#if !defined( ASSERT )
+#define ASSERT( cnd ) UNI_DEPRECATED UNI_ASSERT( cnd )
+#endif /* !defined( ASSERT ) */
+
 #if 0
 #define ASSERT_RET( cnd ) \
 	do \

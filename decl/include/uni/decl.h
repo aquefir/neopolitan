@@ -8,11 +8,13 @@
 #ifndef INC_API__UNI_DECL_H
 #define INC_API__UNI_DECL_H
 
-#ifdef __cplusplus
+#if !defined( UNI_C_API )
+#if defined( __cplusplus )
 #define UNI_C_API extern "C"
 #else
 #define UNI_C_API
 #endif
+#endif /* !defined( UNI_C_API ) */
 
 #if !defined( UNI_DEPRECATED )
 #if !defined( UNI_NODEPREC )
@@ -30,8 +32,12 @@
 #endif /* !defined( UNI_NODEPREC ) */
 #endif /* !defined( UNI_DEPRECATED ) */
 
+#if !defined( UNI_PACKED )
 #define UNI_PACKED __attribute__( ( packed ) )
+#endif /* !defined( UNI_PACKED ) */
 
+#if !defined( UNI_ALIGN )
 #define UNI_ALIGN( _x ) __attribute__( ( aligned( _x ) ) )
+#endif /* !defined( UNI_ALIGN ) */
 
 #endif /* INC_API__UNI_DECL_H */

@@ -28,6 +28,9 @@
 				"CFG_LILENDIAN",
 				"__VSCODE_INTELLISENSE__"
 			],
+			"forcedInclude": [
+				"${workspaceFolder}/common/build/cosmo/cosmopolitan.h"
+			],
 			"compilerPath": "/usr/bin/gcc",
 			"cStandard": "c89",
 			"cppStandard": "c++11",

@@ -9,11 +9,6 @@
 #include <uni/memory.h>
 #include <uni/types/int.h>
 
-void *memset(void *, u32, ptri);
-void *memcpy(void *, const void *, ptri);
-void *malloc(ptri);
-void *realloc(void *, ptri);
-
 void * uni_alloc( ptri sz )
 {
 	void * ret;

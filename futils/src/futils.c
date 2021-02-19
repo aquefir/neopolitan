@@ -7,11 +7,6 @@
 
 #include <uni/futils.h>
 
-#ifndef CFG_GBA
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#endif
 #include <uni/err.h>
 #include <uni/memory.h>
 #include <uni/types/options.h>
@@ -63,8 +58,8 @@ int uni_buffile( const char * fname, u8 * ret, ptri ret_sz )
 	FILE * f;
 	ptri readsz;
 
-	ASSERT( fname != NULL );
-	ASSERT( ret != NULL );
+	UNI_ASSERT( fname != NULL );
+	UNI_ASSERT( ret != NULL );
 
 	f = fopen( fname, "rb" );
 	if( !f )
@@ -91,8 +86,8 @@ int uni_loadfile( const char * fname, u8 ** ret, ptri * ret_sz )
 	ptri data_sz;
 	FILE * f;
 
-	ASSERT( ret != NULL );
-	ASSERT( ret_sz != NULL );
+	UNI_ASSERT( ret != NULL );
+	UNI_ASSERT( ret_sz != NULL );
 
 	f = fname == NULL ? stdin : fopen( fname, "rb" );
 

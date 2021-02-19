@@ -23,10 +23,13 @@ UNI_DECL_OPT( s16 );
 UNI_DECL_OPT( s32 );
 UNI_DECL_OPT( s64 );
 UNI_DECL_OPT( ptri );
+UNI_DECL_OPT( offs );
 
 UNI_DECL_OPT( f16 );
 UNI_DECL_OPT( f32 );
 UNI_DECL_OPT( f64 );
+UNI_DECL_OPT( f80 );
+UNI_DECL_OPT( f128 );
 UNI_DECL_OPT( fbig );
 
 UNI_DECL_OPT_S( point2 );

@@ -7,7 +7,6 @@
 
 #include "arr.h"
 
-#include <stdarg.h>
 #include <uni/err.h>
 #include <uni/memory.h>
 

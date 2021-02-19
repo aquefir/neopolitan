@@ -7,11 +7,26 @@
 
 #include <uni/log.h>
 
-#include <stdarg.h>
-#ifndef CFG_GBA
-#include <stdio.h>
-
 #include <uni/err.h>
+
+#define ASSERT_RETNEG1( cnd ) \
+	do \
+	{ \
+		if( cnd ) \
+		{ \
+		} \
+		else \
+		{ \
+			uni_perror( \
+				"Assertion failed in file \"%s\" on line \"%u\", in " \
+				"function \"%s\".\nExpression: %s", \
+				__FILE__, \
+				__LINE__, \
+				__func__, \
+				#cnd ); \
+			return -1; \
+		} \
+	} while( 0 )
 
 int uni_print( const char * fmt, ... )
 {
@@ -54,5 +69,3 @@ int uni_perror( const char * fmt, ... )
 
 	return 0;
 }
-
-#endif

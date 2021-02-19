@@ -20,7 +20,7 @@ enum /* uni_clarg_tmpl_flags */
 enum /* uni_clarg_tmpl_masks */
 {
 	UNI_CLARG_TMPL_MASK_TAKESVAL = 1 << UNI_CLARG_TMPL_FLAG_TAKESVAL,
-	UNI_CLARG_TMPL_MASK_VALREQD = 1 << UNI_CLARG_TMPL_FLAG_VALREQD
+	UNI_CLARG_TMPL_MASK_VALREQD  = 1 << UNI_CLARG_TMPL_FLAG_VALREQD
 };
 
 struct uni_clarg_tmpl;
