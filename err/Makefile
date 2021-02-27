@@ -22,7 +22,7 @@ AFILE  := 1
 
 # space-separated path list for #includes
 # <system> includes
-INCLUDES := include ../log/include
+INCLUDES := include ../decl/include ../log/include
 # "local" includes
 INCLUDEL := src
 
