@@ -11,6 +11,7 @@
 #define UNI_ABS(X) ((X) < 0 ? -(X) : (X))
 #define UNI_MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 #define UNI_MIN(X, Y) ((X) < (Y) ? (X) : (Y))
+#define UNI_CLAMP(N, LO, HI) ((N) > (HI) ? (HI) : (N) < (LO) ? (LO) : (N))
 
 /** e */
 #define UNI_M_E() (2.7182818284590452354)
