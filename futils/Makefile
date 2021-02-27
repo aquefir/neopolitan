@@ -55,11 +55,5 @@ TES_CPPFILES  :=
 TES_PUBHFILES :=
 TES_PRVHFILES :=
 
-APE_LDSCR := ../common/build/cosmo/ape.lds
-APE_AFILE := ../common/build/cosmo/cosmopolitan.a
-APE_HFILE := ../common/build/cosmo/cosmopolitan.h
-APE_APEO  := ../common/build/cosmo/ape.o
-APE_CRTO  := ../common/build/cosmo/crt.o
-
 # this defines all our usual targets
 include $(AQ)/lib/slick/targets.mk
