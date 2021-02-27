@@ -9,7 +9,88 @@
 #define INC_API__UNI_ERR_H
 
 #include <uni/log.h>
+#include <uni/types/int.h>
 
+/** Err code bits
+ *   0-9 : main description (10 bits)
+ * 10-18 : module of origin (9 bits)
+ * 19-21 : error level (3 bits)
+ * 22-31 : error flags (sub-bitfield) (10 bits)
+ */
+
+#define UNI_ERRCODE_GET_DESC( C ) ( (C)&1023 )
+#define UNI_ERRCODE_GET_MOD( C ) ( ( ( C ) >> 10 ) & 511 )
+#define UNI_ERRCODE_GET_LVL( C ) ( ( ( C ) >> 18 ) & 8 )
+#define UNI_ERRCODE_GET_EFLAGS( C ) ( ( C ) >> 22 )
+
+#define UNI_ERRCODE_MAKE( D, M, E, L ) \
+	( ( D ) | ( ( M ) << 10 ) | ( ( E ) << 21 ) | ( ( L ) << 27 ) )
+
+enum
+{
+	UNI_ERR_DESC_SUCCESS = 0,
+	UNI_ERR_DESC_OOM,
+	UNI_MAX_ERR_DESC
+};
+
+enum
+{
+	UNI_ERR_MOD_COMMON = 0,
+	UNI_ERR_MOD_ARR,
+	UNI_ERR_MOD_CLARG,
+	UNI_ERR_MOD_FUTILS,
+	UNI_ERR_MOD_HIMEM,
+	UNI_ERR_MOD_LOG,
+	UNI_ERR_MOD_MT19937,
+	UNI_ERR_MOD_STR,
+	UNI_ERR_MOD_TABLE,
+	UNI_ERR_MOD_COSMO,
+	UNI_ERR_MOD_NT,
+	UNI_ERR_MOD_SYSV,
+	UNI_MAX_ERR_MOD
+};
+
+enum
+{
+	UNI_ERR_LVL_SUCCESS = 0,
+	UNI_ERR_LVL_INFO,
+	UNI_ERR_LVL_STATUS,
+	UNI_ERR_LVL_TEMP,
+	UNI_ERR_LVL_PERM,
+	UNI_ERR_LVL_USAGE,
+	UNI_ERR_LVL_RESET,
+	UNI_ERR_LVL_FATAL
+};
+
+enum
+{
+	UNI_ERR_EFLAG_BLOCKING = 0,
+	UNI_ERR_EFLAG_OORES,
+	UNI_ERR_EFLAG_NOTFOUND,
+	UNI_ERR_EFLAG_BADSTATE,
+	UNI_ERR_EFLAG_NOSUPPORT,
+	UNI_ERR_EFLAG_BADINPUT,
+	UNI_ERR_EFLAG_INTERNAL,
+	UNI_ERR_EFLAG_RESERVED1,
+	UNI_ERR_EFLAG_RESERVED2,
+	UNI_ERR_EFLAG_RESERVED3
+};
+
+enum
+{
+	UNI_ERR_EMASK_BLOCKING  = 1 << UNI_ERR_EFLAG_BLOCKING,
+	UNI_ERR_EMASK_OORES     = 1 << UNI_ERR_EFLAG_OORES,
+	UNI_ERR_EMASK_NOTFOUND  = 1 << UNI_ERR_EFLAG_NOTFOUND,
+	UNI_ERR_EMASK_BADSTATE  = 1 << UNI_ERR_EFLAG_BADSTATE,
+	UNI_ERR_EMASK_NOSUPPORT = 1 << UNI_ERR_EFLAG_NOSUPPORT,
+	UNI_ERR_EMASK_BADINPUT  = 1 << UNI_ERR_EFLAG_BADINPUT,
+	UNI_ERR_EMASK_INTERNAL  = 1 << UNI_ERR_EFLAG_INTERNAL,
+	UNI_ERR_EMASK_RESERVED1 = 1 << UNI_ERR_EFLAG_RESERVED1,
+	UNI_ERR_EMASK_RESERVED2 = 1 << UNI_ERR_EFLAG_RESERVED2,
+	UNI_ERR_EMASK_RESERVED3 = 1 << UNI_ERR_EFLAG_RESERVED3
+};
+
+/* XXX: Deprecate this somehow */
 enum /* err */
 {
 	UNI_ERR_SUCCESS = 0,
@@ -29,121 +110,16 @@ enum /* err */
 #endif /* defined(NDEBUG) */
 
 #if !defined( ASSERT )
-#define ASSERT( cnd ) UNI_DEPRECATED UNI_ASSERT( cnd )
+#define ASSERT( cnd ) \
+	_Pragma( \
+		"ASSERT() CPP macro is deprecated. Use UNI_ASSERT() instead" ) \
+		UNI_ASSERT( cnd )
 #endif /* !defined( ASSERT ) */
 
-#if 0
-#define ASSERT_RET( cnd ) \
-	do \
-	{ \
-		if( cnd ) \
-		{ \
-		} \
-		else \
-		{ \
-			uni_perror( \
-				"Assertion failed in file \"%s\" on line \"%u\", in " \
-				"function \"%s\".\nExpression: %s", \
-				__FILE__, \
-				__LINE__, \
-				__func__, \
-				#cnd ); \
-			return; \
-		} \
-	} while( 0 )
-#define ASSERT_RETNEG1( cnd ) \
-	do \
-	{ \
-		if( cnd ) \
-		{ \
-		} \
-		else \
-		{ \
-			uni_perror( \
-				"Assertion failed in file \"%s\" on line \"%u\", in " \
-				"function \"%s\".\nExpression: %s", \
-				__FILE__, \
-				__LINE__, \
-				__func__, \
-				#cnd ); \
-			return -1; \
-		} \
-	} while( 0 )
-#define ASSERT_RETRET( r ) \
-	do \
-	{ \
-		if( ( r ) == 0 ) \
-		{ \
-		} \
-		else \
-		{ \
-			uni_perror( \
-				"Assertion failed in file \"%s\" on line \"%u\", in " \
-				"function \"%s\".\nExpression: %s", \
-				__FILE__, \
-				__LINE__, \
-				__func__, \
-				#r ); \
-			return ( r ); \
-		} \
-	} while( 0 )
-#define ASSERT_RETNUL( cnd ) \
-	do \
-	{ \
-		if( cnd ) \
-		{ \
-		} \
-		else \
-		{ \
-			uni_perror( \
-				"Assertion failed in file \"%s\" on line \"%u\", in " \
-				"function \"%s\".\nExpression: %s", \
-				__FILE__, \
-				__LINE__, \
-				__func__, \
-				#cnd ); \
-			return NULL; \
-		} \
-	} while( 0 )
-#define ASSERT_RETVAL( cnd, val ) \
-	do \
-	{ \
-		if( cnd ) \
-		{ \
-		} \
-		else \
-		{ \
-			uni_perror( \
-				"Assertion failed in file \"%s\" on line \"%u\", in " \
-				"function \"%s\".\nExpression: %s", \
-				__FILE__, \
-				__LINE__, \
-				__func__, \
-				#cnd ); \
-			return val; \
-		} \
-	} while( 0 )
-
-#define IMPL_ASSERT_NOP( x, o, file, line ) \
-	do \
-	{ \
-		if( x ) \
-		{ \
-		} \
-		else \
-		{ \
-			fprintf( stderr, \
-				"!!! Assert failed @ %s L%u: %s\n", \
-				file, \
-				line, \
-				#x ); \
-			o.is = 0; \
-			return ( o ); \
-		} \
-	} while( 0 )
-
-#define ASSERT_NOP( x, o ) IMPL_ASSERT_NOP( ( x ), ( o ), __FILE__, __LINE__ )
-#endif /* 0 */
+extern const char * uni_err_desc_tostr( u32 );
+extern const char * uni_err_mod_tostr( u32 );
+extern const char * uni_err_eff_tostr( u32 );
+extern const char * uni_err_lvl_tostr( u32 );
 
 extern void uni_die( void );
 extern void uni_assert_fail(
