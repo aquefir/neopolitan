@@ -18,6 +18,8 @@
  * 22-31 : error flags (sub-bitfield) (10 bits)
  */
 
+typedef u32 uni_err_t;
+
 #define UNI_ERRCODE_GET_DESC( C ) ( (C)&1023 )
 #define UNI_ERRCODE_GET_MOD( C ) ( ( ( C ) >> 10 ) & 511 )
 #define UNI_ERRCODE_GET_LVL( C ) ( ( ( C ) >> 18 ) & 8 )
@@ -116,10 +118,10 @@ enum /* err */
 		UNI_ASSERT( cnd )
 #endif /* !defined( ASSERT ) */
 
-extern const char * uni_err_desc_tostr( u32 );
-extern const char * uni_err_mod_tostr( u32 );
-extern const char * uni_err_eff_tostr( u32 );
-extern const char * uni_err_lvl_tostr( u32 );
+extern const char * uni_err_desc_tostr( uni_err_t );
+extern const char * uni_err_mod_tostr( uni_err_t );
+extern const char * uni_err_eff_tostr( uni_err_t );
+extern const char * uni_err_lvl_tostr( uni_err_t );
 
 extern void uni_die( void );
 extern void uni_assert_fail(
