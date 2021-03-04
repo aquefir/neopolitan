@@ -1,6 +1,24 @@
 #!/bin/sh
 # -*- coding: utf-8 -*-
 
+if test "$(uname -s)" = 'Darwin'; then
+	_make=gmake;
+	if command -v gecho >/dev/null 2>&1; then
+		_echo=gecho;
+	else
+		_echo='/bin/echo'; # ensure it is not a bashism
+	fi
+else
+	_make=make;
+	_echo='/bin/echo'; # ensure it is not a bashism
+fi
+
+if test "$(id -u)" = '0'; then
+	_sudo='';
+else
+	_sudo='sudo ';
+fi
+
 common/util/cleanall.sh;
 common/util/makeall.sh release;
 
@@ -10,20 +28,19 @@ fi
 
 _prefix="${PREFIX}";
 
-echo 'Installing all sub-repositories.' >/dev/stderr;
+${_echo} -e 'Installing all sub-repositories.\n' >/dev/stderr;
 
-REPOS='arr chkmath clarg decl endian err futils himem log mt19937 str table
+_repos='arr chkmath clarg decl endian err futils himem log mt19937 str table
 	text';
 
-for repo in ${REPOS}; do
+for repo in ${_repos}; do
 	cd ${repo};
-	echo "Installing sub-repo ‘${repo}’..." >/dev/stderr;
-	make install PREFIX="${_prefix}" AQ=/opt/aq;
+	${_echo} "Installing sub-repo ‘${repo}’..." >/dev/stderr;
+	${_sudo} ${_make} install PREFIX="${_prefix}" AQ=/opt/aq;
 	cd ..;
 done
-unset repo;
 
-echo -e 'All done. Exiting...' >/dev/stderr;
+${_echo} 'All done. Exiting...' >/dev/stderr;
 
-unset REPOS;
+unset _repo _repos _sudo _echo _make;
 exit 0;

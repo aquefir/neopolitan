@@ -1,17 +1,29 @@
 #!/bin/sh
 # -*- coding: utf-8 -*-
 
-echo -e 'Cleaning all sub-repositories.\n' >/dev/stderr;
+if test "$(uname -s)" = 'Darwin'; then
+	_make=gmake;
+	if command -v gecho >/dev/null 2>&1; then
+		_echo=gecho;
+	else
+		_echo='/bin/echo'; # ensure it is not a bashism
+	fi
+else
+	_make=make;
+	_echo='/bin/echo'; # ensure it is not a bashism
+fi
 
-REPOS='arr clarg err futils himem log mt19937 str table';
+${_echo} -e 'Cleaning all sub-repositories.\n' >/dev/stderr;
 
-for repo in ${REPOS}; do
-	cd ${repo};
-	echo -n "Cleaning sub-repo ‘${repo}’... " >/dev/stderr;
-	make clean 2>&1 >/dev/null;
-	echo 'done.' >/dev/stderr;
+_repos='arr clarg err futils himem log mt19937 str table';
+
+for _repo in ${_repos}; do
+	cd ${_repo};
+	${_echo} -n "Cleaning sub-repo ‘${_repo}’... " >/dev/stderr;
+	${_make} clean 2>&1 >/dev/null;
+	${_echo} 'done.' >/dev/stderr;
 	cd ..;
 done
 
-echo -e 'All done. Exiting...' >/dev/stderr;
-exit 0;
+${_echo} 'All done. Exiting...' >/dev/stderr;
+unset _repo _repos _echo _make;
