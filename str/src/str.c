@@ -866,8 +866,8 @@ struct uni_str * uni_str_dup( struct uni_str * str )
 		ret->data = str->data
 			? uni_alloc( sizeof( char ) * str->sz + 1 )
 			: NULL;
-		ret->sz   = str->sz;
-		ret->cap  = str->sz + 1;
+		ret->sz  = str->sz;
+		ret->cap = str->sz + 1;
 
 		return ret;
 	}

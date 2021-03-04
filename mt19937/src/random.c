@@ -233,7 +233,7 @@ static void set_seed_arr( struct mt_prng * prng, u32 * seed, ptri seed_sz )
 
 #define DOUBLE_TRANSFORM ( 2.3283064365386962890625e-10 )
 
-static const u32 mag01[2] = { 0, MATRIX_A };
+static const u32 mag01[2] = {0, MATRIX_A};
 
 s32 mt_random_s32( struct mt_prng * prng )
 {

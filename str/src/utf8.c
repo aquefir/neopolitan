@@ -252,12 +252,11 @@ int uni_u8enc( char32 in, char * out )
 
 u32 uni_u8encsz( char32 ch )
 {
-	return ch >= 0x8000000   ? 6
-		: ch >= 0x200000 ? 5
-		: ch >= 0x10000  ? 4
-		: ch >= 0x800    ? 3
-		: ch >= 0x80     ? 2
-				 : 1;
+	return ch >= 0x8000000 ? 6
+			       : ch >= 0x200000
+			? 5
+			: ch >= 0x10000 ? 4
+					: ch >= 0x800 ? 3 : ch >= 0x80 ? 2 : 1;
 }
 
 struct uni_u8pos uni_u8by2cp( const char * in, ptri by_pos )

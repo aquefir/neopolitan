@@ -10,9 +10,9 @@
 #include <uni/log.h>
 
 static const char * const k_err_desc[UNI_MAX_ERR_DESC] = {
-	"Success", "Out of memory" };
+	"Success", "Out of memory"};
 
-static const char * const k_err_mod[UNI_MAX_ERR_MOD] = { "Common",
+static const char * const k_err_mod[UNI_MAX_ERR_MOD] = {"Common",
 	"Neopolitan array",
 	"Neopolitan CLI args",
 	"Neopolitan file utils",
@@ -23,16 +23,16 @@ static const char * const k_err_mod[UNI_MAX_ERR_MOD] = { "Common",
 	"Neopolitan tables",
 	"Cosmopolitan",
 	"Windows NT",
-	"System V" };
+	"System V"};
 
-static const char * const k_err_lvl[UNI_ERR_LVL_FATAL + 1] = { "Success",
+static const char * const k_err_lvl[UNI_ERR_LVL_FATAL + 1] = {"Success",
 	"Info",
 	"Status",
 	"Temporary",
 	"Permanent",
 	"Usage",
 	"Reset",
-	"Fatal" };
+	"Fatal"};
 
 static const char * const k_err_eflags[UNI_ERR_EFLAG_RESERVED3 + 1] = {
 	"Blocking",
@@ -44,7 +44,7 @@ static const char * const k_err_eflags[UNI_ERR_EFLAG_RESERVED3 + 1] = {
 	"Internal",
 	"Reserved (1)",
 	"Reserved (2)",
-	"Reserved (3)" };
+	"Reserved (3)"};
 
 void uni_die( void ) { abort( ); }
 

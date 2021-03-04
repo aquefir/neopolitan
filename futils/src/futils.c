@@ -16,7 +16,7 @@
 /* PURE FUNCTION */
 UNI_OPTION( ptri ) uni_filesz( const char * fname )
 {
-	UNI_OPTION( ptri ) ret = { 0, 0 };
+	UNI_OPTION( ptri ) ret = {0, 0};
 
 #ifndef CFG_GBA
 	FILE * f;
