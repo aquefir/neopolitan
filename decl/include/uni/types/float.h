@@ -8,6 +8,8 @@
 #ifndef INC_API__UNI_TYPES_FLOAT_H
 #define INC_API__UNI_TYPES_FLOAT_H
 
+#include "int.h"
+
 /* XXX: Copied from ../decl.h, as we do not #include with dotdirs */
 #if !defined( UNI_DEPRECATED )
 #if !defined( UNI_NODEPREC )
@@ -25,13 +27,19 @@
 #endif /* !defined( UNI_NODEPREC ) */
 #endif /* defined( UNI_DEPRECATED ) */
 
-typedef float f16 UNI_DEPRECATED;
+typedef u16 f16;
 
 typedef float f32;
 typedef double f64;
-typedef __float80 f80;
+typedef long double f80 UNI_DEPRECATED;
+#if defined( __GNUC__ ) && !defined( __clang__ )
 typedef __float128 f128;
-
-typedef __float128 fbig UNI_DEPRECATED;
+#define UNI_HAS_F128( ) 1
+#elif defined( __clang__ ) && UNI_HAS_I128( )
+typedef u128 f128;
+#define UNI_HAS_F128( ) 1
+#else
+#define UNI_HAS_F128( ) 0
+#endif
 
 #endif /* INC_API__UNI_TYPES_FLOAT_H */
