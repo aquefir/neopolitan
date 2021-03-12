@@ -156,78 +156,78 @@ struct _uni_p128d6
 #endif /* UNI_HAS_I128( ) */
 
 typedef struct _uni_p8d2 p8d2;
-typedef volatile struct _uni_p8d2 p8d2;
+typedef volatile struct _uni_p8d2 vp8d2;
 typedef struct _uni_p16d2 p16d2;
-typedef volatile struct _uni_p16d2 p16d2;
+typedef volatile struct _uni_p16d2 vp16d2;
 typedef struct _uni_p32d2 p32d2;
-typedef volatile struct _uni_p32d2 p32d2;
+typedef volatile struct _uni_p32d2 vp32d2;
 #if UNI_HAS_I64( )
 typedef struct _uni_p64d2 p64d2;
-typedef volatile struct _uni_p64d2 p64d2;
+typedef volatile struct _uni_p64d2 vp64d2;
 #endif /* UNI_HAS_I64( ) */
 #if UNI_HAS_I128( )
 typedef struct _uni_p128d2 p128d2;
-typedef volatile struct _uni_p128d2 p128d2;
+typedef volatile struct _uni_p128d2 vp128d2;
 #endif /* UNI_HAS_I128( ) */
 
 typedef struct _uni_p8d3 p8d3;
-typedef volatile struct _uni_p8d3 p8d3;
+typedef volatile struct _uni_p8d3 vp8d3;
 typedef struct _uni_p16d3 p16d3;
-typedef volatile struct _uni_p16d3 p16d3;
+typedef volatile struct _uni_p16d3 vp16d3;
 typedef struct _uni_p32d3 p32d3;
-typedef volatile struct _uni_p32d3 p32d3;
+typedef volatile struct _uni_p32d3 vp32d3;
 #if UNI_HAS_I64( )
 typedef struct _uni_p64d3 p64d3;
-typedef volatile struct _uni_p64d3 p64d3;
+typedef volatile struct _uni_p64d3 vp64d3;
 #endif /* UNI_HAS_I64( ) */
 #if UNI_HAS_I128( )
 typedef struct _uni_p128d3 p128d3;
-typedef volatile struct _uni_p128d3 p128d3;
+typedef volatile struct _uni_p128d3 vp128d3;
 #endif /* UNI_HAS_I128( ) */
 
 typedef struct _uni_p8d4 p8d4;
-typedef volatile struct _uni_p8d4 p8d4;
+typedef volatile struct _uni_p8d4 vp8d4;
 typedef struct _uni_p16d4 p16d4;
-typedef volatile struct _uni_p16d4 p16d4;
+typedef volatile struct _uni_p16d4 vp16d4;
 typedef struct _uni_p32d4 p32d4;
-typedef volatile struct _uni_p32d4 p32d4;
+typedef volatile struct _uni_p32d4 vp32d4;
 #if UNI_HAS_I64( )
 typedef struct _uni_p64d4 p64d4;
-typedef volatile struct _uni_p64d4 p64d4;
+typedef volatile struct _uni_p64d4 vp64d4;
 #endif /* UNI_HAS_I64( ) */
 #if UNI_HAS_I128( )
 typedef struct _uni_p128d4 p128d4;
-typedef volatile struct _uni_p128d4 p128d4;
+typedef volatile struct _uni_p128d4 vp128d4;
 #endif /* UNI_HAS_I128( ) */
 
 typedef struct _uni_p8d5 p8d5;
-typedef volatile struct _uni_p8d5 p8d5;
+typedef volatile struct _uni_p8d5 vp8d5;
 typedef struct _uni_p16d5 p16d5;
-typedef volatile struct _uni_p16d5 p16d5;
+typedef volatile struct _uni_p16d5 vp16d5;
 typedef struct _uni_p32d5 p32d5;
-typedef volatile struct _uni_p32d5 p32d5;
+typedef volatile struct _uni_p32d5 vp32d5;
 #if UNI_HAS_I64( )
 typedef struct _uni_p64d5 p64d5;
-typedef volatile struct _uni_p64d5 p64d5;
+typedef volatile struct _uni_p64d5 vp64d5;
 #endif /* UNI_HAS_I64( ) */
 #if UNI_HAS_I128( )
 typedef struct _uni_p128d5 p128d5;
-typedef volatile struct _uni_p128d5 p128d5;
+typedef volatile struct _uni_p128d5 vp128d5;
 #endif /* UNI_HAS_I128( ) */
 
 typedef struct _uni_p8d6 p8d6;
-typedef volatile struct _uni_p8d6 p8d6;
+typedef volatile struct _uni_p8d6 vp8d6;
 typedef struct _uni_p16d6 p16d6;
-typedef volatile struct _uni_p16d6 p16d6;
+typedef volatile struct _uni_p16d6 vp16d6;
 typedef struct _uni_p32d6 p32d6;
-typedef volatile struct _uni_p32d6 p32d6;
+typedef volatile struct _uni_p32d6 vp32d6;
 #if UNI_HAS_I64( )
 typedef struct _uni_p64d6 p64d6;
-typedef volatile struct _uni_p64d6 p64d6;
+typedef volatile struct _uni_p64d6 vp64d6;
 #endif /* UNI_HAS_I64( ) */
 #if UNI_HAS_I128( )
 typedef struct _uni_p128d6 p128d6;
-typedef volatile struct _uni_p128d6 p128d6;
+typedef volatile struct _uni_p128d6 vp128d6;
 #endif /* UNI_HAS_I128( ) */
 
 #endif /* INC_API__UNI_TYPES_POINT_H */

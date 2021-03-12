@@ -121,58 +121,58 @@ struct _uni_q128d6
 #endif /* UNI_HAS_F128( ) */
 
 typedef struct _uni_q16d2 q16d2;
-typedef volatile struct _uni_q16d2 q16d2;
+typedef volatile struct _uni_q16d2 vq16d2;
 typedef struct _uni_q32d2 q32d2;
-typedef volatile struct _uni_q32d2 q32d2;
+typedef volatile struct _uni_q32d2 vq32d2;
 typedef struct _uni_q64d2 q64d2;
-typedef volatile struct _uni_q64d2 q64d2;
+typedef volatile struct _uni_q64d2 vq64d2;
 #if UNI_HAS_F128( )
 typedef struct _uni_q128d2 q128d2;
-typedef volatile struct _uni_q128d2 q128d2;
+typedef volatile struct _uni_q128d2 vq128d2;
 #endif /* UNI_HAS_F128( ) */
 
 typedef struct _uni_q16d3 q16d3;
-typedef volatile struct _uni_q16d3 q16d3;
+typedef volatile struct _uni_q16d3 vq16d3;
 typedef struct _uni_q32d3 q32d3;
-typedef volatile struct _uni_q32d3 q32d3;
+typedef volatile struct _uni_q32d3 vq32d3;
 typedef struct _uni_q64d3 q64d3;
-typedef volatile struct _uni_q64d3 q64d3;
+typedef volatile struct _uni_q64d3 vq64d3;
 #if UNI_HAS_F128( )
 typedef struct _uni_q128d3 q128d3;
-typedef volatile struct _uni_q128d3 q128d3;
+typedef volatile struct _uni_q128d3 vq128d3;
 #endif /* UNI_HAS_F128( ) */
 
 typedef struct _uni_q16d4 q16d4;
-typedef volatile struct _uni_q16d4 q16d4;
+typedef volatile struct _uni_q16d4 vq16d4;
 typedef struct _uni_q32d4 q32d4;
-typedef volatile struct _uni_q32d4 q32d4;
+typedef volatile struct _uni_q32d4 vq32d4;
 typedef struct _uni_q64d4 q64d4;
-typedef volatile struct _uni_q64d4 q64d4;
+typedef volatile struct _uni_q64d4 vq64d4;
 #if UNI_HAS_F128( )
 typedef struct _uni_q128d4 q128d4;
-typedef volatile struct _uni_q128d4 q128d4;
+typedef volatile struct _uni_q128d4 vq128d4;
 #endif /* UNI_HAS_F128( ) */
 
 typedef struct _uni_q16d5 q16d5;
-typedef volatile struct _uni_q16d5 q16d5;
+typedef volatile struct _uni_q16d5 vq16d5;
 typedef struct _uni_q32d5 q32d5;
-typedef volatile struct _uni_q32d5 q32d5;
+typedef volatile struct _uni_q32d5 vq32d5;
 typedef struct _uni_q64d5 q64d5;
-typedef volatile struct _uni_q64d5 q64d5;
+typedef volatile struct _uni_q64d5 vq64d5;
 #if UNI_HAS_F128( )
 typedef struct _uni_q128d5 q128d5;
-typedef volatile struct _uni_q128d5 q128d5;
+typedef volatile struct _uni_q128d5 vq128d5;
 #endif /* UNI_HAS_F128( ) */
 
 typedef struct _uni_q16d6 q16d6;
-typedef volatile struct _uni_q16d6 q16d6;
+typedef volatile struct _uni_q16d6 vq16d6;
 typedef struct _uni_q32d6 q32d6;
-typedef volatile struct _uni_q32d6 q32d6;
+typedef volatile struct _uni_q32d6 vq32d6;
 typedef struct _uni_q64d6 q64d6;
-typedef volatile struct _uni_q64d6 q64d6;
+typedef volatile struct _uni_q64d6 vq64d6;
 #if UNI_HAS_F128( )
 typedef struct _uni_q128d6 q128d6;
-typedef volatile struct _uni_q128d6 q128d6;
+typedef volatile struct _uni_q128d6 vq128d6;
 #endif /* UNI_HAS_F128( ) */
 
 #endif /* INC_API__UNI_TYPES_QUANT_H */
