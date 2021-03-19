@@ -18,8 +18,6 @@
  * 22-31 : error flags (sub-bitfield) (10 bits)
  */
 
-typedef u32 uni_err_t;
-
 #define UNI_ERRCODE_GET_DESC( C ) ( (C)&1023 )
 #define UNI_ERRCODE_GET_MOD( C ) ( ( ( C ) >> 10 ) & 511 )
 #define UNI_ERRCODE_GET_LVL( C ) ( ( ( C ) >> 18 ) & 8 )
@@ -27,6 +25,9 @@ typedef u32 uni_err_t;
 
 #define UNI_ERRCODE_MAKE( D, M, E, L ) \
 	( ( D ) | ( ( M ) << 10 ) | ( ( E ) << 21 ) | ( ( L ) << 27 ) )
+
+/* so this can be extended later perhaps */
+typedef u32 uni_err_t;
 
 enum
 {
@@ -114,7 +115,7 @@ enum /* err */
 #if !defined( ASSERT )
 #define ASSERT( cnd ) \
 	_Pragma( \
-		"ASSERT() CPP macro is deprecated. Use UNI_ASSERT() instead" ) \
+		"ASSERT( ) CPP macro is deprecated. Use UNI_ASSERT( ) instead" ) \
 		UNI_ASSERT( cnd )
 #endif /* !defined( ASSERT ) */
 
